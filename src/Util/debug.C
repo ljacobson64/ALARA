@@ -17,10 +17,10 @@ void verbose(int msg_level, const char *msgFmt, ...)
       vsprintf(msg,msgFmt,args);
       va_end(args);
 
-#pragma omp critical
+#pragma omp critical (write_cout)
 {
       while (msg_level-- >0)
-	cout << "\t";
+        cout << "\t";
       cout << msg << endl;
 }
     }
@@ -40,10 +40,10 @@ void debug(int msg_level, const char *msgFmt, ...)
       vsprintf(msg,msgFmt,args);
       va_end(args);
 
-#pragma omp critical
+#pragma omp critical (write_cout)
 {
       while (msg_level--)
-	cout << "\t";
+        cout << "\t";
       cout << "**debug: " << msg << endl;
 }
     }
@@ -60,6 +60,7 @@ void error(int error_num, const char *msgFmt, ...)
   vsprintf(msg,msgFmt,args);
   va_end(args);
 
+#pragma omp critical (write_cerr)
   cerr << "Error #" << error_num << ": " << msg << endl;
   exit(error_num);
 }
@@ -67,6 +68,7 @@ void error(int error_num, const char *msgFmt, ...)
 void memCheck(void* ptr, const char *msg)
 {
   if (ptr == NULL)
+#pragma omp critical (write_cerr)
     error(-1,"Memory allocation error: %s",msg);
 }
 
@@ -80,5 +82,6 @@ void warning(int error_num, const char *msgFmt, ...)
   vsprintf(msg,msgFmt,args);
   va_end(args);
 
+#pragma omp critical (write_cerr)
   cerr << "Warning #" << error_num << ": " << msg << endl;
 }

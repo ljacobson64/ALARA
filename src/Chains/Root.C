@@ -97,6 +97,7 @@ void Root::solve(topSchedule *schedule)
     {
 #pragma omp task
 #ifdef _OPENMP
+#pragma omp critical
       verbose(2,"Solving Root #%d: %s on thread %d", ++rootCtr,
               isoName(ptr->kza,isoSym), omp_get_thread_num());
 #else
@@ -111,6 +112,7 @@ void Root::solve(topSchedule *schedule)
       while (chain->build(schedule))
         {
           totalChainCtr = Statistics::accountChain(chain->getChainLength());
+#pragma omp atomic
           chainCode++;
           chain->setupColRates();
           /* set the decay matrices for the entire schedule */
@@ -120,6 +122,8 @@ void Root::solve(topSchedule *schedule)
         }
       delete chain;
 
+#pragma omp critical (write_statistics)
+{
       firstNode = lastNode;
       lastNode = Statistics::numNodes();
       Statistics::cputime(incrTime,totalTime);
@@ -133,7 +137,9 @@ void Root::solve(topSchedule *schedule)
       verbose(2,"                 in %0.2f s (%0.3f nodes/s)",
               totalTime,lastNode/totalTime);
       oldChainCtr = totalChainCtr;
+}
 
+#pragma omp critical (write_dump)
       ptr->mixList->writeDump();
 
       ptr = ptr->nextRoot;

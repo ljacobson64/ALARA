@@ -138,10 +138,10 @@ int main(int argc, char *argv[])
 	      error(2, "Number of threads must be >= 2.");
 	    }
 	  verbose(0,"Using %d OMP threads.",num_threads);
-	  break;
 #else
 	  error(2, "-j option only avaible when compiled with OpenMP.");
 #endif
+	  break;
 	
  	case 'c':
 	  verbose(0,"Calculating chains ONLY.");

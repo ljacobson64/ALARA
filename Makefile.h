@@ -8,4 +8,4 @@ xsdir = $(prefix)/data
 sampledir = $(prefix)/sample
 sampledatadir = $(prefix)/sample/data
 
-AM_CPPFLAGS = -I$(top_srcdir)/src
+AM_CPPFLAGS = -I$(top_srcdir)/src $(OPENMP_CXXFLAGS)

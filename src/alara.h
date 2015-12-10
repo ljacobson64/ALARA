@@ -87,6 +87,7 @@ extern const char* SYMBOLS;
 
 extern int verb_level;
 extern int debug_level;
+extern int num_threads;
 
 // Avagadros number
 #define AVAGADRO 6.02e23

@@ -68,6 +68,8 @@ Root::Root(char* isoName, double isoDens, Mixture* mix,Component* comp) :
 /* solve the entire tree for all the roots */
 /* called by alara::main(...) */
 
+int num_threads = 1;
+
 void Root::solve(topSchedule *schedule)
 {
   Root* ptr=this;
@@ -84,6 +86,10 @@ void Root::solve(topSchedule *schedule)
   lastNode = Statistics::numNodes();
   Statistics::cputime(incrTime,totalTime);
   
+#ifdef _OPENMP
+  omp_set_num_threads(num_threads);
+#endif
+
 #pragma omp parallel
 #pragma omp single nowait
   /* for each root */

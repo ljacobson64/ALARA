@@ -32,6 +32,7 @@ usage: %s [-h] [-r] [-t <tree_filename>] [-V] [-v <n>] [<input_filename>] \n\
 \t -t <tree_filename> Create tree file with given name\n\
 \t -V                 Show version\n\
 \t -v <n>             Set verbosity level\n\
+\t -j <n>             Set number of OMP threads\n\
 \t <input_filename>   Name of input file\n\
 See Users' Guide for more info.\n\
 (http://alara.engr.wisc.edu/)\n";
@@ -113,6 +114,25 @@ int main(int argc, char *argv[])
 	      argNum++;
 	    }
 	  verbose(0,"Set verbose level to %d.",verb_level);
+	  break;
+	
+	case 'j':
+	  if (argv[argNum][1] == '\0')
+	    {
+	      if (argNum<argc-1)
+              {
+		num_threads = atoi(argv[argNum+1]);
+	        argNum+=2;
+	      }
+	     else
+		error(2,"-j requires parameter."); 
+	    }
+	  else
+	    {
+	      num_threads = atoi(argv[argNum]+1);
+	      argNum++;
+	    }
+	  verbose(0,"Using %d OMP threads.",num_threads);
 	  break;
 	
  	case 'c':

@@ -90,7 +90,13 @@ void Root::solve(topSchedule *schedule)
   while (ptr != NULL)
     {
 #pragma omp task
-      verbose(2,"Solving Root #%d: %s", ++rootCtr,isoName(ptr->kza,isoSym));
+      verbose(2,"Solving Root #%d: %s on thread %d", ++rootCtr,
+              isoName(ptr->kza,isoSym),
+#ifdef _OPENMP
+              omp_get_thread_num());
+#else
+              0);
+#endif
 
       /* start a new chain */
       Chain *chain = new Chain(ptr,schedule);

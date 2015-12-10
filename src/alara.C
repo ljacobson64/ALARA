@@ -117,6 +117,7 @@ int main(int argc, char *argv[])
 	  break;
 	
 	case 'j':
+#ifdef _OPENMP
 	  if (argv[argNum][1] == '\0')
 	    {
 	      if (argNum<argc-1)
@@ -138,6 +139,9 @@ int main(int argc, char *argv[])
 	    }
 	  verbose(0,"Using %d OMP threads.",num_threads);
 	  break;
+#else
+	  error(2, "-j option only avaible when compiled with OpenMP.");
+#endif
 	
  	case 'c':
 	  verbose(0,"Calculating chains ONLY.");

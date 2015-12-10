@@ -84,9 +84,12 @@ void Root::solve(topSchedule *schedule)
   lastNode = Statistics::numNodes();
   Statistics::cputime(incrTime,totalTime);
   
+#pragma omp parallel
+#pragma omp single nowait
   /* for each root */
   while (ptr != NULL)
     {
+#pragma omp task
       verbose(2,"Solving Root #%d: %s", ++rootCtr,isoName(ptr->kza,isoSym));
 
       /* start a new chain */

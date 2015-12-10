@@ -1,6 +1,6 @@
 #$Id: Makefile.am,v 1.4 2003-10-22 06:07:02 wilsonp Exp $
 
-AM_CPPFLAGS = -I$(top_srcdir)/src
+AM_CPPFLAGS = -I$(top_srcdir)/src $(OPENMP_CXXFLAGS)
 
 noinst_LIBRARIES = libChains.a
 

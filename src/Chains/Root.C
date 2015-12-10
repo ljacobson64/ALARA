@@ -68,7 +68,7 @@ Root::Root(char* isoName, double isoDens, Mixture* mix,Component* comp) :
 /* solve the entire tree for all the roots */
 /* called by alara::main(...) */
 
-int num_threads = 1;
+int num_threads = 2;
 
 void Root::solve(topSchedule *schedule)
 {

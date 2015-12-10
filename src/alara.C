@@ -132,6 +132,10 @@ int main(int argc, char *argv[])
 	      num_threads = atoi(argv[argNum]+1);
 	      argNum++;
 	    }
+	  if (num_threads < 2)
+	    {
+	      error(2, "Number of threads must be >= 2.");
+	    }
 	  verbose(0,"Using %d OMP threads.",num_threads);
 	  break;
 	

@@ -2,7 +2,7 @@
 /* File sections:
  * Service: constructors, destructors
  * Solution: functions directly related to the solution of a (sub)problem
- * Utility: advanced member access such as searching and counting 
+ * Utility: advanced member access such as searching and counting
  * List: maintenance of lists or arrays of objects
  */
 
@@ -20,21 +20,21 @@
  ***************************/
 /** Invokes default constructor of base class Node, and sets 'mixList'
     and 'next' to NULL. */
-Root::Root() : 
-  Node() 
-{ 
-  nextRoot=NULL; 
+Root::Root() :
+  Node()
+{
+  nextRoot=NULL;
   mixList = NULL;
 }
 
 /** Invokes copy constructor for base class Node and copies pointer
     'mixList', ie. new mixList points to old mixList, and NOT a copy of the
     mixList. 'next' = NULL. */
-Root::Root(const Root& r) : 
-  Node(r) 
-{ 
-  nextRoot=NULL; 
-  mixList=r.mixList; 
+Root::Root(const Root& r) :
+  Node(r)
+{
+  nextRoot=NULL;
+  mixList=r.mixList;
 }
 
 /** Invoks a copy constructor of base class Node with the dereferenced
@@ -85,7 +85,7 @@ void Root::solve(topSchedule *schedule)
 
   lastNode = Statistics::numNodes();
   Statistics::cputime(incrTime,totalTime);
-  
+
 #ifdef _OPENMP
   omp_set_num_threads(num_threads);
 #endif
@@ -96,12 +96,11 @@ void Root::solve(topSchedule *schedule)
   while (ptr != NULL)
     {
 #pragma omp task
-      verbose(2,"Solving Root #%d: %s on thread %d", ++rootCtr,
-              isoName(ptr->kza,isoSym),
 #ifdef _OPENMP
-              omp_get_thread_num());
+      verbose(2,"Solving Root #%d: %s on thread %d", ++rootCtr,
+              isoName(ptr->kza,isoSym), omp_get_thread_num());
 #else
-              0);
+      verbose(2,"Solving Root #%d: %s", ++rootCtr, isoName(ptr->kza,isoSym));
 #endif
 
       /* start a new chain */
@@ -109,30 +108,30 @@ void Root::solve(topSchedule *schedule)
       memCheck(chain,"Root::solve(...): chain");
 
       /* for each chain */
-      while (chain->build(schedule)) 
-	{
-	  totalChainCtr = Statistics::accountChain(chain->getChainLength());
-	  chainCode++;
-	  chain->setupColRates();
-	  /* set the decay matrices for the entire schedule */
-	  schedule->setDecay(chain);
-	  /* solve the transfer matrices for each mixture with this root */
-	  ptr->mixList->solve(chain,schedule);
-	}
+      while (chain->build(schedule))
+        {
+          totalChainCtr = Statistics::accountChain(chain->getChainLength());
+          chainCode++;
+          chain->setupColRates();
+          /* set the decay matrices for the entire schedule */
+          schedule->setDecay(chain);
+          /* solve the transfer matrices for each mixture with this root */
+          ptr->mixList->solve(chain,schedule);
+        }
       delete chain;
 
       firstNode = lastNode;
       lastNode = Statistics::numNodes();
       Statistics::cputime(incrTime,totalTime);
       verbose(2,"      last Root: %d nodes in %d chains with maximum length %d.",
-	      lastNode-firstNode, totalChainCtr-oldChainCtr, 
-	      Statistics::accountMaxRank());
+              lastNode-firstNode, totalChainCtr-oldChainCtr,
+              Statistics::accountMaxRank());
       verbose(2,"                 in %0.3f s (%0.3f nodes/s)",incrTime,
-	      (lastNode-firstNode)/incrTime);
+              (lastNode-firstNode)/incrTime);
       verbose(2,"   Total so far: %d nodes in %d chains with maximum length %d.",
-	      lastNode,totalChainCtr,Statistics::maxRank());
+              lastNode,totalChainCtr,Statistics::maxRank());
       verbose(2,"                 in %0.2f s (%0.3f nodes/s)",
-	      totalTime,lastNode/totalTime);
+              totalTime,lastNode/totalTime);
       oldChainCtr = totalChainCtr;
 
       ptr->mixList->writeDump();
@@ -162,10 +161,10 @@ Root* Root::readSingleDump(int& getKza)
       ptr->mixList->readDump(ptr->kza);
       getKza = ptr->kza;
     }
-  
+
   return ptr->nextRoot;
 }
-      
+
 
 void Root::readDump()
 {
@@ -206,9 +205,9 @@ Root* Root::find(int srchKza)
     {
       //debug(7,"Comparing to %d (%x)",ptr->kza,ptr);
       if (ptr->kza == srchKza)
-	break;
+        break;
       else
-	ptr = ptr->nextRoot;
+        ptr = ptr->nextRoot;
     }
 
   debug(7,"Returning %x",ptr);
@@ -249,12 +248,12 @@ void Root::add(Root* addRoot)
       ptr = ptr->nextRoot;
       //debug(7,"Comparing to %d (%x) with next %x",ptr->kza,ptr,ptr->nextRoot);
     }
-  
+
   debug(7,"Final comparison to %d (%x)",ptr->kza,ptr);
   if (ptr->kza > addRoot->kza)
     {
       debug(8,"Inserting new entry between %d and %d",
-	    prevRoot->kza, ptr->kza);
+            prevRoot->kza, ptr->kza);
       prevRoot->nextRoot = new Root(addRoot,ptr);
     }
   else
@@ -280,7 +279,7 @@ Root* Root::merge(Root* rootList)
   /* advance past head of root list */
   while (rootList->kza == 0)
     rootList = rootList->nextRoot;
-    
+
 
   /* for all elements of new root list */
   while (rootList != NULL)
@@ -291,23 +290,23 @@ Root* Root::merge(Root* rootList)
 
       /* if not found, add to list */
       if (found == NULL)
-	{
-	  debug(6,"Root not found, adding new item.");
-	  head->add(rootList);
-	  debug(6,"Root not found, added new item.");
-	}
+        {
+          debug(6,"Root not found, adding new item.");
+          head->add(rootList);
+          debug(6,"Root not found, added new item.");
+        }
       /* if found, tally the mixture and component number */
       else
-	{
-	  debug(6,"Root found, tallying mix and comp pointers.");
-	  found->mixList->tally(rootList->mixList);
-	}
+        {
+          debug(6,"Root found, tallying mix and comp pointers.");
+          found->mixList->tally(rootList->mixList);
+        }
 
       rootList = rootList->nextRoot;
     }
 
   debug(6,"Finished merging this rootList.");
-	
+
   return head;
-  
+
 }

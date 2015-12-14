@@ -166,7 +166,7 @@ void Loading::getMatLoading(istream& input)
   char name[64],token[64],usv[64];
   bool busv; 
   Loading *ptr = this;
-  bool isusv(char* Usv);	
+  bool isusv(char* Usv);        
 
   verbose(2,"Reading the material loading for this problem.");
 
@@ -176,7 +176,7 @@ void Loading::getMatLoading(istream& input)
     {
       input >> name;  
       clearComment(input);
-      input >> usv;			 
+      input >> usv;                         
       clearComment(input);
       busv=isusv(usv)?TRUE:FALSE;
       ptr->next = new Loading(token,name,busv,strtod(usv,NULL));
@@ -184,7 +184,7 @@ void Loading::getMatLoading(istream& input)
       ptr = ptr->next;
       verbose(3,"Adding zone %s with mixture%s.",token,name);
       if (busv)
-	   input >> token;
+           input >> token;
       else
            strcpy(token,usv);
     }
@@ -195,19 +195,19 @@ void Loading::getMatLoading(istream& input)
 }
 
 //********* Function isusv declared in Loading::getMatLoading**********
-bool isusv(char* Usv)	
+bool isusv(char* Usv)        
 {
-	//Checks wheter argument points to real number. If this were the case
-	//then this is assume to be userVol and the function returns TRUE.
+        //Checks wheter argument points to real number. If this were the case
+        //then this is assume to be userVol and the function returns TRUE.
   
-   	char* strptr=new char[64];
-	char* *pcharptr=&strptr;
+           char* strptr=new char[64];
+        char* *pcharptr=&strptr;
 
-	strtod(Usv,pcharptr);
-	if (strptr[0]=='\0')
-		return TRUE;
-	else
-		return FALSE;
+        strtod(Usv,pcharptr);
+        if (strptr[0]=='\0')
+                return TRUE;
+        else
+                return FALSE;
 }
 /******* get a list of material loadings *******/
 /* called by Input::read(...) */
@@ -256,25 +256,25 @@ void Loading::xCheck(Mixture *mixListHead, Loading *solveList, Loading *skipList
 
       /* check for this zone in explicit solve list or skip list */
       if ( ( solveList->nonEmpty() && solveList->findZone(ptr->zoneName)==NULL ) 
-	   || skipList->findZone(ptr->zoneName)!=NULL )
-	{
-	  delete ptr->mixName;
-	  ptr->mixName = new char[5];
-	  strcpy(ptr->mixName,"void");
-	}
+           || skipList->findZone(ptr->zoneName)!=NULL )
+        {
+          delete ptr->mixName;
+          ptr->mixName = new char[5];
+          strcpy(ptr->mixName,"void");
+        }
       else if (strcmp(ptr->mixName,"void"))
-	{
-	  /* search for the mixture referenced in this zone */
-	  ptr->mixPtr = mixListHead->find(ptr->mixName);
-	  if ( ptr->mixPtr == NULL)
-	    error(370, "Zone %s is loaded with a non-existent mixture: %s",
-		  ptr->zoneName,ptr->mixName);
-	  else
-	    {
-	      ptr->nComps = ptr->mixPtr->getNComps();
-	      ptr->outputList = new Result[ptr->nComps+1];
-	    }
-	}
+        {
+          /* search for the mixture referenced in this zone */
+          ptr->mixPtr = mixListHead->find(ptr->mixName);
+          if ( ptr->mixPtr == NULL)
+            error(370, "Zone %s is loaded with a non-existent mixture: %s",
+                  ptr->zoneName,ptr->mixName);
+          else
+            {
+              ptr->nComps = ptr->mixPtr->getNComps();
+              ptr->outputList = new Result[ptr->nComps+1];
+            }
+        }
       
     }
 
@@ -312,7 +312,7 @@ void Loading::tally(Result *volOutputList, double vol)
     what type of normalization is being used, so that the correct
     output information can be given. */
 void Loading::write(int response, int writeComp, CoolingTime* coolList, 
-		    int targetKza, int normType)
+                    int targetKza, int normType)
 {
   Loading *head = this;
   Loading *ptr = head;
@@ -329,127 +329,127 @@ void Loading::write(int response, int writeComp, CoolingTime* coolList,
       cout << "Zone #" << ++zoneCntr << ": " << ptr->zoneName << endl;
       debug(5,"Loading::userVol=%f",ptr->userVol);
       if (ptr->mixPtr != NULL)
-	{
-	  if (normType > 0)
-	    cout << "\tRelative Volume: " << ptr->volume << endl;
-	  else
-	    cout << "\tMass: " << ptr->volume*ptr->mixPtr->getTotalDensity()
-		 << endl;
+        {
+          if (normType > 0)
+            cout << "\tRelative Volume: " << ptr->volume << endl;
+          else
+            cout << "\tMass: " << ptr->volume*ptr->mixPtr->getTotalDensity()
+                 << endl;
 
-	  cout << "\tContaining mixture: " << ptr->mixName << endl << endl;
+          cout << "\tContaining mixture: " << ptr->mixName << endl << endl;
 
-	  /* write the component breakdown if requested */
-	  if (writeComp && response != OUTFMT_SRC)
-	    {
-	      /* get the list of components for this mixture */
-	      Component *compPtr = ptr->mixPtr->getCompList();
-	      int compNum=0;
-	      compPtr = compPtr->advance();
-	      
-	      /* for each component */
-	      while (compPtr != NULL)
-		{
+          /* write the component breakdown if requested */
+          if (writeComp && response != OUTFMT_SRC)
+            {
+              /* get the list of components for this mixture */
+              Component *compPtr = ptr->mixPtr->getCompList();
+              int compNum=0;
+              compPtr = compPtr->advance();
+              
+              /* for each component */
+              while (compPtr != NULL)
+                {
 
-		  volFrac = compPtr->getVolFrac();
-		  volume_mass = ptr->volume*volFrac;
+                  volFrac = compPtr->getVolFrac();
+                  volume_mass = ptr->volume*volFrac;
 
-		  /* write component header */
-		  cout << "Constituent: " << compPtr->getName() << endl;
-		  
-		  if (normType < 0)
-		    {
-		      cout
-		           << "\tVolume Fraction: " << volFrac
-		           << "\tRelative Volume: " << volume_mass;
-		      density = compPtr->getDensity();
-		      volume_mass *= density;
-		      cout
-			<< "\tDensity: " << density 
-			<< "\tMass: " << volume_mass;
-		    }
-		  else if (normType == OUTNORM_VOL_INT)
-		    {
-		      /* The loading responses are volume weighted sums already.
-			 For volume integrated results, don't renormalize */
-		      cout
-		           << "\tVolume Fraction: " << volFrac
-		           << "\tAbsolute Volume: " << ptr->userVol;
-		      volume_mass /= ptr->userVol;
-		      cout << "\tVolume Integrated ";
-		    }
-		  else
-		    {
-		      cout
-		           << "\tVolume Fraction: " << volFrac
-		           << "\tRelative Volume: " << volume_mass;
-		    }
+                  /* write component header */
+                  cout << "Constituent: " << compPtr->getName() << endl;
+                  
+                  if (normType < 0)
+                    {
+                      cout
+                           << "\tVolume Fraction: " << volFrac
+                           << "\tRelative Volume: " << volume_mass;
+                      density = compPtr->getDensity();
+                      volume_mass *= density;
+                      cout
+                        << "\tDensity: " << density 
+                        << "\tMass: " << volume_mass;
+                    }
+                  else if (normType == OUTNORM_VOL_INT)
+                    {
+                      /* The loading responses are volume weighted sums already.
+                         For volume integrated results, don't renormalize */
+                      cout
+                           << "\tVolume Fraction: " << volFrac
+                           << "\tAbsolute Volume: " << ptr->userVol;
+                      volume_mass /= ptr->userVol;
+                      cout << "\tVolume Integrated ";
+                    }
+                  else
+                    {
+                      cout
+                           << "\tVolume Fraction: " << volFrac
+                           << "\tRelative Volume: " << volume_mass;
+                    }
 
-		  
-		  cout << endl;
+                  
+                  cout << endl;
 
-		  ptr->outputList[compNum].write(response,targetKza,ptr->mixPtr,
-						 coolList,ptr->total,volume_mass);
+                  ptr->outputList[compNum].write(response,targetKza,ptr->mixPtr,
+                                                 coolList,ptr->total,volume_mass);
 
-		  compPtr = compPtr->advance();
-		  compNum++;
-		}
-	    }
+                  compPtr = compPtr->advance();
+                  compNum++;
+                }
+            }
 
-	  volFrac = ptr->mixPtr->getVolFrac();
-	  /* if components were written and there is only one */
-	  if (writeComp && ptr->nComps == 0 && volFrac == 1.0)
-	    /* write comment refering total to component total */
-	    cout << "** Zone totals are the same as those of the single constituent."
-		 << endl << endl;
-	  else
-	    {
-	      /* otherwise write the total response for the zone */
-	      volume_mass = ptr->volume * volFrac;
+          volFrac = ptr->mixPtr->getVolFrac();
+          /* if components were written and there is only one */
+          if (writeComp && ptr->nComps == 0 && volFrac == 1.0)
+            /* write comment refering total to component total */
+            cout << "** Zone totals are the same as those of the single constituent."
+                 << endl << endl;
+          else
+            {
+              /* otherwise write the total response for the zone */
+              volume_mass = ptr->volume * volFrac;
 
-	      cout << "Total (All constituents) " << endl;
+              cout << "Total (All constituents) " << endl;
 
-	      cout << "\tCOMPACTED" << endl;
+              cout << "\tCOMPACTED" << endl;
 
-	      
-	      if (normType < 0)
-		{
-		  density = ptr->mixPtr->getTotalDensity();
-		  /* different from constituent: mixture densities 
-		     already take volume fraction into account */
-	          cout 
-		    << "\tVolume Fraction: " << volFrac
-		    << "\tRelative Volume: " << volume_mass;
-		  volume_mass = ptr->volume * density;
-		  cout
-		    << "\tDensity: " << density 
-		    << "\tMass: " << volume_mass;
-		}
-	      else if (normType == OUTNORM_VOL_INT)
-		{
-		  /* The loading responses are volume weighted sums already.
-		     For volume integrated results, don't renormalize */
-	          cout 
-		    << "\tVolume Fraction: " << volFrac
-		    << "\tAbsolute Volume: " << ptr->userVol;
-		  volume_mass /= ptr->userVol;
-		  cout << "\tVolume Integrated ";
-		}
-	      else
-		{
-	          cout 
-		    << "\tVolume Fraction: " << volFrac
-		    << "\tRelative Volume: " << volume_mass;
-		}
-	      
-	      cout << endl;
+              
+              if (normType < 0)
+                {
+                  density = ptr->mixPtr->getTotalDensity();
+                  /* different from constituent: mixture densities 
+                     already take volume fraction into account */
+                  cout 
+                    << "\tVolume Fraction: " << volFrac
+                    << "\tRelative Volume: " << volume_mass;
+                  volume_mass = ptr->volume * density;
+                  cout
+                    << "\tDensity: " << density 
+                    << "\tMass: " << volume_mass;
+                }
+              else if (normType == OUTNORM_VOL_INT)
+                {
+                  /* The loading responses are volume weighted sums already.
+                     For volume integrated results, don't renormalize */
+                  cout 
+                    << "\tVolume Fraction: " << volFrac
+                    << "\tAbsolute Volume: " << ptr->userVol;
+                  volume_mass /= ptr->userVol;
+                  cout << "\tVolume Integrated ";
+                }
+              else
+                {
+                  cout 
+                    << "\tVolume Fraction: " << volFrac
+                    << "\tRelative Volume: " << volume_mass;
+                }
+              
+              cout << endl;
 
-	      ptr->outputList[ptr->nComps].write(response, targetKza, ptr->mixPtr,
-						 coolList, ptr->total, volume_mass);
+              ptr->outputList[ptr->nComps].write(response, targetKza, ptr->mixPtr,
+                                                 coolList, ptr->total, volume_mass);
 
-	    }
-	}
+            }
+        }
     }
-	  
+          
   /** WRITE TOTAL TABLE **/
   /* reset zone pointer and counter */
   ptr = head;
@@ -472,13 +472,13 @@ void Loading::write(int response, int writeComp, CoolingTime* coolList,
       ptr = ptr->next;
       cout << ++zoneCntr << "\t";
       if (ptr->mixPtr != NULL)
-	for (resNum=0;resNum<nResults;resNum++)
-	  {
-	    sprintf(isoSym,"%-11.4e ",ptr->total[resNum]);
-	    cout << isoSym;
-	  }
+        for (resNum=0;resNum<nResults;resNum++)
+          {
+            sprintf(isoSym,"%-11.4e ",ptr->total[resNum]);
+            cout << isoSym;
+          }
       cout << "\t" << ptr->zoneName 
-	   << " (" << ptr->mixName << ")" << endl;
+           << " (" << ptr->mixName << ")" << endl;
     }
   coolList->writeSeparator();
 
@@ -502,7 +502,7 @@ Loading* Loading::findZone(char *srchZone)
     {
       ptr = ptr->next;
       if (!strcmp(ptr->zoneName,srchZone))
-	return ptr;
+        return ptr;
     }
 
   return NULL;
@@ -522,7 +522,7 @@ Loading* Loading::findMix(char *srchMix)
     {
       ptr = ptr->next;
       if (!strcmp(ptr->mixName,srchMix))
-	return ptr;
+        return ptr;
     }
 
   return NULL;
@@ -554,8 +554,8 @@ void Loading::resetOutList()
       ptr = ptr->next;
       ptr->volume = 0;
       if (ptr->outputList != NULL)
-	for (compNum=0;compNum<=ptr->nComps;compNum++)
-	  ptr->outputList[compNum].clear();
+        for (compNum=0;compNum<=ptr->nComps;compNum++)
+          ptr->outputList[compNum].clear();
     }
 }
 

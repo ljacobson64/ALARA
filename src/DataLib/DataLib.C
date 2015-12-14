@@ -79,7 +79,7 @@ DataLib* DataLib::newLib(char* libType, istream& input)
       input >> alaraLibName;
       dl = new ALARALib(alaraLibName,type);
       verbose(3,"Openned binary library with %d parents and %d groups.",
-	      dl->nParents,dl->nGroups);
+              dl->nParents,dl->nGroups);
       break;
     case DATALIB_FEIND:
       char arg0[256];
@@ -88,14 +88,14 @@ DataLib* DataLib::newLib(char* libType, istream& input)
       input >> arg0 >> arg1 >> arg2;
       dl = new FEINDLib(arg0,arg1,arg2, type);
       verbose(3,"Openned FEIND library with %d parents and %d groups.",
-	      dl->nParents,dl->nGroups);      
+              dl->nParents,dl->nGroups);      
       break;
     case DATALIB_ADJOINT:
       char adjointLibName[256];
       input >> adjointLibName;
       dl = new ADJLib(adjointLibName,type);
       verbose(3,"Openned adjoint library with %d parents and %d groups.",
-	      dl->nParents,dl->nGroups);
+              dl->nParents,dl->nGroups);
       break;
     case DATALIB_GAMMA:
       char gammaLibName[256];
@@ -105,7 +105,7 @@ DataLib* DataLib::newLib(char* libType, istream& input)
       break;
     default:
       error(1000,"Data library type %s (%d) is not yet supported.",
-	    libType, type);
+            libType, type);
     }
 
   return dl;
@@ -123,20 +123,20 @@ void DataLib::convertLib(char *fromTypeStr, int toType, istream& input)
     case EAF2ALARA:
       input >> transFname >> decayFname;
       verbose(3,"Openning EAF formatted libraries %s, %s for conversion",
-	      transFname,decayFname);
+              transFname,decayFname);
       dl = new EAFLib(transFname,decayFname,ALARAFNAME);
       delete dl;
       break;
     case IEAF2ALARA:
       input >> transFname >> decayFname;
       verbose(3,"Openning IEAF formatted libraries %s, %s for conversion",
-	      transFname,decayFname);
+              transFname,decayFname);
       dl = new IEAFLib(transFname,decayFname,ALARAFNAME);
       delete dl;
       break;
     default:
       error(1001,"Conversion from %s (%d) to (%d) is not yet supported.",
-	    fromTypeStr, fromType, toType);
+            fromTypeStr, fromType, toType);
     }
 
 }
@@ -159,20 +159,20 @@ void DataLib::convertLib(istream& input)
     case EAF2ALARA:
       input >> transFname >> decayFname >> alaraFname;
       verbose(3,"Openning EAF formatted libraries %s, %s for conversion into ALARA library %s",
-	      transFname,decayFname,alaraFname);
+              transFname,decayFname,alaraFname);
       dl = new EAFLib(transFname,decayFname,alaraFname);
       delete dl;
       verbose(3,"Converted libraries with %d parents and %d groups.",
-	      dl->nParents,dl->nGroups);
+              dl->nParents,dl->nGroups);
       break;
     case IEAF2ALARA:
       input >> transFname >> decayFname >> alaraFname;
       verbose(3,"Openning IEAF formatted libraries %s, %s for conversion into ALARA library %s",
-	      transFname,decayFname,alaraFname);
+              transFname,decayFname,alaraFname);
       dl = new IEAFLib(transFname,decayFname,alaraFname);
       delete dl;
       verbose(3,"Converted libraries with %d parents and %d groups.",
-	      dl->nParents,dl->nGroups);
+              dl->nParents,dl->nGroups);
       break;
     case ALARA2ADJ:
       char adjointLibName[256];
@@ -182,7 +182,7 @@ void DataLib::convertLib(istream& input)
       break;
     default:
       error(1001,"Conversion from %s (%d) to %s (%d) is not yet supported.",
-	    fromTypeStr, fromType, toTypeStr, toType);
+            fromTypeStr, fromType, toTypeStr, toType);
     }
 
 }

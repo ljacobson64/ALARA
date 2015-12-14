@@ -57,13 +57,13 @@ PulseLevel* PulseLevel::getPulseLevel(int inNumPulse,istream& input)
   /* check for valid units */
   if (strchr(UNITS,inUnits) == NULL)
     error(190,"Invalid units in pulse level: %10g %c",
-	  inDelay, inUnits);
+          inDelay, inUnits);
   
   next = new PulseLevel(inNumPulse,inDelay,inUnits);
   memCheck(next,"PulseLevel::getPulseLevel(...): next");
   
   verbose(3,"Adding level with %d pulses and %g %c between pulses.",
-	  inNumPulse,inDelay,inUnits);
+          inNumPulse,inDelay,inUnits);
   
   return next;
   

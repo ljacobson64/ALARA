@@ -44,14 +44,14 @@ protected:
   /** By convention, it will always be 1 greater than the rank of the
       bottom isotope in the chain. */
   int chainLength;
-	
+        
   /// This indicates the rank of the first isotope which is different
   /// from the last chain.
   /** This is important when manipulating the transfer and decay matrices;
       since they are lower triangular matrices, only the new elements,
       i.e. those corresponding to new isotopes, need to be changed. */
   int newRank;
-	
+        
   /// This indicates the rank of the first isotope to be tallied in this
   /// chain.
   /** A given isotope is tallied only immediately before it is
@@ -106,7 +106,7 @@ protected:
   /// the beginning of the blocks defined above to give 4 apparent rate
   /// arrays. This is a simple convenience measure.
   double *d;
-	
+        
   /// One of four points that simply point into the colRates vector at 
   /// the beginning of the blocks defined above to give 4 apparent rate
   /// arrays. This is a simple convenience measure.
@@ -121,7 +121,7 @@ protected:
   /// or impurityTruncLimit (impurityIgnoreLimit) as appropriate for 
   /// the current chain being solved.
   double chainTruncLimit;
-		
+                
   /// One of two pointers that simply point to truncLimit (ignoreLimit)
   /// or impurityTruncLimit (impurityIgnoreLimit) as appropriate for 
   /// the current chain being solved.

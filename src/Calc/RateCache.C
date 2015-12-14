@@ -42,14 +42,14 @@ RateCache::CacheData* RateCache::search(int baseKza)
   if (baseKza < kzaList[max].kza && baseKza > kzaList[min].kza)
     while (min < max-1)
       {
-	mid = (min + max)/2;
-	if (baseKza == kzaList[mid].kza)
-	  return kzaList[mid].dataPtr;
-	else 
-	  if (baseKza > kzaList[mid].kza)
-	    min = mid;
-	  else
-	    max = mid;
+        mid = (min + max)/2;
+        if (baseKza == kzaList[mid].kza)
+          return kzaList[mid].dataPtr;
+        else 
+          if (baseKza > kzaList[mid].kza)
+            min = mid;
+          else
+            max = mid;
       }
   
   return NULL;
@@ -67,24 +67,24 @@ double RateCache::read(int baseKza, int pathNum)
     {
       /* if not already at the end of the list */
       if (lastUsedData != dataPtr)
-	{
-	  if (oldestData == dataPtr)
-	    /* delete this from the beginning or... */
-	    oldestData = dataPtr->next;
-	  else
-	    /* ... from middle of the list */
-	    dataPtr->prev->next = dataPtr->next;
-	  
-	  dataPtr->next->prev = dataPtr->prev;
+        {
+          if (oldestData == dataPtr)
+            /* delete this from the beginning or... */
+            oldestData = dataPtr->next;
+          else
+            /* ... from middle of the list */
+            dataPtr->prev->next = dataPtr->next;
+          
+          dataPtr->next->prev = dataPtr->prev;
 
-	  /* put this at the end of the list */
-	  lastUsedData->next = dataPtr;
-	  dataPtr->prev = lastUsedData;
+          /* put this at the end of the list */
+          lastUsedData->next = dataPtr;
+          dataPtr->prev = lastUsedData;
 
-	  /* point the last used data pointer at the right place */
-	  lastUsedData = dataPtr;
-	  lastUsedData->next = NULL;
-	}
+          /* point the last used data pointer at the right place */
+          lastUsedData = dataPtr;
+          lastUsedData->next = NULL;
+        }
 
       rate = lastUsedData->cache[pathNum];
     }
@@ -98,7 +98,7 @@ double RateCache::read(int baseKza, int pathNum)
     isotope, the third argument is used to set the size of the new
     CacheData object which is created for this isotope. */
 void RateCache::set(int baseKza, int nRates, 
-		    int pathNum, double rate)
+                    int pathNum, double rate)
 {
   CacheData *dataPtr = search(baseKza);
 
@@ -130,15 +130,15 @@ RateCache::CacheData* RateCache::add(int baseKza, int nRates)
       
       /* if the cache if full */
       if (idx == CACHE_SIZE)
-	{
-	  idx = oldestData->kzaIdx;
-	  
-	  /* remove oldest data from list */
-	  tmpData = oldestData->next;
-	  oldestData->next = NULL;
-	  delete oldestData;
-	  oldestData = tmpData;
-	}
+        {
+          idx = oldestData->kzaIdx;
+          
+          /* remove oldest data from list */
+          tmpData = oldestData->next;
+          oldestData->next = NULL;
+          delete oldestData;
+          oldestData = tmpData;
+        }
       
       /* add new data to list */
       tmpData = new CacheData(nRates);
@@ -151,14 +151,14 @@ RateCache::CacheData* RateCache::add(int baseKza, int nRates)
   while (idx < CACHE_SIZE-1 && baseKza > kzaList[idx+1].kza)
     {
       if (kzaList[idx+1].dataPtr != NULL)
-	kzaList[idx+1].dataPtr->kzaIdx = idx;
+        kzaList[idx+1].dataPtr->kzaIdx = idx;
       kzaList[idx] = kzaList[idx+1];
       idx++;
     }
   while (idx > 0 && baseKza < kzaList[idx-1].kza)
     {
       if (kzaList[idx-1].dataPtr != NULL)
-	kzaList[idx-1].dataPtr->kzaIdx = idx;
+        kzaList[idx-1].dataPtr->kzaIdx = idx;
       kzaList[idx] = kzaList[idx-1];
       idx--;
     }

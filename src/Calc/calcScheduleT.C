@@ -30,11 +30,11 @@ calcScheduleT::calcScheduleT(calcSchedule *sched) :
       memCheck(subSchedT, "calcScheduleT::calcScheduleT(...) constructor: subSchedT");
 
       for (int itemNum=0;itemNum<nItems;itemNum++)
-	{
-	  subSchedT[itemNum] = new calcScheduleT( (*sched)[itemNum] );
-	  memCheck(subSchedT[itemNum],
-		   "calcScheduleT::calcScheduleT(...) constructor: subSchedT[itemNum]");
-	}
+        {
+          subSchedT[itemNum] = new calcScheduleT( (*sched)[itemNum] );
+          memCheck(subSchedT[itemNum],
+                   "calcScheduleT::calcScheduleT(...) constructor: subSchedT[itemNum]");
+        }
     }
 
 }
@@ -52,11 +52,11 @@ calcScheduleT::calcScheduleT(const calcScheduleT& c) :
       memCheck(subSchedT,"calcScheduleT::calcScheduleT(...) copy constructor: subSchedT");
       
       for (int itemNum=0;itemNum<nItems;itemNum++)
-	{
-	  subSchedT[itemNum] = new calcScheduleT( *(c.subSchedT[itemNum]) );
-	  memCheck(subSchedT[itemNum],
-		   "calcScheduleT::calcScheduleT(...) copy constructor: subSchedT[itemNum]");
-	}
+        {
+          subSchedT[itemNum] = new calcScheduleT( *(c.subSchedT[itemNum]) );
+          memCheck(subSchedT[itemNum],
+                   "calcScheduleT::calcScheduleT(...) copy constructor: subSchedT[itemNum]");
+        }
     }
 }
 
@@ -87,10 +87,10 @@ calcScheduleT& calcScheduleT::operator=(const calcScheduleT& c)
       memCheck(subSchedT,"calcScheduleT::operator=(...): subSchedT");
       
       for (int itemNum=0;itemNum<nItems;itemNum++)
-	{
-	  subSchedT[itemNum] = new calcScheduleT( *(c.subSchedT[itemNum]) );
-	  memCheck(subSchedT[itemNum],"calcScheduleT::operator=(...): subSchedT[itemNum]");
-	}
+        {
+          subSchedT[itemNum] = new calcScheduleT( *(c.subSchedT[itemNum]) );
+          memCheck(subSchedT[itemNum],"calcScheduleT::operator=(...): subSchedT[itemNum]");
+        }
     }
 
   return *this;

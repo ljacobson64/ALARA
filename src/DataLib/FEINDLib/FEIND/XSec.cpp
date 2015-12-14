@@ -154,9 +154,9 @@ void XSec::CleanUp()
       PCs->Count--;
 
       if(!PCs->Count)
-	{
-	  delete PCs->P;
-	}
+        {
+          delete PCs->P;
+        }
 
       PCs = NULL;
     }

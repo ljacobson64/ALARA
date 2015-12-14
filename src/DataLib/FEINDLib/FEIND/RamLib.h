@@ -56,7 +56,7 @@ class FEIND::RamLib
   XSec GetPCs(Kza parent, int csType);
 
   void SetDCs(const Kza parent, const Kza daughter, XSecType csType,
-		 XSec cs, bool add=false) throw(ExXsecSize, ExEmptyXSec);
+                 XSec cs, bool add=false) throw(ExXsecSize, ExEmptyXSec);
 
   XSec GetDCs(Kza parent, Kza daughter, int csType);
   
@@ -73,17 +73,17 @@ class FEIND::RamLib
   double GetDecayConstant(Kza parent);
 
   void AddDecayEnergy(const Kza parent, const int enType, 
-			 const double energy);
+                         const double energy);
   double GetDecayEnergy(Kza parent, int enType);  
 
   double GetTotalDecayEnergy(Kza parent);
 
   /// Add a spectrum.
   void AddSpectrum(const Kza parent, const int specType, 
-		      const Spectrum& spec);
+                      const Spectrum& spec);
 
   const std::vector<std::pair<double,double> >& GetDiscreteSpec(Kza parent, 
-								int specType);
+                                                                int specType);
 
   /// Add a decay mode to the library
   /** This function will automatically add the appropriate information for
@@ -104,11 +104,11 @@ class FEIND::RamLib
   //****************************//
 
   void AddFissionYield(const Kza parent, const Kza daughter,
-			  const int fissionType, const double yield);
+                          const int fissionType, const double yield);
   double GetFissionYield(Kza parent, Kza daughter, int fissionType);
 
   void GetFissionYield(Kza parent, std::vector<Kza>& daughters, 
-		       std::vector<double>& yields, FissionType ft);
+                       std::vector<double>& yields, FissionType ft);
 
   //****************************************************//
   //*** CALCULATING PRODUCTION AND DESTRUCTION RATES ***//
@@ -117,7 +117,7 @@ class FEIND::RamLib
   void LambdaEff(Kza parent,const std::vector<double>& flux,double& result);
 
   void LambdaEff(Kza parent, Kza daughter, const std::vector<double>& flux, 
-		    double& result);
+                    double& result);
 
   /// Function to calculate total and secondary reaction rates
   /** This reaction rate function returns the total destruction rate associated
@@ -189,8 +189,8 @@ class FEIND::RamLib
    *  \f$ \lambda_d \f$ is the parent decay constant
    */
   double LambdaEff(Kza parent, const std::vector<double>& flux,
-		   std::vector<Kza>& daughters, std::vector<double>& dLambdas,
-		   double& secLambda, FissionType ft=DefaultFT) 
+                   std::vector<Kza>& daughters, std::vector<double>& dLambdas,
+                   double& secLambda, FissionType ft=DefaultFT) 
     throw(ExXsecSize, ExEmptyXSec);
 
   /// Function to calculate production rates for adjoint calculations.
@@ -246,8 +246,8 @@ class FEIND::RamLib
    *  \f$ \lambda_d \f$ is the daughter's decay constant
    */
   double ProdRates(Kza daughter, const std::vector<double>& flux,
-		   std::vector<Kza>& parents, std::vector<double>& pLambdas,
-		   FissionType ft=DefaultFT) throw(ExEmptyXSec, ExXsecSize);
+                   std::vector<Kza>& parents, std::vector<double>& pLambdas,
+                   FissionType ft=DefaultFT) throw(ExEmptyXSec, ExXsecSize);
 
   //********************************//
   //*** GET/SET GROUP STRUCTURES ***//

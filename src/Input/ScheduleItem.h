@@ -28,7 +28,7 @@ protected:
     /// The descriptive name of the flux used for a specific pulse type
     /// item.  
     /** This name should match one of the descriptive names in the Flux
-	list. */
+        list. */
     char *fluxName;
 
     /// During cross-referencing, the 'fluxName' descriptive name is
@@ -38,7 +38,7 @@ protected:
     /// The descriptive name of the schedule referenced in a
     /// sub-schedule item.
     /** This name should match one of the descriptive names in the 
-	Schedule list. */
+        Schedule list. */
     char *itemName;
 
     /// For sub-schedule items, the 'itemName' descriptive name is
@@ -78,9 +78,9 @@ protected:
 public:
   /// Default constructor
   ScheduleItem(int intType=SCHED_HEAD, char* name=NULL, 
-	       char* pname=NULL, double inDelay=0, 
-	       char inDUnits=' ', double inOpTime=0, 
-	       char inOpUnits=' ');
+               char* pname=NULL, double inDelay=0, 
+               char inDUnits=' ', double inOpTime=0, 
+               char inOpUnits=' ');
 
   /// Inline destructor destroys whole list by deleting next - NOT!.
   ~ScheduleItem()

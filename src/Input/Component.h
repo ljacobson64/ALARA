@@ -82,7 +82,7 @@ public:
 
   /// Default constructor
   Component(int compType=COMP_HEAD, char* name=NULL,double dens=0, 
-	    double volFrac=1);
+            double volFrac=1);
 
   /// Copy constructor
   Component(const Component&);

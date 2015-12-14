@@ -65,13 +65,13 @@ topSchedule::topSchedule(const topSchedule& t) :
       memCheck(coolD,"topSchedule::topSchedule(...) copy constructor: coolD");
       coolingTime = new double[nCoolingTimes];
       memCheck(coolingTime,
-	       "topSchedule::topSchedule(...) copy constructor: coolingTime");
+               "topSchedule::topSchedule(...) copy constructor: coolingTime");
       
       for (int coolNum=0;coolNum<nCoolingTimes;coolNum++)
-	{
-	  coolD[coolNum] = t.coolD[coolNum];
-	  coolingTime[coolNum] = t.coolingTime[coolNum];
-	}
+        {
+          coolD[coolNum] = t.coolD[coolNum];
+          coolingTime[coolNum] = t.coolingTime[coolNum];
+        }
     }
 }
 
@@ -113,7 +113,7 @@ topSchedule& topSchedule::operator=(const topSchedule& t)
       memCheck(subSched,"calcSchedule::operator=(...): subSched");
       
       for (int itemNum=0;itemNum<nItems;itemNum++)
-	subSched[itemNum] = t.subSched[itemNum];
+        subSched[itemNum] = t.subSched[itemNum];
     }
   /**** END copied directly from calcSchedule.C ***/
 
@@ -130,13 +130,13 @@ topSchedule& topSchedule::operator=(const topSchedule& t)
       memCheck(coolD,"topSchedule::operator=(...): coolD");
       coolingTime = new double[nCoolingTimes];
       memCheck(coolingTime,
-	       "topSchedule::operator=(...): coolingTime");
+               "topSchedule::operator=(...): coolingTime");
       
       for (int coolNum=0;coolNum<nCoolingTimes;coolNum++)
-	{
-	  coolD[coolNum] = t.coolD[coolNum];
-	  coolingTime[coolNum] = t.coolingTime[coolNum];
-	}
+        {
+          coolD[coolNum] = t.coolD[coolNum];
+          coolingTime[coolNum] = t.coolingTime[coolNum];
+        }
     }
 
   return *this;

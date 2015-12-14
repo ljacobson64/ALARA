@@ -24,7 +24,7 @@ enum FEINDFormat
     DECAY_ENDF_6 = 0, /**< ENDF VI decay format */
     EAF_4_1 = 1,      /**< EAF 4.1 format for cross-sections */
     CINDER = 2,       /**< The CINDER data format, which contains decay data,
-		       *   cross sections and fission yields. */
+                       *   cross sections and fission yields. */
     ENDF_IEAF = 3     /**< The ENDF VI format for cross-sections */
   };
 

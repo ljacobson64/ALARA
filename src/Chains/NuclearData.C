@@ -91,19 +91,19 @@ NuclearData::NuclearData(const NuclearData& n)
       paths[rxnNum] = new double[nGroups+1];
       memCheck(paths[rxnNum],"NuclearData::NuclearData(...) copy constructor: paths[n]");
       for (gNum=0;gNum<=nGroups;gNum++)
-	paths[rxnNum][gNum] = n.paths[rxnNum][gNum];
+        paths[rxnNum][gNum] = n.paths[rxnNum][gNum];
       
       /* check for pointing of D and P */
       if (n.D == n.paths[rxnNum])
-	{
-	  D = paths[rxnNum];
-	  P = single;
-	}
+        {
+          D = paths[rxnNum];
+          P = single;
+        }
       if (n.P == n.paths[rxnNum])
-	{
-	  P = paths[rxnNum];
-	  D = single;
-	}
+        {
+          P = paths[rxnNum];
+          D = single;
+        }
     }
   
   /* allocate storage for total of paths and single xsection */
@@ -195,18 +195,18 @@ NuclearData& NuclearData::operator=(const NuclearData& n)
       paths[rxnNum] = new double[nGroups+1];
       memCheck(paths[rxnNum],"NuclearData::NuclearData(...) copy constructor: paths[n]");
       for (gNum=0;gNum<=nGroups;gNum++)
-	paths[rxnNum][gNum] = n.paths[rxnNum][gNum];
+        paths[rxnNum][gNum] = n.paths[rxnNum][gNum];
       
       if (n.D == n.paths[rxnNum])
-	{
-	  D = paths[rxnNum];
-	  P = single;
-	}
+        {
+          D = paths[rxnNum];
+          P = single;
+        }
       if (n.P == n.paths[rxnNum])
-	{
-	  P = paths[rxnNum];
-	  D = single;
-	}
+        {
+          P = paths[rxnNum];
+          D = single;
+        }
       
     }
 
@@ -298,7 +298,7 @@ void NuclearData::getDataLib(istream& input)
   nGroups = dataLib->getNumGroups();
 
   VolFlux::setNumGroups(nGroups);
-	  
+          
 }
 
 void NuclearData::closeDataLib()
@@ -319,8 +319,8 @@ void NuclearData::closeDataLib()
     NuclearData::emitted, NuclearData::paths, NuclearData::D[ngroups],
     and NuclearData::single respectively. */
 void NuclearData::setData(int numRxns, float* radE, int* daugKza, 
-			  char** emissions, float** xSection, 
-			  float thalf, float *totalXSection)
+                          char** emissions, float** xSection, 
+                          float thalf, float *totalXSection)
 {
   int gNum, rxnNum, totalRxnNum=-1;
   
@@ -369,7 +369,7 @@ void NuclearData::setData(int numRxns, float* radE, int* daugKza,
 
       single = new double[nGroups+1];
       for (gNum=0;gNum<nGroups;gNum++)
-	single[gNum] = totalXSection[gNum]*1e-24;
+        single[gNum] = totalXSection[gNum]*1e-24;
       D = single;
     }
   else
@@ -389,7 +389,7 @@ void NuclearData::setData(int numRxns, float* radE, int* daugKza,
         relations[rxnNum] = daugKza[rxnNum];
         /* log location of total reaction */
         if (daugKza[rxnNum] == 0)
-	  totalRxnNum = rxnNum;
+          totalRxnNum = rxnNum;
         emitted[rxnNum] = new char[strlen(emissions[rxnNum])+1];
         memCheck(emitted[rxnNum],"NuclearData::setData(...) : emitted[n]");
         strcpy(emitted[rxnNum],emissions[rxnNum]);
@@ -398,11 +398,11 @@ void NuclearData::setData(int numRxns, float* radE, int* daugKza,
         memCheck(paths[rxnNum],"NuclearData::setData(...) : paths[n]");
 
         for (gNum=0;gNum<nGroups;gNum++)
-	  {
-	    paths[rxnNum][gNum] = xSection[rxnNum][gNum]*1e-24;
-	    if (strcmp(emitted[rxnNum],"x"))
-	      paths[nPaths][gNum] += paths[rxnNum][gNum];
-	  }
+          {
+            paths[rxnNum][gNum] = xSection[rxnNum][gNum]*1e-24;
+            if (strcmp(emitted[rxnNum],"x"))
+              paths[nPaths][gNum] += paths[rxnNum][gNum];
+          }
         paths[rxnNum][nGroups] = xSection[rxnNum][nGroups];
       }
   else //FIENDLib always comes here. It doesn't have a emitted particle implemented
@@ -413,7 +413,7 @@ void NuclearData::setData(int numRxns, float* radE, int* daugKza,
         relations[rxnNum] = daugKza[rxnNum];
         /* log location of total reaction */
         if (daugKza[rxnNum] == 0)
-	  totalRxnNum = rxnNum;
+          totalRxnNum = rxnNum;
         emitted[rxnNum] = new char[strlen(emissions[rxnNum])+1];
         memCheck(emitted[rxnNum],"NuclearData::setData(...) : emitted[n]");
         strcpy(emitted[rxnNum],emissions[rxnNum]);
@@ -422,11 +422,11 @@ void NuclearData::setData(int numRxns, float* radE, int* daugKza,
         memCheck(paths[rxnNum],"NuclearData::setData(...) : paths[n]");
 
         for (gNum=0;gNum<nGroups;gNum++)
-	  {
-	    paths[rxnNum][gNum] = xSection[rxnNum][gNum]*1e-24;
-// 	    if (strcmp(emitted[rxnNum],"x"))
-// 	      paths[nPaths][gNum] += paths[rxnNum][gNum];
-	  }
+          {
+            paths[rxnNum][gNum] = xSection[rxnNum][gNum]*1e-24;
+//             if (strcmp(emitted[rxnNum],"x"))
+//               paths[nPaths][gNum] += paths[rxnNum][gNum];
+          }
         paths[rxnNum][nGroups] = xSection[rxnNum][nGroups];
       }
 
@@ -444,7 +444,7 @@ void NuclearData::setData(int numRxns, float* radE, int* daugKza,
 
       /* check where D is pointing */
       if (D == paths[nPaths])
-	D = paths[totalRxnNum];
+        D = paths[totalRxnNum];
 
       /* delete summation based total reaction rate */
       delete[] paths[nPaths];
@@ -457,11 +457,11 @@ void NuclearData::setData(int numRxns, float* radE, int* daugKza,
 
       /* shift all channel reactions down by one */
       for (rxnNum=totalRxnNum;rxnNum<nPaths-1;rxnNum++)
-	{
-	  paths[rxnNum] = paths[rxnNum+1];
-	  relations[rxnNum] = relations[rxnNum+1];
-	  emitted[rxnNum] = emitted[rxnNum+1];
-	}
+        {
+          paths[rxnNum] = paths[rxnNum+1];
+          relations[rxnNum] = relations[rxnNum+1];
+          emitted[rxnNum] = emitted[rxnNum+1];
+        }
       /* unpoint the last emitted */
       emitted[nPaths-1] = NULL;
       
@@ -491,27 +491,27 @@ void NuclearData::sortData()
   if ( paths[nPaths][nGroups] > 0)
     while (rxnNum < switchNum)
       {
-	/* find last decay path */
-	while (paths[--switchNum][nGroups]==0 && switchNum > 0) ;
-	
-	/* find first non-decay path */
-	while (rxnNum < switchNum && paths[rxnNum][nGroups]>0) rxnNum++;
-	
-	if (rxnNum < switchNum)
-	  {
-	    tmpPath = paths[rxnNum];
-	    tmpRel = relations[rxnNum];
-	    tmpEmit = emitted[rxnNum];
-	    paths[rxnNum] = paths[switchNum];
-	    relations[rxnNum] = relations[switchNum];
-	    emitted[rxnNum] = emitted[switchNum];
-	    paths[switchNum] = tmpPath;
-	    relations[switchNum] = tmpRel;
-	    emitted[switchNum] = tmpEmit;
-	  }
+        /* find last decay path */
+        while (paths[--switchNum][nGroups]==0 && switchNum > 0) ;
+        
+        /* find first non-decay path */
+        while (rxnNum < switchNum && paths[rxnNum][nGroups]>0) rxnNum++;
+        
+        if (rxnNum < switchNum)
+          {
+            tmpPath = paths[rxnNum];
+            tmpRel = relations[rxnNum];
+            tmpEmit = emitted[rxnNum];
+            paths[rxnNum] = paths[switchNum];
+            relations[rxnNum] = relations[switchNum];
+            emitted[rxnNum] = emitted[switchNum];
+            paths[switchNum] = tmpPath;
+            relations[switchNum] = tmpRel;
+            emitted[switchNum] = tmpEmit;
+          }
       }
 }
-				   
+                                   
 
 /** Both the NuclearData::nPaths member and the related arrays
     (NuclearData::paths, NuclearData::emitted, and NuclearData::relation)
@@ -537,13 +537,13 @@ int NuclearData::stripNonDecay()
     {
       /* only need relations and emitted if we have decay reactions */
       if (numDecay > 0)
-	{
-	  newDaug = new int[numDecay];
-	  memCheck(newDaug,"NuclearData::stripNonDecay(...): newDaug");
-	  
-	  newEmitted = new char*[numDecay];
-	  memCheck(newEmitted,"NuclearData::stripNonDecay(...): newEmitted");
-	}  
+        {
+          newDaug = new int[numDecay];
+          memCheck(newDaug,"NuclearData::stripNonDecay(...): newDaug");
+          
+          newEmitted = new char*[numDecay];
+          memCheck(newEmitted,"NuclearData::stripNonDecay(...): newEmitted");
+        }  
 
       int decayRxnNum = 0;
 
@@ -554,17 +554,17 @@ int NuclearData::stripNonDecay()
       /* always need to copy the decay paths (could be none) and
        * delete the non decay paths */
       for (rxnNum=0;rxnNum<nPaths;rxnNum++)
-	if (paths[rxnNum][nGroups]>0)
-	  {
-	    newDaug[decayRxnNum] = relations[rxnNum];
-	    newPaths[decayRxnNum] = paths[rxnNum];
-	    newEmitted[decayRxnNum++] = emitted[rxnNum];
-	  }
-	else
-	  {
-	    delete[] paths[rxnNum];
-	    delete[] emitted[rxnNum];
-	  }
+        if (paths[rxnNum][nGroups]>0)
+          {
+            newDaug[decayRxnNum] = relations[rxnNum];
+            newPaths[decayRxnNum] = paths[rxnNum];
+            newEmitted[decayRxnNum++] = emitted[rxnNum];
+          }
+        else
+          {
+            delete[] paths[rxnNum];
+            delete[] emitted[rxnNum];
+          }
       
       /* always must copy total decay rate */
       newPaths[decayRxnNum] = paths[rxnNum];

@@ -18,7 +18,7 @@ void verbose(int msg_level, const char *msgFmt, ...)
       va_end(args);
 
       while (msg_level-- >0)
-	cout << "\t";
+        cout << "\t";
       cout << msg << endl;
     }
 
@@ -38,7 +38,7 @@ void debug(int msg_level, const char *msgFmt, ...)
       va_end(args);
 
       while (msg_level--)
-	cout << "\t";
+        cout << "\t";
       cout << "**debug: " << msg << endl;
     }
 

@@ -12,7 +12,7 @@ Matrix::Matrix(int siz)
       data = new double[size*(size+1)/2];
 
       for (siz=0;siz<size*(size+1)/2;siz++)
-	data[siz] = 0;
+        data[siz] = 0;
     }
 
   /* all matrices are made as identiy matrices by default */
@@ -33,7 +33,7 @@ Matrix::Matrix(const Matrix& m)
       data = new double[size*(size+1)/2];
       
       for (int idx=0;idx<size*(size+1)/2;idx++)
-	data[idx] = m.data[idx];
+        data[idx] = m.data[idx];
     }
 
 }
@@ -54,14 +54,14 @@ Matrix::Matrix(double *d, int sz, int ecol)
       row = 0;
       col = 0;
       for (idx=0;idx<sz*(sz+1)/2;idx++)
-	{
-	  data[idx] = d[ecol+(col++)];
-	  if (col > row)
-	    {
-	      row++;
-	      col=0;
-	    }
-	}
+        {
+          data[idx] = d[ecol+(col++)];
+          if (col > row)
+            {
+              row++;
+              col=0;
+            }
+        }
     }
 
 }
@@ -94,18 +94,18 @@ Matrix& Matrix::operator*=(const Matrix& B)
       int row=0,col=0,idx,term, idxA=0;
       
       for (idx=0;idx<size*(size+1)/2;idx++)
-	{
-	  if (col > row)
-	    {
-	      row++;
-	      col=0;
-	      idxA = idx;
-	    }
-	  data[idx] = 0;
-	  for (term=col;term<=row;term++)
-	    data[idx] += A_data[idxA+term]*B.data[term*(term+1)/2+col];
-	  col++;
-	}
+        {
+          if (col > row)
+            {
+              row++;
+              col=0;
+              idxA = idx;
+            }
+          data[idx] = 0;
+          for (term=col;term<=row;term++)
+            data[idx] += A_data[idxA+term]*B.data[term*(term+1)/2+col];
+          col++;
+        }
       
       delete[] A_data;
     }
@@ -126,14 +126,14 @@ Matrix Matrix::operator*(const Matrix& B)
   for (idx=0;idx<size*(size+1)/2;idx++)
     {
       if (col > row)
-	{
-	  row++;
-	  col=0;
-	  idxA = idx;
-	}
+        {
+          row++;
+          col=0;
+          idxA = idx;
+        }
       result.data[idx] = 0;
       for (term=col;term<=row;term++)
-	result.data[idx] += data[idxA+term]*B.data[term*(term+1)/2+col];
+        result.data[idx] += data[idxA+term]*B.data[term*(term+1)/2+col];
       col++;
     }
       
@@ -156,14 +156,14 @@ void Matrix::square()
   for (idx=0;idx<size*(size+1)/2;idx++)
     {
       if (col > row)
-	{
-	  row++;
-	  col=0;
-	  idxA = idx;
-	}
+        {
+          row++;
+          col=0;
+          idxA = idx;
+        }
       data[idx] = 0;
       for (term=col;term<=row;term++)
-	data[idx] += old_data[idxA+term]*old_data[term*(term+1)/2+col];
+        data[idx] += old_data[idxA+term]*old_data[term*(term+1)/2+col];
       col++;
     }
 
@@ -185,11 +185,11 @@ Matrix Matrix::operator^(int power)
     {
       /* if exponent is odd */
       if (power%2 == 1)
-	answer *= accumulator;
+        answer *= accumulator;
 
       /* time saver */
       if (power > 1)
-	accumulator.square();
+        accumulator.square();
 
       power = power/2;
     }
@@ -212,7 +212,7 @@ Matrix& Matrix::operator=(const Matrix& m)
       data = new double[size*(size+1)/2];
       
       for (int idx=0;idx<size*(size+1)/2;idx++)
-	data[idx] = m.data[idx];
+        data[idx] = m.data[idx];
     }
 
   return *this;

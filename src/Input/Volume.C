@@ -244,9 +244,9 @@ void Volume::xCheck(Loading *loadList)
       ptr = ptr->next;
       ptr->zonePtr = loadList->findZone(ptr->zoneName);
       if (ptr->zonePtr == NULL)
-	{
-	  error(420,"Zone %s specified in interval volumes was not found in the material loading.", ptr->zoneName);
-	}
+        {
+          error(420,"Zone %s specified in interval volumes was not found in the material loading.", ptr->zoneName);
+        }
     }
 
   verbose(3,"All zones referenced in interval definitions were found.");
@@ -264,12 +264,12 @@ void Volume::xCheck(Loading *loadList)
     to determine the type of geometry and the fifth for
     cross-referencing the newly generated interval with a zone. */
 Volume* Volume::calculate(double *da, double *dx, int *coord, 
-			      Geometry* geom, Loading *loadPtr)
+                              Geometry* geom, Loading *loadPtr)
 {
   double ri,ro,dt,dz,pi,po,dp;
 
   /* debug(3,"Adding interval at point (%g,%g,%g), with size (%g,%g,%g) and coordinate ordering (%d,%d,%d) in zone %s.",
-	da[0],da[1],da[2],dx[0],dx[1],dx[2],coord[0],coord[1],coord[2],loadPtr->getName()); */
+        da[0],da[1],da[2],dx[0],dx[1],dx[2],coord[0],coord[1],coord[2],loadPtr->getName()); */
 
   switch (geom->getType())
     {
@@ -328,17 +328,17 @@ void Volume::xRef(Mixture *mixListHead)
     {
       ptr = ptr->next;
       if (strcmp(ptr->zonePtr->getMix(),"void"))
-	{
-	  /* set the mixture pointer based on the zone pointer */
-	  ptr->mixPtr = mixListHead->find(ptr->zonePtr->getMix());
-	  /* add this interval to the mixture's list of intervals */
-	  ptr->mixPtr->xRef(ptr);
-	  ptr->nComps = ptr->mixPtr->getNComps();
-	  ptr->outputList = new Result[ptr->nComps+1];
-	  verbose(3,"Referencing mixture from zone %s (%s) -> %s.",
-		  ptr->zonePtr->getName(), ptr->zonePtr->getMix(),
-		  ptr->mixPtr->getName());
-	}
+        {
+          /* set the mixture pointer based on the zone pointer */
+          ptr->mixPtr = mixListHead->find(ptr->zonePtr->getMix());
+          /* add this interval to the mixture's list of intervals */
+          ptr->mixPtr->xRef(ptr);
+          ptr->nComps = ptr->mixPtr->getNComps();
+          ptr->outputList = new Result[ptr->nComps+1];
+          verbose(3,"Referencing mixture from zone %s (%s) -> %s.",
+                  ptr->zonePtr->getName(), ptr->zonePtr->getMix(),
+                  ptr->mixPtr->getName());
+        }
     }
 }
 
@@ -354,7 +354,7 @@ void Volume::xRef(Norm *normList)
       ptr=ptr->next;
       normList = normList->advance();
       if (normList == NULL)
-	error(620,"You have specified too few normalizations.  If you specifiy any normalizations, you must specify one for each interval.");
+        error(620,"You have specified too few normalizations.  If you specifiy any normalizations, you must specify one for each interval.");
 
       ptr->norm = normList->getScale();
       cntNorms++;
@@ -406,7 +406,7 @@ void Volume::addMixList(Volume* ptr)
 //   while (ptr->next != NULL)
 //     {
 //       if (fluxFile.eof())
-// 	error(622,"Flux file %s does not contain enough data.",fname);
+//         error(622,"Flux file %s does not contain enough data.",fname);
 
 //       ptr = ptr->next;
 //       ptr->flux = ptr->flux->read(fluxFile,scale*ptr->norm);
@@ -444,13 +444,13 @@ void Volume::makeSchedTs(topSchedule *top)
     {
       ptr = ptr->next;
       if (ptr->mixPtr != NULL)
-	{
-	  ptr->schedT = new topScheduleT(top);
-	  memCheck(ptr->schedT,"Volume::makeSchedTs(...): ptr->schedT");
-	  verbose(6,"Made next storage hierarchy.");
-	}
+        {
+          ptr->schedT = new topScheduleT(top);
+          memCheck(ptr->schedT,"Volume::makeSchedTs(...): ptr->schedT");
+          verbose(6,"Made next storage hierarchy.");
+        }
       else
-	verbose(6,"Skipped storage hierarchy in VOID interval.");
+        verbose(6,"Skipped storage hierarchy in VOID interval.");
     }
 
   verbose(3,"Made all storage hierarchies.");
@@ -550,19 +550,19 @@ void Volume::readDump(int kza)
       ptr->results.readDump();
 
       switch(NuclearData::getMode())
-	{
-	case MODE_FORWARD:
-	  {
-	    /* tally the results from this root in the various components */
-	    ptr->results.postProcList(ptr->outputList,ptr->mixPtr,kza);
-	    break;
-	  }
-	case MODE_REVERSE:
-	  {
-	    /* tally the results from this target in various components */
-	    ptr->results.postProcTarget(ptr->outputList,ptr->mixPtr);
-	  }
-	}
+        {
+        case MODE_FORWARD:
+          {
+            /* tally the results from this root in the various components */
+            ptr->results.postProcList(ptr->outputList,ptr->mixPtr,kza);
+            break;
+          }
+        case MODE_REVERSE:
+          {
+            /* tally the results from this target in various components */
+            ptr->results.postProcTarget(ptr->outputList,ptr->mixPtr);
+          }
+        }
     }
 }
 
@@ -577,31 +577,31 @@ void Volume::postProc()
       ptr = ptr->next;
  
       if (ptr->mixPtr != NULL)
-	{
-	  verbose(3,"Tallying for interval #%d",++intvlCntr);
-	  /* tally each of the components into the total */
-	  for (compNum=0;compNum<ptr->nComps;compNum++)
-	    ptr->outputList[compNum].postProc(ptr->outputList[ptr->nComps]);
-	  
-	  /* tally the results to the respective mixture and zone */
-	  verbose(3,"Tallying interval #%d into mixture %s",++intvlCntr,
-		  ptr->mixPtr->getName());
-	  ptr->mixPtr->tally(ptr->outputList,ptr->volume);
-	  verbose(3,"Tallying interval #%d into zone %s",++intvlCntr,
-		  ptr->zoneName);
-	  ptr->zonePtr->tally(ptr->outputList,ptr->volume);
-	}
+        {
+          verbose(3,"Tallying for interval #%d",++intvlCntr);
+          /* tally each of the components into the total */
+          for (compNum=0;compNum<ptr->nComps;compNum++)
+            ptr->outputList[compNum].postProc(ptr->outputList[ptr->nComps]);
+          
+          /* tally the results to the respective mixture and zone */
+          verbose(3,"Tallying interval #%d into mixture %s",++intvlCntr,
+                  ptr->mixPtr->getName());
+          ptr->mixPtr->tally(ptr->outputList,ptr->volume);
+          verbose(3,"Tallying interval #%d into zone %s",++intvlCntr,
+                  ptr->zoneName);
+          ptr->zonePtr->tally(ptr->outputList,ptr->volume);
+        }
       else
-	verbose(3,"Skipping VOID interval #%d.",++intvlCntr);
+        verbose(3,"Skipping VOID interval #%d.",++intvlCntr);
     }
   ptr=this;
   while (ptr->next !=NULL)
   {
-	ptr=ptr->next;
-	if (ptr->mixPtr != NULL)
-        {	ptr->userVol=(ptr->zonePtr->getUserVol())*(ptr->volume)/(ptr->zonePtr->getVol());
- 		ptr->mixPtr->incrUserVol(ptr->userVol);
-	} 
+        ptr=ptr->next;
+        if (ptr->mixPtr != NULL)
+        {        ptr->userVol=(ptr->zonePtr->getUserVol())*(ptr->volume)/(ptr->zonePtr->getVol());
+                 ptr->mixPtr->incrUserVol(ptr->userVol);
+        } 
   }    
 }
 
@@ -615,7 +615,7 @@ void Volume::postProc()
     normalization is being used, so that the correct output information
     can be given. */
 void Volume::write(int response, int writeComp, CoolingTime* coolList, 
-		   int targetKza, int normType)
+                   int targetKza, int normType)
 {
   Volume *head = this;
   Volume *ptr = head;
@@ -630,137 +630,137 @@ void Volume::write(int response, int writeComp, CoolingTime* coolList,
       /* write header information */
       cout << endl;
       cout << "Interval #" << ++intvlCntr << " (Zone: " 
-	   << ptr->zoneName <<") :" << endl;
+           << ptr->zoneName <<") :" << endl;
 
       debug(5,"Volume::userVol= %f",ptr->userVol);
       if (ptr->mixPtr != NULL)
-	{
-	  if (normType > 0)
-	    cout << "\tRelative Volume: " << ptr->volume << endl;
-	  else
-	    cout << "\tMass: " << ptr->volume*ptr->mixPtr->getTotalDensity() 
-		 << endl;
+        {
+          if (normType > 0)
+            cout << "\tRelative Volume: " << ptr->volume << endl;
+          else
+            cout << "\tMass: " << ptr->volume*ptr->mixPtr->getTotalDensity() 
+                 << endl;
 
-	  cout << "\tContaining mixture: " << ptr->mixPtr->getName() << endl 
-	       << endl;
-	  
-	  /* write the component breakdown if requested */
-	  if (writeComp && response != OUTFMT_SRC)
-	    {
-	      /* get the list of components for this mixture */
-	      Component *compPtr = ptr->mixPtr->getCompList();
-	      int compNum=0;
-	      compPtr = compPtr->advance();
-	      
-	      /* for each component */
-	      while (compPtr != NULL)
-		{
-		  /* NOTE: interval results are already normalized 
-		           for the correct total interval volume */
-		  volFrac = compPtr->getVolFrac();
-		  volume_mass = volFrac;
+          cout << "\tContaining mixture: " << ptr->mixPtr->getName() << endl 
+               << endl;
+          
+          /* write the component breakdown if requested */
+          if (writeComp && response != OUTFMT_SRC)
+            {
+              /* get the list of components for this mixture */
+              Component *compPtr = ptr->mixPtr->getCompList();
+              int compNum=0;
+              compPtr = compPtr->advance();
+              
+              /* for each component */
+              while (compPtr != NULL)
+                {
+                  /* NOTE: interval results are already normalized 
+                           for the correct total interval volume */
+                  volFrac = compPtr->getVolFrac();
+                  volume_mass = volFrac;
 
-		  /* write component header */
-		  cout << "Constituent: " << compPtr->getName() << endl;
+                  /* write component header */
+                  cout << "Constituent: " << compPtr->getName() << endl;
 
-		  if (normType < 0)
-		    {
-		      density = compPtr->getDensity();
-		      cout 
-		        << "\tVolume Fraction: " << volFrac
-		        << "\tRelative Volume: " << volume_mass*ptr->volume;
-		      volume_mass *= density;
-		      cout
-			<< "\tDensity: " << density 
-			<< "\tMass: " << volume_mass*ptr->volume;
-		    }
-		  else if (normType == OUTNORM_VOL_INT) 
-		    {
-		      /* this effectively multiplies by the interval volume to give
-			 a volume integrated result */
-		      cout 
-		        << "\tVolume Fraction: " << volFrac
-		        << "\tAbsolute Volume: " << volume_mass*ptr->userVol;
-		      volume_mass /= ptr->userVol;
-		      cout << "\tVolume Integrated";
-		    }
-		  else
-		    {
-		      cout 
-		        << "\tVolume Fraction: " << volFrac
-		        << "\tRelative Volume: " << volume_mass*ptr->volume;
-		    }
+                  if (normType < 0)
+                    {
+                      density = compPtr->getDensity();
+                      cout 
+                        << "\tVolume Fraction: " << volFrac
+                        << "\tRelative Volume: " << volume_mass*ptr->volume;
+                      volume_mass *= density;
+                      cout
+                        << "\tDensity: " << density 
+                        << "\tMass: " << volume_mass*ptr->volume;
+                    }
+                  else if (normType == OUTNORM_VOL_INT) 
+                    {
+                      /* this effectively multiplies by the interval volume to give
+                         a volume integrated result */
+                      cout 
+                        << "\tVolume Fraction: " << volFrac
+                        << "\tAbsolute Volume: " << volume_mass*ptr->userVol;
+                      volume_mass /= ptr->userVol;
+                      cout << "\tVolume Integrated";
+                    }
+                  else
+                    {
+                      cout 
+                        << "\tVolume Fraction: " << volFrac
+                        << "\tRelative Volume: " << volume_mass*ptr->volume;
+                    }
 
-		  cout << endl;
+                  cout << endl;
 
-		  ptr->outputList[compNum].write(response,targetKza,ptr->mixPtr,
-						 coolList,ptr->total,volume_mass,ptr);
+                  ptr->outputList[compNum].write(response,targetKza,ptr->mixPtr,
+                                                 coolList,ptr->total,volume_mass,ptr);
 
-		  compPtr = compPtr->advance();
-		  compNum++;
-		}
-	    }
-	  
-	  volFrac = ptr->mixPtr->getVolFrac();
+                  compPtr = compPtr->advance();
+                  compNum++;
+                }
+            }
+          
+          volFrac = ptr->mixPtr->getVolFrac();
 
-	  /* if components were written and there is only one */
-	  if (writeComp && ptr->nComps == 0 && volFrac == 1.0)
-	    /* write comment refering total to component total */
-	    cout << "** Interval totals are the same as those of the single constituent."
-		 << endl << endl;
-	  else
-	    {
-	      /* otherwise write the total response for the zone */
-	      volume_mass = volFrac;
-	      
-	      /* write component header */
-	      cout << "Total (All constituents) " << endl;
+          /* if components were written and there is only one */
+          if (writeComp && ptr->nComps == 0 && volFrac == 1.0)
+            /* write comment refering total to component total */
+            cout << "** Interval totals are the same as those of the single constituent."
+                 << endl << endl;
+          else
+            {
+              /* otherwise write the total response for the zone */
+              volume_mass = volFrac;
+              
+              /* write component header */
+              cout << "Total (All constituents) " << endl;
 
-	      cout << "\tCOMPACTED" << endl;
+              cout << "\tCOMPACTED" << endl;
 
-	      
-	      if (normType < 0)
-		{
-	          cout 
-		    << "\tVolume Fraction: " << volFrac
-		    << "\tRelative Volume: " << volume_mass*ptr->volume;
-		  density = ptr->mixPtr->getTotalDensity();
-		  /* different from constituent: mixture densities 
-		     already take volume fraction into account */
-		  volume_mass = density;
-		  cout
-		    << "\tDensity: " << density 
-		    << "\tMass: " << volume_mass*ptr->volume;
-		}
-	      else if (normType == OUTNORM_VOL_INT) 
-		{
-		  /* this effectively multiplies by the interval volume to give
-		     a volume integrated result */
-	          cout 
-		    << "\tVolume Fraction: " << volFrac
-		    << "\tAbsolute Volume: " << volume_mass*ptr->userVol;
-		  cout << "\tVolume Integrated";
-		  volume_mass /= ptr->userVol;
-		}
-	      else
-		{
-		  cout 
-		    << "\tVolume Fraction: " << volFrac
-		    << "\tRelative Volume: " << volume_mass*ptr->volume;
-		}
-	      
-	      cout << endl;
+              
+              if (normType < 0)
+                {
+                  cout 
+                    << "\tVolume Fraction: " << volFrac
+                    << "\tRelative Volume: " << volume_mass*ptr->volume;
+                  density = ptr->mixPtr->getTotalDensity();
+                  /* different from constituent: mixture densities 
+                     already take volume fraction into account */
+                  volume_mass = density;
+                  cout
+                    << "\tDensity: " << density 
+                    << "\tMass: " << volume_mass*ptr->volume;
+                }
+              else if (normType == OUTNORM_VOL_INT) 
+                {
+                  /* this effectively multiplies by the interval volume to give
+                     a volume integrated result */
+                  cout 
+                    << "\tVolume Fraction: " << volFrac
+                    << "\tAbsolute Volume: " << volume_mass*ptr->userVol;
+                  cout << "\tVolume Integrated";
+                  volume_mass /= ptr->userVol;
+                }
+              else
+                {
+                  cout 
+                    << "\tVolume Fraction: " << volFrac
+                    << "\tRelative Volume: " << volume_mass*ptr->volume;
+                }
+              
+              cout << endl;
 
-	      ptr->outputList[ptr->nComps].write(response,targetKza,ptr->mixPtr,
-						 coolList,ptr->total, volume_mass,ptr);
-	      
-	    }
-	}
+              ptr->outputList[ptr->nComps].write(response,targetKza,ptr->mixPtr,
+                                                 coolList,ptr->total, volume_mass,ptr);
+              
+            }
+        }
       else
-	cout << "\tMixture: VOID" << endl << endl;
+        cout << "\tMixture: VOID" << endl << endl;
       
     }
-	  
+          
 
   /** WRITE TOTAL TABLE **/
   /* reset interval pointer and counter */
@@ -784,17 +784,17 @@ void Volume::write(int response, int writeComp, CoolingTime* coolList,
       ptr = ptr->next;
       intvlCntr++;
       if (ptr->mixPtr != NULL)
-	{
-	  cout << intvlCntr << "\t";
-	  
+        {
+          cout << intvlCntr << "\t";
+          
           /* for each cooling time */ 
           for (resNum=0;resNum<nResults;resNum++)
-	    {
-	      sprintf(isoSym,"%-11.4e ",ptr->total[resNum]);
-	      cout << isoSym;
-	    }
-	  cout << endl;
-	}
+            {
+              sprintf(isoSym,"%-11.4e ",ptr->total[resNum]);
+              cout << isoSym;
+            }
+          cout << endl;
+        }
     }
   coolList->writeSeparator();
 
@@ -816,11 +816,11 @@ void Volume::write(int response, int writeComp, CoolingTime* coolList,
 // //loop to count number of interval
 // while (ptr->next != NULL)
 // {
-// 	ptr=ptr->next; // First ptr is head
-// 	volumeCtr++;	
-// 	Loading* ldrptr=ptr->zonePtr;
-//  	if ((ptr->next != NULL) & (ptr->next>zonePtr<>ldrptr))
-// 		(*intHEAD)++;		
+//         ptr=ptr->next; // First ptr is head
+//         volumeCtr++;        
+//         Loading* ldrptr=ptr->zonePtr;
+//          if ((ptr->next != NULL) & (ptr->next>zonePtr<>ldrptr))
+//                 (*intHEAD)++;                
 // }
 
 // //performs summation and prints result
@@ -828,33 +828,33 @@ void Volume::write(int response, int writeComp, CoolingTime* coolList,
 // {
  
 //         //  Loops through each shutdown time 
-// 	for (resNum=0;resNum<nResults;resNum++)
-// 	{
-// 	        sum = 0; 
-// 	        sizectr=listsize-1; //we've read 1 element already	
-		
-// 		// Loops through all requested set of intervals to be summed
-// 		while(sizectr>0) 
-// 		{
-// 			lower=*(++intervalptr);
-// 			upper=*(++intervalptr);
+//         for (resNum=0;resNum<nResults;resNum++)
+//         {
+//                 sum = 0; 
+//                 sizectr=listsize-1; //we've read 1 element already        
+                
+//                 // Loops through all requested set of intervals to be summed
+//                 while(sizectr>0) 
+//                 {
+//                         lower=*(++intervalptr);
+//                         upper=*(++intervalptr);
 
-// 			for(int i=0;i<lower;i++) // advances ptr to start of interval to be summed
-// 				ptr = ptr -> next;
-		
-// 			//  Loops through mesh interval at a given shutdown time	
-// 			for(int mesh=lower;mesh<=upper;mesh++)
-// 			{
-// 				sum+=ptr->total[resNum];
-// 				ptr = ptr->next;
-// 			}
-// 			sizectr-=2; //we'vre read 2 additional numbers
-// 		}
-// 		ptr = head; // reset ptr to mesh head
-// 		intervalptr=intHEAD; // reset interval list	
-// 	        listsize = *intervalptr; // reads size of new interval set	
-// 		cout<<endl<<" "<<"sum;  // write total dose for all requested interval for one cooling time	
-// 	}		
+//                         for(int i=0;i<lower;i++) // advances ptr to start of interval to be summed
+//                                 ptr = ptr -> next;
+                
+//                         //  Loops through mesh interval at a given shutdown time        
+//                         for(int mesh=lower;mesh<=upper;mesh++)
+//                         {
+//                                 sum+=ptr->total[resNum];
+//                                 ptr = ptr->next;
+//                         }
+//                         sizectr-=2; //we'vre read 2 additional numbers
+//                 }
+//                 ptr = head; // reset ptr to mesh head
+//                 intervalptr=intHEAD; // reset interval list        
+//                 listsize = *intervalptr; // reads size of new interval set        
+//                 cout<<endl<<" "<<"sum;  // write total dose for all requested interval for one cooling time        
+//         }                
 
 // }
 // *********************** END OF DOSE SUMMARY CODE ************************************************ */
@@ -873,8 +873,8 @@ void Volume::resetOutList()
     {
       ptr = ptr->next;
       if (ptr->outputList != NULL)
-	for (compNum=0;compNum<=ptr->nComps;compNum++)
-	  ptr->outputList[compNum].clear();
+        for (compNum=0;compNum<=ptr->nComps;compNum++)
+          ptr->outputList[compNum].clear();
     }
 }
 
@@ -924,27 +924,27 @@ int Volume::count()
 //       ptr = ptr->next;
 //       volFluxPtr = ptr->fluxHead;
 //       while(volFluxPtr->advance())
-// 	{
-// 	  volFluxPtr = volFluxPtr->advance();
-	  
-// 	  for(int CP = 0; CP < nCP; CP++)
-// 	    {
-// 	      for(int CPEG = 0; CPEG < nCPEG; CPEG++)
-// 		{
-// 		  sumNEG = 0;
-// 		  for(int NEG = 0; NEG < nNEG; NEG++)
-// 		    {
-// 		      sumNEG += volFluxPtr->getnflux()[NEG]*ptr->mixPtr->getGvalues()[CP][CPEG][NEG];
-// 		    }
-// 		  volFluxPtr->setCPflux(CP,CPEG,sumNEG);
-// 		  //cout << volFluxPtr->getCPflux()[CP][CPEG] << ' ';
-// 		}
-// 	      //cout << endl << endl;
-// 	    }
-// 	  //cout << endl << endl << "Next CP" << endl << endl;
-// 	}
+//         {
+//           volFluxPtr = volFluxPtr->advance();
+          
+//           for(int CP = 0; CP < nCP; CP++)
+//             {
+//               for(int CPEG = 0; CPEG < nCPEG; CPEG++)
+//                 {
+//                   sumNEG = 0;
+//                   for(int NEG = 0; NEG < nNEG; NEG++)
+//                     {
+//                       sumNEG += volFluxPtr->getnflux()[NEG]*ptr->mixPtr->getGvalues()[CP][CPEG][NEG];
+//                     }
+//                   volFluxPtr->setCPflux(CP,CPEG,sumNEG);
+//                   //cout << volFluxPtr->getCPflux()[CP][CPEG] << ' ';
+//                 }
+//               //cout << endl << endl;
+//             }
+//           //cout << endl << endl << "Next CP" << endl << endl;
+//         }
 //     }
-	
+        
 // }
 
 // void Volume::loadSpecLib(istream *probInput)
@@ -976,25 +976,25 @@ int Volume::count()
 //       input.getline(String,100,'\n');
 
 //       for(int i = 0; i < 20; i++)
-// 	{
-// 	  input >> Start >> Start >> Start;
-	  
-// 	  if(Start/1000)
-// 	    {
-// 	      Finish = Start % 1000;
-// 	      Start = Start/1000;
-// 	    }
-// 	  else
-// 	    {
-// 	      input >> Finish;
-// 	    }
+//         {
+//           input >> Start >> Start >> Start;
+          
+//           if(Start/1000)
+//             {
+//               Finish = Start % 1000;
+//               Start = Start/1000;
+//             }
+//           else
+//             {
+//               input >> Finish;
+//             }
 
-// 	  for(int j = Start; j <= Finish; j++)
-// 	    energyRel[j-1] = i;	    
+//           for(int j = Start; j <= Finish; j++)
+//             energyRel[j-1] = i;            
 
-// 	  for(int j = 0; j < 21; j++)
-// 	    input.getline(String, 100, '\n');
-// 	}
+//           for(int j = 0; j < 21; j++)
+//             input.getline(String, 100, '\n');
+//         }
 
 //       input.seekg(0,ios::beg);
 //     }
@@ -1019,10 +1019,10 @@ int Volume::count()
 //                   input >> specLibStorage[count];
 //                   count++;
 //                 }
-	      
+              
 //               input.getline(String,100,'\n');
 //             }
-// 	  specLib[KZA] = specLibStorage;
+//           specLib[KZA] = specLibStorage;
 //         }
 //       input.get();
 //       count = 0;
@@ -1048,9 +1048,9 @@ int Volume::count()
 //       input[i].open(strcat(tmpStr2,tmpStr));
       
 //       if(!input[i].is_open())
-// 	{
-// 	  cout << "\nFailed To Open Range Libraries\n";
-// 	}
+//         {
+//           cout << "\nFailed To Open Range Libraries\n";
+//         }
 //     }
 
 //   // 0: alpha
@@ -1068,7 +1068,7 @@ int Volume::count()
 //       while(!input[i].eof())
 //         {
 //           input[i] >> KZA;
-// 	  KZA = KZA/10000;
+//           KZA = KZA/10000;
 
 //           if(!i)
 //             {
@@ -1093,10 +1093,10 @@ void Volume::readAdjDoseData(int nGroups, ifstream& AdjDoseData)
   Volume *ptr = this;
   while (ptr->next !=NULL)
   {
-	ptr = ptr->next;
+        ptr = ptr->next;
         ptr->adjConv=new double[nGroups]; 
         for (int gNum=0;gNum<nGroups;gNum++)
-	       AdjDoseData >> ptr->adjConv[gNum];
+               AdjDoseData >> ptr->adjConv[gNum];
   }
 }
 
@@ -1108,7 +1108,7 @@ double Volume::getAdjDoseConv(int kza, GammaSrc *adjDose)
 // adjDose or volume can be NULL if folded dose (bio dose) requested for unsupported resolution
 
   if (adjDose == NULL || &volume == NULL)
-  	error(9000, "Error in Volume::getAdjDoseConv()" ); 
+          error(9000, "Error in Volume::getAdjDoseConv()" ); 
   
   // check cache for data
   if (!doseContrib.count(kza))
@@ -1134,9 +1134,9 @@ double Volume::getAdjDoseConv(int kza, GammaSrc *adjDose)
 //   if (dataAccess.getLambda(kza))
 //     {
 //       while (ptr->loadingPtr = thisLoading)
-// 	{
-// 	  zoneResponse += ptr->getAdjDoseConv(kza,adjDose) * kzaResult;
-// 	}
+//         {
+//           zoneResponse += ptr->getAdjDoseConv(kza,adjDose) * kzaResult;
+//         }
 //     }
 
 // }

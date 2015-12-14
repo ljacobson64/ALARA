@@ -19,8 +19,8 @@ ALARALib::ALARALib(const char* fname, const char* idxName)
   binLib = fopen(fname,"wb");
   if (binLib == NULL)
     error(1105,
-	  "The specified library with filename %s could not be created. Please check the path/filename.",
-	  fname);
+          "The specified library with filename %s could not be created. Please check the path/filename.",
+          fname);
     
   tmpIdx.open(idxName, ios::out);
   offset = 0;
@@ -40,15 +40,15 @@ ALARALib::ALARALib(const char* fname,int setType)
   binLib = fopen(searchXSPath(fnameStr),"rb");
   if (binLib == NULL)
     error(1104,
-	  "The specified library with filename %s could not be accessed. Please check the path/filename.",
-	  fnameStr);
+          "The specified library with filename %s could not be accessed. Please check the path/filename.",
+          fnameStr);
     
 
   idx = new LibIdx(nParents,nGroups,binLib,setType);
 
   if (setType != type)
     error(1100,"You have specified library type %s but given the filename of a%s library.",
-	  libTypeStr[type],libTypeStr[setType]);
+          libTypeStr[type],libTypeStr[setType]);
 }
 
 ALARALib::ALARALib(const ALARALib& a) : DataLib(a)
@@ -110,10 +110,10 @@ void ALARALib::readData(int findKza, NuclearData* data)
       fread(&thalf,SFLOAT,1,binLib);
       fread(E,SFLOAT,3,binLib);
       if (type == DATALIB_ADJOINT)
-	{
-	  totalXSect = new float[nGroups+1];
-	  fread(totalXSect,SFLOAT,nGroups+1,binLib);
-	}
+        {
+          totalXSect = new float[nGroups+1];
+          fread(totalXSect,SFLOAT,nGroups+1,binLib);
+        }
 
       /* setup arrays */
       daugKza= new int[nRxns];
@@ -127,23 +127,23 @@ void ALARALib::readData(int findKza, NuclearData* data)
       
       /* Read info for each daughter */
       for (rxnNum=0;rxnNum<nRxns;rxnNum++)
-	{
-	  fread(daugKza+rxnNum,SINT,1,binLib);
-	  fread(&emittedLen,SINT,1,binLib);
+        {
+          fread(daugKza+rxnNum,SINT,1,binLib);
+          fread(&emittedLen,SINT,1,binLib);
 
-	  emitted[rxnNum] = new char[emittedLen+1];
-	  memCheck(emitted[rxnNum],"ALARALib::readData(...): emitted[n]");
-	  fread(emitted[rxnNum],1,emittedLen,binLib);
-	  emitted[rxnNum][emittedLen] = '\0';
+          emitted[rxnNum] = new char[emittedLen+1];
+          memCheck(emitted[rxnNum],"ALARALib::readData(...): emitted[n]");
+          fread(emitted[rxnNum],1,emittedLen,binLib);
+          emitted[rxnNum][emittedLen] = '\0';
 
-	  xSection[rxnNum] = new float[nGroups+1];
-	  memCheck(xSection[rxnNum],"ALARALib::readData(...): xSection[n]");
-	  fread(&numNZGrps,SINT,1,binLib);
-	  fread(xSection[rxnNum],SFLOAT,numNZGrps,binLib);
-	  for (gNum=numNZGrps;gNum<nGroups;gNum++)
-	    xSection[rxnNum][gNum] = 0;
-	  fread(xSection[rxnNum]+nGroups,SFLOAT,1,binLib);
-	}
+          xSection[rxnNum] = new float[nGroups+1];
+          memCheck(xSection[rxnNum],"ALARALib::readData(...): xSection[n]");
+          fread(&numNZGrps,SINT,1,binLib);
+          fread(xSection[rxnNum],SFLOAT,numNZGrps,binLib);
+          for (gNum=numNZGrps;gNum<nGroups;gNum++)
+            xSection[rxnNum][gNum] = 0;
+          fread(xSection[rxnNum]+nGroups,SFLOAT,1,binLib);
+        }
       
       verbose(5,"Read %d reaction path(s) for %d.",nRxns,findKza);
       /* set the NuclearData object */
@@ -204,25 +204,25 @@ void ALARALib::readGammaData(int findKza, GammaSrc *gammaSrc)
       fread(nPnts,SINT,numSpec,binLib);
       
       for (specNum=0;specNum<numSpec;specNum++)
-	{
-	  discGammaE[specNum] = new float[numDisc[specNum]];
-	  discGammaI[specNum] = new float[numDisc[specNum]];
-	  fread(discGammaE[specNum],SFLOAT,numDisc[specNum],binLib);
-	  fread(discGammaI[specNum],SFLOAT,numDisc[specNum],binLib);
+        {
+          discGammaE[specNum] = new float[numDisc[specNum]];
+          discGammaI[specNum] = new float[numDisc[specNum]];
+          fread(discGammaE[specNum],SFLOAT,numDisc[specNum],binLib);
+          fread(discGammaI[specNum],SFLOAT,numDisc[specNum],binLib);
 
-	  intRegB[specNum] = new int[numIntReg[specNum]];
-	  intRegT[specNum] = new int[numIntReg[specNum]];
-	  contX[specNum] = new float[nPnts[specNum]];
-	  contY[specNum] = new float[nPnts[specNum]];
-	  fread(intRegB[specNum],SINT,numIntReg[specNum],binLib);
-	  fread(intRegT[specNum],SINT,numIntReg[specNum],binLib);
-	  fread(contX[specNum],SFLOAT,nPnts[specNum],binLib);
-	  fread(contY[specNum],SFLOAT,nPnts[specNum],binLib);
-	}
+          intRegB[specNum] = new int[numIntReg[specNum]];
+          intRegT[specNum] = new int[numIntReg[specNum]];
+          contX[specNum] = new float[nPnts[specNum]];
+          contY[specNum] = new float[nPnts[specNum]];
+          fread(intRegB[specNum],SINT,numIntReg[specNum],binLib);
+          fread(intRegT[specNum],SINT,numIntReg[specNum],binLib);
+          fread(contX[specNum],SFLOAT,nPnts[specNum],binLib);
+          fread(contY[specNum],SFLOAT,nPnts[specNum],binLib);
+        }
     }
 
   gammaSrc->setData(findKza,numSpec,numDisc,numIntReg,nPnts,intRegB,intRegT,
-		    discGammaE,discGammaI,contX,contY);
+                    discGammaE,discGammaI,contX,contY);
 
   for (specNum=0;specNum<numSpec;specNum++)
     {
@@ -285,7 +285,7 @@ void ALARALib::writeHead(int readNGrps, float *grpBnds, float *grpWeights)
 
 /* write the data for a single isotope */
 void ALARALib::writeData(int kza, int nRxns, float thalf, float *E,
-			 int *daugKza, char **emitted, float **xSection)
+                         int *daugKza, char **emitted, float **xSection)
 {
   int unique, emittedLen, numNZGrps;
 
@@ -304,10 +304,10 @@ void ALARALib::writeData(int kza, int nRxns, float thalf, float *E,
       /* determine number of non-zero groups */
       numNZGrps = nGroups;
       while (numNZGrps > 1 && xSection[unique][numNZGrps-1] == 0)
-	numNZGrps--;
+        numNZGrps--;
 
       tmpIdx << "\t" << daugKza[unique] << "\t" << emitted[unique] 
-	     << "\t" << offset << endl;
+             << "\t" << offset << endl;
       offset+=fwrite(daugKza+unique,SINT,1,binLib)*SINT;
       emittedLen = strlen(emitted[unique]);
       offset+=fwrite(&emittedLen,SINT,1,binLib)*SINT;
@@ -329,9 +329,9 @@ void ALARALib::writeData(int kza, int nRxns, float thalf, float *E,
 }
 
 void ALARALib::writeGammaData(int kza, int numSpec, int *numDisc, int *nIntReg,
-			      int *nPnts, float **discGammaE, float **discGammaI,
-			      int **intRegB, int **intRegT, 
-			      float **contX, float **contY)
+                              int *nPnts, float **discGammaE, float **discGammaI,
+                              int **intRegB, int **intRegT, 
+                              float **contX, float **contY)
 {
   int specNum;
 
@@ -344,7 +344,7 @@ void ALARALib::writeGammaData(int kza, int numSpec, int *numDisc, int *nIntReg,
   offset += fwrite(&kza,SINT,1,binLib)*SINT;
   offset += fwrite(&numSpec,SINT,1,binLib)*SINT;
   /* write number of discrete gammas in each spectrum */
-  offset+=fwrite(numDisc,SINT,numSpec,binLib)*SINT;	
+  offset+=fwrite(numDisc,SINT,numSpec,binLib)*SINT;        
   /* write number of interpolation groups in each spectrum */
   offset+=fwrite(nIntReg,SINT,numSpec,binLib)*SINT;
   /* write number of interpolation points in each spectrum */
@@ -355,7 +355,7 @@ void ALARALib::writeGammaData(int kza, int numSpec, int *numDisc, int *nIntReg,
     {
       /* write extra info to index */
       tmpIdx << "\t" << numDisc[specNum] << "\t" << nIntReg[specNum]
-	     << "\t" << nPnts[specNum] << "\t" << offset << endl;
+             << "\t" << nPnts[specNum] << "\t" << offset << endl;
       
       /* gamma Energies */
       offset+=fwrite(discGammaE[specNum],SFLOAT,numDisc[specNum],binLib)*SFLOAT;
@@ -458,30 +458,30 @@ void ALARALib::appendIdx(char* idxName,int libType)
       
       /* read and write daughter info */
       for (rxnNum=0;rxnNum<nRxn;rxnNum++)
-	{
-	  switch(libType)
-	    {
-	    case DATALIB_ALARA:
-	    case DATALIB_ADJOINT:
-	      {
-		tmpIdx >> kza >> emission >> ioffset;
-		emittedLen = strlen(emission);
-		offset += fwrite(&kza,SINT,1,binLib)*SINT;
-		offset += fwrite(&emittedLen,SINT,1,binLib)*SINT;
-		offset += fwrite(emission,1,emittedLen,binLib);
-		offset += fwrite(&ioffset,SLONG,1,binLib)*SLONG;
-		break;
-	      }
-	    case DATALIB_GAMMA:
-	      {
-		tmpIdx >> nDisc >> nRegs >> nPnts >> ioffset;
-		offset += fwrite(&nDisc,SINT,1,binLib)*SINT;
-		offset += fwrite(&nRegs,SINT,1,binLib)*SINT;
-		offset += fwrite(&nPnts,SINT,1,binLib)*SINT;
-		offset += fwrite(&ioffset,SLONG,1,binLib)*SLONG;
-	      }
-	    }
-	}
+        {
+          switch(libType)
+            {
+            case DATALIB_ALARA:
+            case DATALIB_ADJOINT:
+              {
+                tmpIdx >> kza >> emission >> ioffset;
+                emittedLen = strlen(emission);
+                offset += fwrite(&kza,SINT,1,binLib)*SINT;
+                offset += fwrite(&emittedLen,SINT,1,binLib)*SINT;
+                offset += fwrite(emission,1,emittedLen,binLib);
+                offset += fwrite(&ioffset,SLONG,1,binLib)*SLONG;
+                break;
+              }
+            case DATALIB_GAMMA:
+              {
+                tmpIdx >> nDisc >> nRegs >> nPnts >> ioffset;
+                offset += fwrite(&nDisc,SINT,1,binLib)*SINT;
+                offset += fwrite(&nRegs,SINT,1,binLib)*SINT;
+                offset += fwrite(&nPnts,SINT,1,binLib)*SINT;
+                offset += fwrite(&ioffset,SLONG,1,binLib)*SLONG;
+              }
+            }
+        }
     } 
 
   tmpIdx.close();

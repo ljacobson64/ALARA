@@ -43,9 +43,9 @@ void RamLib::SetPCs(const Kza parent, XSecType csType, XSec cs, bool add)
     catch(ExXsecSize& ex) {
       stringstream ss;
       ss << "\nError in RamLib::SetPCs, An attempt was made to add a parent cross section"
-	 << "\nto another cross-section with different group structures. Perhaps you"
-	 << "\nmeant to replace the cross-section?"
-	 << "\nError occured for parent: " << parent << endl;
+         << "\nto another cross-section with different group structures. Perhaps you"
+         << "\nmeant to replace the cross-section?"
+         << "\nError occured for parent: " << parent << endl;
       ex.AddToDetailed(ss.str());
       throw;
     }
@@ -71,7 +71,7 @@ XSec RamLib::GetPCs(Kza parent, int csType)
 }
 
 void RamLib::SetDCs(const Kza parent, const Kza daughter, XSecType csType,
-		    XSec cs, bool add) throw(ExXsecSize, ExEmptyXSec)
+                    XSec cs, bool add) throw(ExXsecSize, ExEmptyXSec)
 {
   if(!add || Data[parent].Daughters[daughter].CrossSections.find(csType) ==
      Data[parent].Daughters[daughter].CrossSections.end() )
@@ -85,13 +85,13 @@ void RamLib::SetDCs(const Kza parent, const Kza daughter, XSecType csType,
 
       try{ old_cs += cs; }
       catch(ExXsecSize& ex) {
-	stringstream ss;
-	ss << "\nError in RamLib::SetDCs, An attempt was made to add a p/d cross section"
-	   << "\nto another cross-section with different group structures. Perhaps you"
-	   << "\nmeant to replace the cross-section?"
-	   << "\nError occured for parent: " << parent << endl;
-	ex.AddToDetailed(ss.str());
-	throw;
+        stringstream ss;
+        ss << "\nError in RamLib::SetDCs, An attempt was made to add a p/d cross section"
+           << "\nto another cross-section with different group structures. Perhaps you"
+           << "\nmeant to replace the cross-section?"
+           << "\nError occured for parent: " << parent << endl;
+        ex.AddToDetailed(ss.str());
+        throw;
       }
 
       SetDCs(parent, daughter, csType, old_cs, false);
@@ -114,13 +114,13 @@ XSec RamLib::GetDCs(Kza parent, Kza daughter, int csType)
 }
 
 void RamLib::AddSpectrum(const Kza parent, const int specType, 
-			    const Spectrum& spec)
+                            const Spectrum& spec)
 {
   Data[parent].SpecList[specType] = spec;
 }
 
 void RamLib::AddDecayEnergy(const Kza parent, const int enType, 
-			       const double energy)
+                               const double energy)
 {
   Data[parent].DecayEnergies[enType] = energy;
 }
@@ -147,7 +147,7 @@ void RamLib::AddDecayConstant(Kza parent, const double constant)
 }
 
 void RamLib::AddFissionYield(const Kza parent, const Kza daughter,
-				const int fissionType, const double yield)
+                                const int fissionType, const double yield)
 {
   Data[parent].Daughters[daughter].FissionYield[fissionType] = yield;
 }
@@ -177,13 +177,13 @@ double RamLib::GetBratio(Kza parent, Kza daughter)
     {
       // Parent exists, now, check for daughter:
       map<Kza,Daughter>::iterator daughter_iter = 
-	parent_iter->second.Daughters.find(daughter);
+        parent_iter->second.Daughters.find(daughter);
       
       if(daughter_iter != parent_iter->second.Daughters.end())
-	{
-	  // Parent and daughter exist, exit:
-	  return daughter_iter->second.BranchingRatio;
-	}
+        {
+          // Parent and daughter exist, exit:
+          return daughter_iter->second.BranchingRatio;
+        }
       // Daughter does not exist...
     }
   // Return default value:
@@ -237,7 +237,7 @@ double RamLib::GetTotalDecayEnergy(Kza parent)
 }
 
 const vector<pair<double,double> >& RamLib::GetDiscreteSpec(Kza parent, 
-							    int specType)
+                                                            int specType)
 {
   map<Kza,Parent>::iterator p_iter = Data.find(parent);
   if(p_iter == Data.end()) return EMPTY_PAIR_DOUBLE;
@@ -280,7 +280,7 @@ vector<Kza> RamLib::Daughters(Kza parent)
 }
 
 void RamLib::AddDecayMode(Kza parent, DecayModeType decayMode, int dIso, 
-			  double br) throw(ExDecayMode)
+                          double br) throw(ExDecayMode)
 {
   Kza sec;
   Kza daughter;
@@ -305,7 +305,7 @@ void RamLib::AddDecayMode(Kza parent, DecayModeType decayMode, int dIso,
 }
 
 void RamLib::LambdaEff(Kza parent, const vector<double>& flux, 
-			  double& result)
+                          double& result)
 {
   unsigned int i;
   vector<Kza> d_kzas = Daughters(parent);
@@ -320,9 +320,9 @@ void RamLib::LambdaEff(Kza parent, const vector<double>& flux,
       cs = GetDCs(parent, d_kzas[i], TOTAL_CS);
 
       if(cs)
-	{
-	  result = cs.Integrate(flux);
-	}
+        {
+          result = cs.Integrate(flux);
+        }
 
     }
   //  Convert from barns:
@@ -333,7 +333,7 @@ void RamLib::LambdaEff(Kza parent, const vector<double>& flux,
 }
 
 void RamLib::LambdaEff(Kza parent, Kza daughter, 
-			  const vector<double>& flux, double& result)
+                          const vector<double>& flux, double& result)
 {
   XSec cs = GetDCs(parent,daughter,TOTAL_CS);
 
@@ -350,8 +350,8 @@ void RamLib::LambdaEff(Kza parent, Kza daughter,
 }
 
 double RamLib::LambdaEff(Kza parent, const std::vector<double>& flux,
-			 vector<Kza>& daughters, vector<double>& dLambdas,
-			 double& secLambda, FissionType ft) 
+                         vector<Kza>& daughters, vector<double>& dLambdas,
+                         double& secLambda, FissionType ft) 
   throw(ExXsecSize, ExEmptyXSec)
 {
   double decay_constant = GetDecayConstant(parent);
@@ -383,12 +383,12 @@ double RamLib::LambdaEff(Kza parent, const std::vector<double>& flux,
 
       try{ pri_lambda += total_cs.Integrate(flux); }
       catch(ExXsecSize& ex) {
-	stringstream ss;
-	ss << "\nError occurred in LambdaEff(...), user supplied a flux that did not match the"
-	   << "\ntotal cross-section group structure loaded in the RamLib!"
-	   << "\nError occured for parent isotope: " << parent << endl;
-	ex.AddToDetailed(ss.str());
-	throw;
+        stringstream ss;
+        ss << "\nError occurred in LambdaEff(...), user supplied a flux that did not match the"
+           << "\ntotal cross-section group structure loaded in the RamLib!"
+           << "\nError occured for parent isotope: " << parent << endl;
+        ex.AddToDetailed(ss.str());
+        throw;
       }
     }
   // Calculate lambda effective for each daughter:
@@ -398,12 +398,12 @@ double RamLib::LambdaEff(Kza parent, const std::vector<double>& flux,
     {
       try{ fission_sigphi += fission_cs.Integrate(flux); }
       catch(ExXsecSize& ex) {
-	stringstream ss;
+        stringstream ss;
         ss << "\nError occurred in LambdaEff(...), user supplied a flux that did not match the"
-	   << "\nfission cross-section group structure loaded in the RamLib!"
-	   << "\nError occured for parent isotope: " << parent << endl;
-	ex.AddToDetailed(ss.str());
-	throw;
+           << "\nfission cross-section group structure loaded in the RamLib!"
+           << "\nError occured for parent isotope: " << parent << endl;
+        ex.AddToDetailed(ss.str());
+        throw;
       }
     }
 
@@ -423,30 +423,30 @@ double RamLib::LambdaEff(Kza parent, const std::vector<double>& flux,
 
       // Make sure the cross-section exists:
       if(cs)
-	{
-	  try{ dLambdas[i] += cs.Integrate(flux); }
-	  catch(ExXsecSize& ex) {
-	    stringstream ss;
-	    ss << "\nError occurred in LambdaEff(...), user supplied a flux that did not match the"
-	       << "\nparent daughter cross-section group structure loaded in the RamLib!"
-	       << "\nError occured for parent " << parent
-	       << " and daughter " << dLambdas[i] << endl;
-	    ex.AddToDetailed(ss.str());
-	    throw;
-	  }
-	}
+        {
+          try{ dLambdas[i] += cs.Integrate(flux); }
+          catch(ExXsecSize& ex) {
+            stringstream ss;
+            ss << "\nError occurred in LambdaEff(...), user supplied a flux that did not match the"
+               << "\nparent daughter cross-section group structure loaded in the RamLib!"
+               << "\nError occured for parent " << parent
+               << " and daughter " << dLambdas[i] << endl;
+            ex.AddToDetailed(ss.str());
+            throw;
+          }
+        }
 
       dLambdas[i] += GetBratio(parent, daughters[i])*decay_constant;
 
       // Make sure to handle spontaneous fission, which is NOT included in the
       // normal decay branching ratios..
       if(sfbr > 0.0 && ft != NO_FISSION &&
-	 (sfyield = GetFissionYield(parent,daughters[i],FISSION_SF)))
-	dLambdas[i] += sfbr*decay_constant*sfyield;
+         (sfyield = GetFissionYield(parent,daughters[i],FISSION_SF)))
+        dLambdas[i] += sfbr*decay_constant*sfyield;
 
       // Add non-spontaneous fission contribution..
       if(fission_sigphi && ft != NO_FISSION)
-	dLambdas[i] += fission_sigphi*GetFissionYield(parent,daughters[i],ft);
+        dLambdas[i] += fission_sigphi*GetFissionYield(parent,daughters[i],ft);
 
       total_lambda += dLambdas[i];
     }
@@ -492,25 +492,25 @@ void RamLib::ConstructAdjoint()
       iter = daughter_map.begin();
 
       while(iter != daughter_map.end())
-	{
-	  daughter = iter->first;
-	  parent_exists = false;
+        {
+          daughter = iter->first;
+          parent_exists = false;
 
-	  // Check to see if this parent is already in the daughter list:
-	  for(k = 0; k < Adjoint[daughter].size(); k++)
-	    {
-	      if(parent == Adjoint[daughter][k])
-		{
-		  // The parent already exists
-		  parent_exists = true;
-		  break;
-		}
-	    }
-	  
-	  if(!parent_exists) Adjoint[daughter].push_back(parent);
-	  
-	  iter++;
-	}
+          // Check to see if this parent is already in the daughter list:
+          for(k = 0; k < Adjoint[daughter].size(); k++)
+            {
+              if(parent == Adjoint[daughter][k])
+                {
+                  // The parent already exists
+                  parent_exists = true;
+                  break;
+                }
+            }
+          
+          if(!parent_exists) Adjoint[daughter].push_back(parent);
+          
+          iter++;
+        }
     }
 }
 
@@ -523,8 +523,8 @@ const std::vector<Kza>& RamLib::Parents(Kza daughter)
 }
 
 double RamLib::ProdRates(Kza daughter, const vector<double>& flux,
-			 vector<Kza>& parents, vector<double>& pLambdas, 
-			 FissionType ft)
+                         vector<Kza>& parents, vector<double>& pLambdas, 
+                         FissionType ft)
   throw(ExXsecSize, ExEmptyXSec)
 {
   double decay_constant;
@@ -545,12 +545,12 @@ double RamLib::ProdRates(Kza daughter, const vector<double>& flux,
     {
       try{ pri_lambda += total_cs.Integrate(flux); }
       catch(ExXsecSize &ex) {
-	stringstream ss;
-	ss << "\nError occurred in ProdRate(...), user supplied a flux that did not match the"
-	   << "\ntotal cross-section group structure loaded in the RamLib!"
-	   << "\nError occured for daughter " << daughter << endl;
-	ex.AddToDetailed(ss.str());
-	throw;
+        stringstream ss;
+        ss << "\nError occurred in ProdRate(...), user supplied a flux that did not match the"
+           << "\ntotal cross-section group structure loaded in the RamLib!"
+           << "\nError occured for daughter " << daughter << endl;
+        ex.AddToDetailed(ss.str());
+        throw;
       }
 
     }
@@ -568,12 +568,12 @@ double RamLib::ProdRates(Kza daughter, const vector<double>& flux,
     {
       try{ pri_lambda += fission_cs.Integrate(flux); }
       catch(ExXsecSize &ex) {
-	stringstream ss;
-	ss << "\nError occurred in ProdRate(...), user supplied a flux that did not match the"
-	   << "\nfission cross-section group structure loaded in the RamLib!"
-	   << "\nError occured for daughter " << daughter << endl;
-	ex.AddToDetailed(ss.str());
-	throw;
+        stringstream ss;
+        ss << "\nError occurred in ProdRate(...), user supplied a flux that did not match the"
+           << "\nfission cross-section group structure loaded in the RamLib!"
+           << "\nError occured for daughter " << daughter << endl;
+        ex.AddToDetailed(ss.str());
+        throw;
       }
     }
 
@@ -582,23 +582,23 @@ double RamLib::ProdRates(Kza daughter, const vector<double>& flux,
        XSec cs = GetDCs(parents[i], daughter, TOTAL_CS);
 
        if(cs)
- 	{
-	  pLambdas[i] += cs.Integrate(flux);
- 	}
+         {
+          pLambdas[i] += cs.Integrate(flux);
+         }
 
        // Now, check for fission...
        XSec f_cs = GetDCs(parents[i], daughter, NEUTRON_FISSION_CS);
        
        if(f_cs && ft != NO_FISSION)
-	 {
-	   // Get the yield...
-	   fission_yield = GetFissionYield(parents[i], daughter, ft);
+         {
+           // Get the yield...
+           fission_yield = GetFissionYield(parents[i], daughter, ft);
 
-	   if(fission_yield)
-	     {
-	       pLambdas[i] += f_cs.Integrate(flux)*fission_yield;
-	     }
-	 }
+           if(fission_yield)
+             {
+               pLambdas[i] += f_cs.Integrate(flux)*fission_yield;
+             }
+         }
 
        // Now decay...
        b_ratio = GetBratio(parents[i], daughter);
@@ -607,14 +607,14 @@ double RamLib::ProdRates(Kza daughter, const vector<double>& flux,
 
        // Finally...spontaneous fission...
        pLambdas[i] += GetSfbr(parents[i])*decay_constant*
-	 GetFissionYield(parents[i],daughter,FISSION_SF);
+         GetFissionYield(parents[i],daughter,FISSION_SF);
      }
 
    return pri_lambda;
 }
 
 void RamLib::GetFissionYield(Kza parent, vector<Kza>& daughters, 
-			     vector<double>& yields, FissionType ft)
+                             vector<double>& yields, FissionType ft)
 {
   vector<Kza> all_daughters = Daughters(parent);
   double y;
@@ -627,9 +627,9 @@ void RamLib::GetFissionYield(Kza parent, vector<Kza>& daughters,
       y = GetFissionYield(parent, all_daughters[i], ft);
 
       if(y != 0.0)
-	{
-	  daughters.push_back( all_daughters[i] );
-	  yields.push_back( y );
-	}
+        {
+          daughters.push_back( all_daughters[i] );
+          yields.push_back( y );
+        }
     }
 }

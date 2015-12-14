@@ -103,9 +103,9 @@ void IEAFLib::getTransInfo()
     {
       inTrans.getline(buffer,MAXLINELENGTH);
       for (valNum=0;valNum<6 && grpNum<nGroups+1;valNum++)
-	{
-	  extract(buffer+11*valNum,grpBnds+(grpNum++));
-	}
+        {
+          extract(buffer+11*valNum,grpBnds+(grpNum++));
+        }
     }
 
   grpWeights = NULL;
@@ -270,8 +270,8 @@ int IEAFLib::getTransData()
       rxnNum++;
 
       if (rxnNum >= MAXIEAFRXNS)
-	error(1200,"Too many reactions in this library: %d > %d", 
-	      rxnNum+1, MAXIEAFRXNS);
+        error(1200,"Too many reactions in this library: %d > %d", 
+              rxnNum+1, MAXIEAFRXNS);
 
       debug(7,"processing reaction # %d", rxnNum);
 
@@ -287,25 +287,25 @@ int IEAFLib::getTransData()
 
       /* set all lower energy groups to 0 */
       for (gNum=nGroups-1;gNum>thisGNum;gNum--)
-	xSection[rxnNum][gNum] = 0;
+        xSection[rxnNum][gNum] = 0;
 
       debug(8,"reaction product %d starts in group %d",
-	    transKza[rxnNum], thisGNum);
+            transKza[rxnNum], thisGNum);
 
       /* get the rest of the groups */
       while(thisGNum>0)
-	{
-	  inTrans.getline(buffer,MAXLINELENGTH);
-	  /* parse x-section */
-	  extract(buffer+11,&tmpFlt);
-	  xSection[rxnNum][thisGNum] = tmpFlt;
+        {
+          inTrans.getline(buffer,MAXLINELENGTH);
+          /* parse x-section */
+          extract(buffer+11,&tmpFlt);
+          xSection[rxnNum][thisGNum] = tmpFlt;
 
 
-	  /* read next line */
-	  inTrans.getline(buffer,MAXLINELENGTH);
-	  buffer[66] = '\0';
-	  thisGNum = nGroups-atoi(buffer+55);
-	}
+          /* read next line */
+          inTrans.getline(buffer,MAXLINELENGTH);
+          buffer[66] = '\0';
+          thisGNum = nGroups-atoi(buffer+55);
+        }
 
       /* read last x-section */
       inTrans.getline(buffer,MAXLINELENGTH);
@@ -315,12 +315,12 @@ int IEAFLib::getTransData()
       
       /* set emitted particles */
       if (transKza[rxnNum]!=0)
-	strcpy(emitted[rxnNum],"x");
+        strcpy(emitted[rxnNum],"x");
       else
-	{
-	  strcpy(emitted[rxnNum],"total");
-	  inTrans.getline(buffer,MAXLINELENGTH);
-	}
+        {
+          strcpy(emitted[rxnNum],"total");
+          inTrans.getline(buffer,MAXLINELENGTH);
+        }
 
       /* check for next x-section: ie. are we still in MT=5 */
       inTrans.getline(buffer,MAXLINELENGTH);
@@ -329,7 +329,7 @@ int IEAFLib::getTransData()
 
       /* get next modified kza number */
       if (inTrans.eof())
-	zak = -1;
+        zak = -1;
       
     }
   
@@ -454,25 +454,25 @@ int IEAFLib::getDecayData()
       
       /* set daughter kza based on reaction type*/
       decayKza[decyNum] = (zak/10 - delKza(rxnType))*10
-	+ int(dIsoFlag);
+        + int(dIsoFlag);
       /* if this is a proton producing reaction */
       if (int(rxnType) == 7)
-	{
-	  pFlag = 1;
-	  pBranch += bRatio[decyNum];
-	}
+        {
+          pFlag = 1;
+          pBranch += bRatio[decyNum];
+        }
       /* if this is an alpha producing reaction */
       else if (int(rxnType) == 4 || int(rxnType*10)%10 == 4)
-	{
-	  aFlag = 1;
-	  aBranch += bRatio[decyNum];
-	}
+        {
+          aFlag = 1;
+          aBranch += bRatio[decyNum];
+        }
       /* spontaneous fission */
       else if (int(rxnType) == 6)
-	{
-	  decyNum--;
-	  nDRxns--;
-	}
+        {
+          decyNum--;
+          nDRxns--;
+        }
       
     }
 
@@ -535,8 +535,8 @@ void IEAFLib::skipDiscreteGammas(char* buffer, int numGammas)
       inDecay.getline(buffer,MAXLINELENGTH);
       /* if necessary */
       if (numParms>6)
-	/* skip another line */
-	inDecay.getline(buffer,MAXLINELENGTH);
+        /* skip another line */
+        inDecay.getline(buffer,MAXLINELENGTH);
     }
 }
 
@@ -571,12 +571,12 @@ void IEAFLib::skipContGammas(char *buffer)
       numPnts = atoi(buffer+55);
       /* skip one line for every three data points */
       for (pntNum=0;pntNum<numPnts;pntNum+=3)
-	inDecay.getline(buffer,MAXLINELENGTH);
+        inDecay.getline(buffer,MAXLINELENGTH);
     }
 }
 
 void IEAFLib::readDiscreteGammas(int specNum, int numGammas, 
-				float discFactor, char *buffer ) 
+                                float discFactor, char *buffer ) 
 { 
   int gammaNum; 
   int numParms; 
@@ -601,7 +601,7 @@ void IEAFLib::readDiscreteGammas(int specNum, int numGammas,
       
       /* throw away extra line if necessary */
       if (numParms>6)
-	inDecay.getline(buffer,MAXLINELENGTH);
+        inDecay.getline(buffer,MAXLINELENGTH);
       
       discGammaE[specNum][gammaNum] = gammaE;
       discGammaI[specNum][gammaNum] = gammaI*discFactor;
@@ -644,11 +644,11 @@ void IEAFLib::readContGammas(int specNum, float contFactor, char* buffer)
       sscanf(buffer,"%d %d %d %d %d %d",b,t,b+1,t+1,b+2,t+2);
       /* for each region on this line */
       for (;regNum<lineStart+3 && regNum<numReg;regNum++)
-	{
-	  /* set the data */
-	  intRegB[specNum][regNum] = b[regNum-lineStart];
-	  intRegT[specNum][regNum] = t[regNum-lineStart];
-	}
+        {
+          /* set the data */
+          intRegB[specNum][regNum] = b[regNum-lineStart];
+          intRegT[specNum][regNum] = t[regNum-lineStart];
+        }
     }
   
   /* read the interpolation table */
@@ -667,13 +667,13 @@ void IEAFLib::readContGammas(int specNum, float contFactor, char* buffer)
       /* extract spectrum table data */
       /* for each point on this line */
       for (;pntNum<lineStart+3 && pntNum<numPnts;pntNum++)
-	{
-	  extract(buffer+22*(pntNum-lineStart),&x);
-	  extract(buffer+11+22*(pntNum-lineStart),&y);
-	  /* set the data */
-	  contX[specNum][pntNum] = x;
-	  contY[specNum][pntNum] = y*contFactor;
-	}
+        {
+          extract(buffer+22*(pntNum-lineStart),&x);
+          extract(buffer+11+22*(pntNum-lineStart),&y);
+          /* set the data */
+          contX[specNum][pntNum] = x;
+          contY[specNum][pntNum] = y*contFactor;
+        }
     }
   
   /* skip covariance data */
@@ -685,7 +685,7 @@ void IEAFLib::readContGammas(int specNum, float contFactor, char* buffer)
       numPnts = atoi(buffer+55);
       /* skip one line for every three data points */
       for (pntNum=0;pntNum<numPnts;pntNum+=3)
-	inDecay.getline(buffer,MAXLINELENGTH);
+        inDecay.getline(buffer,MAXLINELENGTH);
     }
 }
 
@@ -733,53 +733,53 @@ int IEAFLib::getGammaData()
       /* it is possible that the ENDF entry is all zeros, 
        * in which case, skip this spectrum */
       if ( (discFactor == 0.0 || numGammas == 0) && (specType == 0.0 || contFactor == 0.0) )
-	radType = 1;
+        radType = 1;
       
       /* if this is not a gamma spectrum or an x-ray spectrum entry */
       if ( (int(radType) != 0) && (int(radType) != 9) )
-	{
-	  skipDiscreteGammas(buffer,numGammas);
-	  if (specType>0)
-	    skipContGammas(buffer);
-	}
+        {
+          skipDiscreteGammas(buffer,numGammas);
+          if (specType>0)
+            skipContGammas(buffer);
+        }
       /* this is a gamma spectrum entry */
       else
-	{
-	  /* read this spectrum */
-	  /* read discrete entries */
-	  numDisc[numGSpec] = 0;
-	  discGammaE[numGSpec] = NULL;
-	  discGammaI[numGSpec] = NULL;
-	  
-	  if (numGammas > 0 )
-	    {
-	    /* if there are valid discrete gammas */
-	    if (discFactor > 0 )
-	      readDiscreteGammas(numGSpec,numGammas,discFactor,buffer);
-	    else
-	      skipDiscreteGammas(buffer,numGammas);
-	    }
-	  
-	  nIntReg[numGSpec] = 0;
-	  intRegB[numGSpec] = NULL;
-	  intRegT[numGSpec] = NULL;
-	  nPnts[numGSpec] = 0;
-	  contX[numGSpec] = NULL;
-	  contY[numGSpec] = NULL;
-	  
-	  /* read continuous data */
-	  if (specType>0)
-	    {
-	    /* if the scaling factor is non-zero */
-	    if (contFactor>0)
-	      readContGammas(numGSpec,contFactor,buffer);
-	    else
-	      skipContGammas(buffer);
-	    }
-	  
-	  /* increment gamma spectra counter */
-	  numGSpec++;
-	}
+        {
+          /* read this spectrum */
+          /* read discrete entries */
+          numDisc[numGSpec] = 0;
+          discGammaE[numGSpec] = NULL;
+          discGammaI[numGSpec] = NULL;
+          
+          if (numGammas > 0 )
+            {
+            /* if there are valid discrete gammas */
+            if (discFactor > 0 )
+              readDiscreteGammas(numGSpec,numGammas,discFactor,buffer);
+            else
+              skipDiscreteGammas(buffer,numGammas);
+            }
+          
+          nIntReg[numGSpec] = 0;
+          intRegB[numGSpec] = NULL;
+          intRegT[numGSpec] = NULL;
+          nPnts[numGSpec] = 0;
+          contX[numGSpec] = NULL;
+          contY[numGSpec] = NULL;
+          
+          /* read continuous data */
+          if (specType>0)
+            {
+            /* if the scaling factor is non-zero */
+            if (contFactor>0)
+              readContGammas(numGSpec,contFactor,buffer);
+            else
+              skipContGammas(buffer);
+            }
+          
+          /* increment gamma spectra counter */
+          numGSpec++;
+        }
     }
 
   if (numGSpec == 0)

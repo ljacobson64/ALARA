@@ -50,41 +50,41 @@ ALARALib::LibIdx::LibIdx(int& nPar, int& nGroups, FILE*& binLib, int &libType)
       fread(&junkLong,SLONG,1,binLib);
       
       if (nParents>0)
-	{
-	  kza = new int[nParents];
-	  memCheck(kza,"ALARALib::LibIdx::LibIdx(...) constructor: kza");
+        {
+          kza = new int[nParents];
+          memCheck(kza,"ALARALib::LibIdx::LibIdx(...) constructor: kza");
 
-	  offset = new long[nParents];
-	  memCheck(offset,"ALARALib::LibIdx::LibIdx(...) constructor: offset");
-	  
-	  for (parNum=0;parNum<nParents;parNum++)
-	    {
-	      fread(kza+parNum,SINT,1,binLib);
-	      fread(&nRxns,SINT,1,binLib);
-	      fread(offset+parNum,SLONG,1,binLib);
-	      for (rxnNum=0;rxnNum<nRxns;rxnNum++)
-		switch(libType)
-		  {
-		  case DATALIB_ALARA:
-		  case DATALIB_ADJOINT:
-		    {
-		      fread(&junkInt,SINT,1,binLib);
-		      fread(&junkInt,SINT,1,binLib);
-		      fread(buffer,1,junkInt,binLib);
-		      fread(&junkLong,SLONG,1,binLib);
-		      break;
-		    }
-		  case DATALIB_GAMMA:
-		    {
-		      fread(&junkInt,SINT,1,binLib);
-		      fread(&junkInt,SINT,1,binLib);
-		      fread(&junkInt,SINT,1,binLib);
-		      fread(&junkLong,SLONG,1,binLib);
-		      break;
-		    }
-		  }
-	    }
-	}
+          offset = new long[nParents];
+          memCheck(offset,"ALARALib::LibIdx::LibIdx(...) constructor: offset");
+          
+          for (parNum=0;parNum<nParents;parNum++)
+            {
+              fread(kza+parNum,SINT,1,binLib);
+              fread(&nRxns,SINT,1,binLib);
+              fread(offset+parNum,SLONG,1,binLib);
+              for (rxnNum=0;rxnNum<nRxns;rxnNum++)
+                switch(libType)
+                  {
+                  case DATALIB_ALARA:
+                  case DATALIB_ADJOINT:
+                    {
+                      fread(&junkInt,SINT,1,binLib);
+                      fread(&junkInt,SINT,1,binLib);
+                      fread(buffer,1,junkInt,binLib);
+                      fread(&junkLong,SLONG,1,binLib);
+                      break;
+                    }
+                  case DATALIB_GAMMA:
+                    {
+                      fread(&junkInt,SINT,1,binLib);
+                      fread(&junkInt,SINT,1,binLib);
+                      fread(&junkInt,SINT,1,binLib);
+                      fread(&junkLong,SLONG,1,binLib);
+                      break;
+                    }
+                  }
+            }
+        }
     }
 }
 
@@ -105,10 +105,10 @@ ALARALib::LibIdx::LibIdx(const LibIdx& l)
       memCheck(offset,"ALARALib::LibIdx::LibIdx(...) copy constructor: offset");
 
       for (parNum=0;parNum<nParents;parNum++)
-	{
-	  kza[parNum] = l.kza[parNum];
-	  offset[parNum] = l.offset[parNum];
-	}
+        {
+          kza[parNum] = l.kza[parNum];
+          offset[parNum] = l.offset[parNum];
+        }
     }
 }
 
@@ -135,10 +135,10 @@ ALARALib::LibIdx& ALARALib::LibIdx::operator=(const LibIdx& l)
       memCheck(offset,"ALARALib::LibIdx::operator=(...): offset");
 
       for (parNum=0;parNum<nParents;parNum++)
-	{
-	  kza[parNum] = l.kza[parNum];
-	  offset[parNum] = l.offset[parNum];
-	}
+        {
+          kza[parNum] = l.kza[parNum];
+          offset[parNum] = l.offset[parNum];
+        }
     }
 
   return *this;
@@ -148,7 +148,7 @@ ALARALib::LibIdx& ALARALib::LibIdx::operator=(const LibIdx& l)
 /****************************
  ********* Utility **********
  ***************************/
-	  
+          
 /* routine to search the index and retrieve the offset for the binary
  * data library */
 long ALARALib::LibIdx::search(int findKza, int min, int max)
@@ -160,7 +160,7 @@ long ALARALib::LibIdx::search(int findKza, int min, int max)
     {
 
       debug(4,"Initiating search for %d in list of %d isotopes.",
-	    findKza,nParents);
+            findKza,nParents);
       /* set the maximum to the number of parents in the index */
       max=nParents-1;
 
@@ -172,10 +172,10 @@ long ALARALib::LibIdx::search(int findKza, int min, int max)
 
       /* if matches the max */
       if (findKza == kza[max])
-	return offset[max];
+        return offset[max];
       /* if matches the min */
       if (findKza == kza[min])
-	return offset[min];
+        return offset[min];
     }
 
   /* when converged! 
@@ -195,11 +195,11 @@ long ALARALib::LibIdx::search(int findKza, int min, int max)
 
       /* test for match at midpoint */
       if (findKza == kza[mid])
-	return offset[mid];
+        return offset[mid];
       else if (findKza > kza[mid])
-	return search(findKza,mid,max);
+        return search(findKza,mid,max);
       else
-	return search(findKza,min,mid);
+        return search(findKza,min,mid);
     }
   
 }    

@@ -63,7 +63,7 @@ Zone* Zone::addZone(int ints, double bound)
     appropriate zoneLists, the problem geometry, the list of problem
     material loadings and the problem's list of intervals. */
 void Zone::convert(double *start, int *coord, Zone **zoneStart, 
-		   Geometry *geom, Loading *loadList, Volume *volList)
+                   Geometry *geom, Loading *loadList, Volume *volList)
 {
   
   double d1[3],d2[3],dx[3];
@@ -94,88 +94,88 @@ void Zone::convert(double *start, int *coord, Zone **zoneStart,
 
       /* G: for each interval in this boundary dimension */
       for (inNum[2]=0;inNum[2]<nmInts[2];inNum[2]++)
-	{
+        {
 
-	  /* always start at the first loading definition of this row */
-	  loadPtr = firstLoadPtr[2];
+          /* always start at the first loading definition of this row */
+          loadPtr = firstLoadPtr[2];
 
-	  /* A: see comment A above */
-	  zonePtr[1] = zoneStart[1]->next;
-	  /* B */
-	  d1[1] = start[1];
-	  
-	  /* C */
-	  while (zonePtr[1] != NULL)
-	    {
-	      /* D */
-	      d2[1] = zonePtr[1]->boundary;
-	      /* E */
-	      nmInts[1] = zonePtr[1]->nInts;
-	      /* F */
-	      dx[1] = (d2[1]-d1[1])/nmInts[1];
+          /* A: see comment A above */
+          zonePtr[1] = zoneStart[1]->next;
+          /* B */
+          d1[1] = start[1];
+          
+          /* C */
+          while (zonePtr[1] != NULL)
+            {
+              /* D */
+              d2[1] = zonePtr[1]->boundary;
+              /* E */
+              nmInts[1] = zonePtr[1]->nInts;
+              /* F */
+              dx[1] = (d2[1]-d1[1])/nmInts[1];
 
-	      /* store the pointer to the first loading in this dimension */
-	      firstLoadPtr[1] = loadPtr;
+              /* store the pointer to the first loading in this dimension */
+              firstLoadPtr[1] = loadPtr;
 
-	      loadPtr = loadPtr->advance();
+              loadPtr = loadPtr->advance();
 
-	      /* G */
-	      for (inNum[1]=0;inNum[1]<nmInts[1];inNum[1]++)
-		{
-		  /* always start at the first loading definition of this row */
-		  loadPtr = firstLoadPtr[1];
+              /* G */
+              for (inNum[1]=0;inNum[1]<nmInts[1];inNum[1]++)
+                {
+                  /* always start at the first loading definition of this row */
+                  loadPtr = firstLoadPtr[1];
 
-		  /* A */
-		  zonePtr[0] = zoneStart[0]->next;
-		  /* B */
-		  d1[0] = start[0];
+                  /* A */
+                  zonePtr[0] = zoneStart[0]->next;
+                  /* B */
+                  d1[0] = start[0];
 
-		  /* C */
-		  while (zonePtr[0] != NULL)
-		    {
-		      loadPtr = loadPtr->advance();
+                  /* C */
+                  while (zonePtr[0] != NULL)
+                    {
+                      loadPtr = loadPtr->advance();
 
-		      /* D */
-		      d2[0] = zonePtr[0]->boundary;
-		      /* E */
-		      nmInts[0] = zonePtr[0]->nInts;
-		      /* F */
-		      dx[0] = (d2[0]-d1[0])/nmInts[0];
+                      /* D */
+                      d2[0] = zonePtr[0]->boundary;
+                      /* E */
+                      nmInts[0] = zonePtr[0]->nInts;
+                      /* F */
+                      dx[0] = (d2[0]-d1[0])/nmInts[0];
 
-		      /* G */
-		      for (inNum[0]=0;inNum[0]<nmInts[0];inNum[0]++)
-			{
-			  /* debug(4,"Creating new interval at point (%g,%g,%g), with size (%g,%g,%g) and coordinate ordering (%d,%d,%d) in zone %s.",
-				d1[0],d1[1],d1[2],dx[0],dx[1],dx[2],coord[0],coord[1],coord[2],loadPtr->getName()); */
-			  /* calculate volume of this interval */
-			  volList = volList->calculate(d1,dx,coord,geom,loadPtr);
-			  /* H */
-			  d1[0] += dx[0];
-			}
-		      
-		      /* I */
-		      zonePtr[0] = zonePtr[0]->next;
-		      /* J */
-		      d1[0] = d2[0];
-		      
-		    }
+                      /* G */
+                      for (inNum[0]=0;inNum[0]<nmInts[0];inNum[0]++)
+                        {
+                          /* debug(4,"Creating new interval at point (%g,%g,%g), with size (%g,%g,%g) and coordinate ordering (%d,%d,%d) in zone %s.",
+                                d1[0],d1[1],d1[2],dx[0],dx[1],dx[2],coord[0],coord[1],coord[2],loadPtr->getName()); */
+                          /* calculate volume of this interval */
+                          volList = volList->calculate(d1,dx,coord,geom,loadPtr);
+                          /* H */
+                          d1[0] += dx[0];
+                        }
+                      
+                      /* I */
+                      zonePtr[0] = zonePtr[0]->next;
+                      /* J */
+                      d1[0] = d2[0];
+                      
+                    }
 
-		  /* H */
-		  d1[1] += dx[1];
-		  
-		}
-	      
-	      /* I */
-	      zonePtr[1] = zonePtr[1]->next;
-	      /* J */
-	      d1[1] = d2[1];
-	      
-	    }
-	  
-	  /* H: increment lower boundary */
-	  d1[2] += dx[2];
-	}
-	  
+                  /* H */
+                  d1[1] += dx[1];
+                  
+                }
+              
+              /* I */
+              zonePtr[1] = zonePtr[1]->next;
+              /* J */
+              d1[1] = d2[1];
+              
+            }
+          
+          /* H: increment lower boundary */
+          d1[2] += dx[2];
+        }
+          
       /* I: advance to next boundary */
       zonePtr[2] = zonePtr[2]->next;
       /* J: reset lower boundary */

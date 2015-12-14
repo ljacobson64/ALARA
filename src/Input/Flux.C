@@ -30,7 +30,7 @@
     file name, scaling factor, and skip value, with arguments given in
     that order. */
 Flux::Flux(int inFormat, const char *flxName, const char *fName, 
-	   double inScale, int inSkip) :
+           double inScale, int inSkip) :
   format(inFormat),  skip(inSkip), scale(inScale)
 {
   fluxName = NULL;
@@ -148,7 +148,7 @@ Flux* Flux::getFlux(istream& input)
 
   verbose(2,"Added Flux %s from file %s with normalization %g,\
  format code %d, and skipping %d entries.", 
-	  flxName,fName,inScale,inFormat,inSkip);
+          flxName,fName,inScale,inFormat,inSkip);
 
   return next;
 }
@@ -187,47 +187,47 @@ void Flux::xRef(Volume *volList)
       verbose(3,"Assigning flux %s",ptr->fluxName);
 
       switch (ptr->format)
-	{
-	case FLUX_D:
-	  {
-	    /* Default: Reads data from fluxin file */
+        {
+        case FLUX_D:
+          {
+            /* Default: Reads data from fluxin file */
 
-	    // Open Input File
-	    ifstream FluxData(ptr->fileName);
+            // Open Input File
+            ifstream FluxData(ptr->fileName);
 
-	    // Skip appropriate number of Volumes
-	    if(ptr->skip > 0)
-	      for(int i = 0; i < ptr->skip; i++)
-		for(int j = 0; j < numGrps; j++)
-		  FluxData >> temp;
+            // Skip appropriate number of Volumes
+            if(ptr->skip > 0)
+              for(int i = 0; i < ptr->skip; i++)
+                for(int j = 0; j < numGrps; j++)
+                  FluxData >> temp;
 
-	    if(FluxData.eof())
-	      error(622,"Flux file %s does not contain enough data.",
-		    ptr->fileName);
+            if(FluxData.eof())
+              error(622,"Flux file %s does not contain enough data.",
+                    ptr->fileName);
 
-	    // Load data from FluxData
-	    for(int x = 0; x < numVols; x++)
-	    {
-	      for(int y = 0; y < numGrps; y++)
-	      {
-		if(FluxData.eof())
-		  error(622,"Flux file %s does not contain enough data.",
-			ptr->fileName);
+            // Load data from FluxData
+            for(int x = 0; x < numVols; x++)
+            {
+              for(int y = 0; y < numGrps; y++)
+              {
+                if(FluxData.eof())
+                  error(622,"Flux file %s does not contain enough data.",
+                        ptr->fileName);
 
-		FluxData >> FluxMatrix[x][y];
-	      }
-	    }
-	    FluxData.close();
-	    break;
-	  }
+                FluxData >> FluxMatrix[x][y];
+              }
+            }
+            FluxData.close();
+            break;
+          }
 
-	case FLUX_R:
-	  {
-	    ptr->readRTFLUX(MatrixStorage,numVols,numGrps);
-	    
-	    break;
-	  }
-	};
+        case FLUX_R:
+          {
+            ptr->readRTFLUX(MatrixStorage,numVols,numGrps);
+            
+            break;
+          }
+        };
       
       volList->storeMatrix(FluxMatrix,ptr->scale);
     }
@@ -276,7 +276,7 @@ void Flux::readRTFLUX(double *MatrixStorage,int numVols, int numGrps)
   fread((char*)&f77_reclen,SINT,1,binFile);
 
   debug(2,"readRTFLUX: (ndim,ngrp,ninti,nintj,nintk,nblok) = (%d,%d,%d,%d,%d,%d)",
-	ndim,ngrp,ninti,nintj,nintk,nblok);
+        ndim,ngrp,ninti,nintj,nintk,nblok);
 
   /// error checking
   if (ndim > 1)
@@ -305,9 +305,9 @@ void Flux::readRTFLUX(double *MatrixStorage,int numVols, int numGrps)
   for (int gNum=0;gNum<numGrps;gNum++)
     for (int volNum=0;volNum<numVols;volNum++)
       {
-	debug(3,"readRTFLUX: reading group #%d in volume #%d: %g", 
-	      gNum, volNum, fluxIn[gNum*ninti+(volNum+skip)]);
-	MatrixStorage[volNum*numGrps+gNum] = fluxIn[gNum*ninti+(volNum+skip)];
+        debug(3,"readRTFLUX: reading group #%d in volume #%d: %g", 
+              gNum, volNum, fluxIn[gNum*ninti+(volNum+skip)]);
+        MatrixStorage[volNum*numGrps+gNum] = fluxIn[gNum*ninti+(volNum+skip)];
       }
 
   delete fluxIn;
@@ -333,12 +333,12 @@ int Flux::find(char *srchFlux)
       ptr = ptr->next;
       fluxNum++;
       if (!strcmp(ptr->fluxName,srchFlux))
-	{
-	if (ptr->checkFname())
-	  return fluxNum-1;
-	else
-	  return FLUX_BAD_FNAME;
-	}
+        {
+        if (ptr->checkFname())
+          return fluxNum-1;
+        else
+          return FLUX_BAD_FNAME;
+        }
     }
 
   return FLUX_NOT_FOUND;

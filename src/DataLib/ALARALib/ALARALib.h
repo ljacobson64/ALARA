@@ -171,7 +171,7 @@ protected:
       LibIdx(int& nPar,int& nGroups, FILE*&,int&);
       LibIdx(const LibIdx&);
       ~LibIdx()
-	{ delete kza; delete offset; };
+        { delete kza; delete offset; };
 
       LibIdx& operator=(const LibIdx&);
 
@@ -204,7 +204,7 @@ public:
   void writeHead(int,float*,float*);
   void writeData(int, int, float, float*, int*, char**, float**);
   void writeGammaData(int,int,int*,int*,int*,float**,float**,int**,int**,
-		      float**,float**);
+                      float**,float**);
   void appendIdx(char*,int);
   
 

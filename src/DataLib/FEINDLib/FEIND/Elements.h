@@ -118,7 +118,7 @@ int FEIND::GetAtomicNumber(const std::string& symbol)
   for(unsigned int i = 0; i < NUM_ELEMENTS; i++)
     {
       if(Elements[i].first == symbol)
-	return i+1;	
+        return i+1;        
     }
   assert(false);
   return -1;

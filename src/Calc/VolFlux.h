@@ -86,12 +86,12 @@ public:
     { 
       switch (refflux_type_code) {
       case 'v':
-	refflux_type = REFFLUX_VOL_AVG;
-	break;
+        refflux_type = REFFLUX_VOL_AVG;
+        break;
       case 'm':
       default:
-	refflux_type = REFFLUX_MAX;
-	break;
+        refflux_type = REFFLUX_MAX;
+        break;
       }
     };
 

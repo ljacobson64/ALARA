@@ -56,7 +56,7 @@ Input::Input(char* inputFname)
       debug(1,"Openning %s for input.",inputFname);
       input = openFile(inputFname);
       if (*input == NULL)
-	error(102,"Unable to open main input file: '%s'.",inputFname);
+        error(102,"Unable to open main input file: '%s'.",inputFname);
 
       verbose(1,"Openned %s for input.",inputFname);
     }
@@ -149,140 +149,140 @@ void Input::read()
   while (input != NULL)
     {
       while (!(*input).eof())
-	{
-	  token[0] = '\0';
-	  clearIncludeComment();
-	  *input >> token;
+        {
+          token[0] = '\0';
+          clearIncludeComment();
+          *input >> token;
 
-	  if (strlen(token)>0)
-	    {
-	      debug(1,"Token %s = %d",token,tokenType(token));
-	      switch (tokenType(token))
-		{
-		case INTOK_GEOM:
-		  *input >> token;
-		  debug(1,"Creating new geometry object: %s.", token);
-		  inGeom = new Geometry(token);
-		  memCheck(inGeom,"Input::Input() constructor: inGeom");
-		  break;
-		case INTOK_MIX:
-		  debug(1,"Creating new Mixture object.");
-		  mixList = mixList->getMixture(*input);
-		  break;
-		case INTOK_FLUX:
-		  debug(1,"Creating new Flux object.");
-		  fluxList = fluxList->getFlux(*input);
-		  break;
-		case INTOK_PULSE:
-		  debug(1,"Creating new History object.");
-		  historyList = historyList->getHistory(*input);
-		  break;
-		case INTOK_SCHED:
-		  debug(1,"Creating new Schedule object.");
-		  schedList = schedList->getSchedule(*input);
-		  break;
-		case INTOK_DIM:
-		  debug(1,"Creating new Dimension object.");
-		  dimList = dimList->getDimension(*input);
-		  break;
-		case INTOK_MINR:
-		  debug(1,"Reading Minor Radius.");
-		  *input >> token;
-		  inGeom->setMinorR(atof(token));
-		  verbose(2,"Set torus minor radius = %g",atof(token));
-		  break;
-		case INTOK_MAJR:
-		  debug(1,"Reading Major Radius.");
-		  *input >> token;
-		  inGeom->setMajorR(atof(token));
-		  verbose(2,"Set torus major radius = %g",atof(token));
-		  break;
-		case INTOK_COOL:
-		  debug(1,"Creating new CoolingTime object.");
-		  coolList->getCoolingTimes(*input);
-		  break;
-		case INTOK_MAT:
-		  debug(1,"Creating new Loading object.");
-		  loadList->getMatLoading(*input);
-		  break;
-		case INTOK_VOL:
-		  debug(1,"Reading Volume List.");
-		  volList->getVolumes(*input);
-		  break;
-		case INTOK_MATLIB:
-		  debug(1,"Opening material library");
-		  Component::getMatLib(*input);
-		  break;
-		case INTOK_ELELIB:
-		  debug(1,"Opening element library");
-		  Component::getEleLib(*input);
-		  break;
-		case INTOK_DATALIB:
-		  debug(1,"Opening data library");
-		  NuclearData::getDataLib(*input);
-		  break;
-		case INTOK_LIBCONV:
-		  debug(1,"Converting data library");
-		  DataLib::convertLib(*input);
-		  verbose(1,"Exiting after library conversion.");
-		  exit(0);
-		case INTOK_TRUNC:
-		  debug(1,"Reading Truncation criteria.");
-		  Chain::getTruncInfo(*input);
-		  break;
-		case INTOK_IGNORE:
-		  debug(1,"Reading relative ignore criteria.");
-		  Chain::getIgnoreInfo(*input);
-		  break;
-		case INTOK_IMPURITY:
-		  debug(1,"Reading Impurity definition and truncation criteria.");
-		  Chain::getImpTruncInfo(*input);
-		  break;
-		case INTOK_NORM:
-		  debug(1,"Reading interval normalizations.");
-		  normList->getNorms(*input);
-		  break;
-		case INTOK_OUTPUT:
-		  debug(1,"Reading output formatting.");
-		  outList = outList->getOutFmts(*input);
-		  break;
-		case INTOK_DUMPFILE:
-		  debug(1,"Openning dump filename.");
-		  *input >> token;
-		  Result::initBinDump(token);
-		  break;
-		case INTOK_SOLVELIST:
-		  solveList->getSolveList(*input);
-		  break;
-		case INTOK_SKIPLIST:
-		  skipList->getSolveList(*input);
-		  break;
-		case INTOK_REFFLUX:
-		  *input >> token;
-		  VolFlux::setRefFluxType(tolower(token[0]));
-		  break;
-// 		case INTOK_CPLIBS:
-// 		  int num;
-// 		  *input >> num;
-// 		  VolFlux::setNumCP(num);
-// 		  *input >> num;
-// 		  VolFlux::setNumCPEG(num);
-//   		  Volume::loadRangeLib(input);
-// 		  Volume::loadSpecLib(input);
-// 		  break;
-		default:
-		  error(100,"Invalid token in input file: %s",token);
-		}
+          if (strlen(token)>0)
+            {
+              debug(1,"Token %s = %d",token,tokenType(token));
+              switch (tokenType(token))
+                {
+                case INTOK_GEOM:
+                  *input >> token;
+                  debug(1,"Creating new geometry object: %s.", token);
+                  inGeom = new Geometry(token);
+                  memCheck(inGeom,"Input::Input() constructor: inGeom");
+                  break;
+                case INTOK_MIX:
+                  debug(1,"Creating new Mixture object.");
+                  mixList = mixList->getMixture(*input);
+                  break;
+                case INTOK_FLUX:
+                  debug(1,"Creating new Flux object.");
+                  fluxList = fluxList->getFlux(*input);
+                  break;
+                case INTOK_PULSE:
+                  debug(1,"Creating new History object.");
+                  historyList = historyList->getHistory(*input);
+                  break;
+                case INTOK_SCHED:
+                  debug(1,"Creating new Schedule object.");
+                  schedList = schedList->getSchedule(*input);
+                  break;
+                case INTOK_DIM:
+                  debug(1,"Creating new Dimension object.");
+                  dimList = dimList->getDimension(*input);
+                  break;
+                case INTOK_MINR:
+                  debug(1,"Reading Minor Radius.");
+                  *input >> token;
+                  inGeom->setMinorR(atof(token));
+                  verbose(2,"Set torus minor radius = %g",atof(token));
+                  break;
+                case INTOK_MAJR:
+                  debug(1,"Reading Major Radius.");
+                  *input >> token;
+                  inGeom->setMajorR(atof(token));
+                  verbose(2,"Set torus major radius = %g",atof(token));
+                  break;
+                case INTOK_COOL:
+                  debug(1,"Creating new CoolingTime object.");
+                  coolList->getCoolingTimes(*input);
+                  break;
+                case INTOK_MAT:
+                  debug(1,"Creating new Loading object.");
+                  loadList->getMatLoading(*input);
+                  break;
+                case INTOK_VOL:
+                  debug(1,"Reading Volume List.");
+                  volList->getVolumes(*input);
+                  break;
+                case INTOK_MATLIB:
+                  debug(1,"Opening material library");
+                  Component::getMatLib(*input);
+                  break;
+                case INTOK_ELELIB:
+                  debug(1,"Opening element library");
+                  Component::getEleLib(*input);
+                  break;
+                case INTOK_DATALIB:
+                  debug(1,"Opening data library");
+                  NuclearData::getDataLib(*input);
+                  break;
+                case INTOK_LIBCONV:
+                  debug(1,"Converting data library");
+                  DataLib::convertLib(*input);
+                  verbose(1,"Exiting after library conversion.");
+                  exit(0);
+                case INTOK_TRUNC:
+                  debug(1,"Reading Truncation criteria.");
+                  Chain::getTruncInfo(*input);
+                  break;
+                case INTOK_IGNORE:
+                  debug(1,"Reading relative ignore criteria.");
+                  Chain::getIgnoreInfo(*input);
+                  break;
+                case INTOK_IMPURITY:
+                  debug(1,"Reading Impurity definition and truncation criteria.");
+                  Chain::getImpTruncInfo(*input);
+                  break;
+                case INTOK_NORM:
+                  debug(1,"Reading interval normalizations.");
+                  normList->getNorms(*input);
+                  break;
+                case INTOK_OUTPUT:
+                  debug(1,"Reading output formatting.");
+                  outList = outList->getOutFmts(*input);
+                  break;
+                case INTOK_DUMPFILE:
+                  debug(1,"Openning dump filename.");
+                  *input >> token;
+                  Result::initBinDump(token);
+                  break;
+                case INTOK_SOLVELIST:
+                  solveList->getSolveList(*input);
+                  break;
+                case INTOK_SKIPLIST:
+                  skipList->getSolveList(*input);
+                  break;
+                case INTOK_REFFLUX:
+                  *input >> token;
+                  VolFlux::setRefFluxType(tolower(token[0]));
+                  break;
+//                 case INTOK_CPLIBS:
+//                   int num;
+//                   *input >> num;
+//                   VolFlux::setNumCP(num);
+//                   *input >> num;
+//                   VolFlux::setNumCPEG(num);
+//                     Volume::loadRangeLib(input);
+//                   Volume::loadSpecLib(input);
+//                   break;
+                default:
+                  error(100,"Invalid token in input file: %s",token);
+                }
 
-	    } 
-	}
+            } 
+        }
       
       /* delete current stream */
       if (input != &cin)
-	{
-	  debug(1,"Deleting current stream.");
-	  delete input;
-	}
+        {
+          debug(1,"Deleting current stream.");
+          delete input;
+        }
       
       debug(1,"Popping next stream.");
       /* end of this input stream */
@@ -326,38 +326,38 @@ void Input::xCheck()
     {
       /* if using zone dimensions */
       if (!dimList->head())
-	{
-	  /* interval volumes not allowed */
-	  if (!volList->head())
-	    error(300,"Cannot define both zone dimensions and interval volumes.");
+        {
+          /* interval volumes not allowed */
+          if (!volList->head())
+            error(300,"Cannot define both zone dimensions and interval volumes.");
 
-	  /* check that we have the correct dimension types for this geometry */
-	  dimListHead->checkTypes(inGeom->getType());
+          /* check that we have the correct dimension types for this geometry */
+          dimListHead->checkTypes(inGeom->getType());
 
-	  /* check for torus radii */
-	  if (inGeom->getType() == GEOM_T)
-	    inGeom->checkTorus(dimListHead);
-	  
-	  /* check that the number of zones defined here 
-	   * matches the number in the material loading */
-	  if (dimListHead->totZones() < loadList->numZones())
-	    warning(301,"A material loading is given for more zones (%d) than are defined by the zone dimensions (%d).\n\
+          /* check for torus radii */
+          if (inGeom->getType() == GEOM_T)
+            inGeom->checkTorus(dimListHead);
+          
+          /* check that the number of zones defined here 
+           * matches the number in the material loading */
+          if (dimListHead->totZones() < loadList->numZones())
+            warning(301,"A material loading is given for more zones (%d) than are defined by the zone dimensions (%d).\n\
 Those extra zones are being ignored.",loadList->numZones(),dimListHead->totZones());
-	  else if (dimListHead->totZones() > loadList->numZones())
-	    error(302,"Material loadings were not defined for as many zones (%d) as were defined by the zone dimensions (%d).",
-		  loadList->numZones(),dimListHead->totZones());
-	  else
-	    verbose(2,"Number of zones defined by zone dimensions (%d) matches number of material loadings defined.(%d)",
-		  dimListHead->totZones(),loadList->numZones());
-	}
+          else if (dimListHead->totZones() > loadList->numZones())
+            error(302,"Material loadings were not defined for as many zones (%d) as were defined by the zone dimensions (%d).",
+                  loadList->numZones(),dimListHead->totZones());
+          else
+            verbose(2,"Number of zones defined by zone dimensions (%d) matches number of material loadings defined.(%d)",
+                  dimListHead->totZones(),loadList->numZones());
+        }
       else if (!volList->head())
-	{
-	  /* ensure that all zones used in the volume list are defined in the material loading list */
-	  volList->xCheck(loadList);
-	}
+        {
+          /* ensure that all zones used in the volume list are defined in the material loading list */
+          volList->xCheck(loadList);
+        }
       /* reqiure either zone dimensions or interval volumes */
       else 
-	error(303,"Must define either zone dimensions or interval volumes for multi-point problems.");
+        error(303,"Must define either zone dimensions or interval volumes for multi-point problems.");
     }
 
   /* cross-check schedule list
@@ -441,33 +441,33 @@ void Input::postProc(Root *masterRootList)
     {
     case MODE_FORWARD:
       {
-	masterRootList->readDump();
-	volList->postProc();
-	outListHead->write(volList,mixListHead,loadList,coolList);
-	break;
+        masterRootList->readDump();
+        volList->postProc();
+        outListHead->write(volList,mixListHead,loadList,coolList);
+        break;
       }
     case MODE_REVERSE:
       {
-	Root *target = masterRootList;
-	int targetKza;
-	char isoSym[16];
+        Root *target = masterRootList;
+        int targetKza;
+        char isoSym[16];
 
-	while (target != NULL)
-	  {
-	    target = target->readSingleDump(targetKza);
-	    volList->postProc();
-	    cout << endl << "****** TARGET ****** " 
-		 << isoName(targetKza,isoSym) << " ****** TARGET ****** " 
-		 << isoSym << " ****** TARGET ****** " << endl << endl;
-	    outListHead->write(volList,mixListHead,loadList,coolList,targetKza);
-	    volList->resetOutList();
-	    mixListHead->resetOutList();
-	    loadList->resetOutList();
+        while (target != NULL)
+          {
+            target = target->readSingleDump(targetKza);
+            volList->postProc();
+            cout << endl << "****** TARGET ****** " 
+                 << isoName(targetKza,isoSym) << " ****** TARGET ****** " 
+                 << isoSym << " ****** TARGET ****** " << endl << endl;
+            outListHead->write(volList,mixListHead,loadList,coolList,targetKza);
+            volList->resetOutList();
+            mixListHead->resetOutList();
+            loadList->resetOutList();
 
-	  }
-	break;
+          }
+        break;
       }
-	      
+              
     }
   
 
@@ -490,62 +490,62 @@ void Input::clearIncludeComment()
     switch (charInput)
       {
       case '#' : /* comment or INCLUDE*/
-	char buffer[MAXLINELENGTH];
+        char buffer[MAXLINELENGTH];
 
-	input->getline(buffer,MAXLINELENGTH,'\n');
+        input->getline(buffer,MAXLINELENGTH,'\n');
 
-	/* if we are including another input file here */
-	if (!strncmp(buffer,"#include",8))
-	  {
-	    char  *inFileName, *endFileName;
-	    int findEnd = 1;
+        /* if we are including another input file here */
+        if (!strncmp(buffer,"#include",8))
+          {
+            char  *inFileName, *endFileName;
+            int findEnd = 1;
 
-	    /* extract name of new input file */
-	    inFileName = buffer+8;
-	    while (findEnd)
-	      switch (inFileName[0])
-		{
-		case '\'':
-		case '"':
-		  endFileName = strchr(inFileName+1,inFileName[0]);
-		  *endFileName = '\0';
-		  findEnd = 0;
-		case ' ':
-		  inFileName++;
-		  break;
-		}
-	    
-	    /* push this stream onto the stack */
-	    streamStack << input;
+            /* extract name of new input file */
+            inFileName = buffer+8;
+            while (findEnd)
+              switch (inFileName[0])
+                {
+                case '\'':
+                case '"':
+                  endFileName = strchr(inFileName+1,inFileName[0]);
+                  *endFileName = '\0';
+                  findEnd = 0;
+                case ' ':
+                  inFileName++;
+                  break;
+                }
+            
+            /* push this stream onto the stack */
+            streamStack << input;
 
 
-	    verbose(2,"Openning included file: %s.",inFileName);
-	    /* open new stream */
-	    /* Allow inclusion of files from a search path
-	     * This allows standard elements of an input file
-	     * to be defined once.  
-	     * Examples: 
-	     *  - "steady_state"  pulse history
-	     *  - library selection */
-	    input = openFile(searchNonXSPath(inFileName));
+            verbose(2,"Openning included file: %s.",inFileName);
+            /* open new stream */
+            /* Allow inclusion of files from a search path
+             * This allows standard elements of an input file
+             * to be defined once.  
+             * Examples: 
+             *  - "steady_state"  pulse history
+             *  - library selection */
+            input = openFile(searchNonXSPath(inFileName));
 
-	    if (*input == 0)
-	      error(101,"Unable to open included file: '%s'.",inFileName);
+            if (*input == 0)
+              error(101,"Unable to open included file: '%s'.",inFileName);
 
-	    verbose(2,"Reading included file: %s.",inFileName);
+            verbose(2,"Reading included file: %s.",inFileName);
 
-	  }
+          }
 
-	charInput = input->peek();
-	break;
+        charInput = input->peek();
+        break;
       case ' ' : /* whitespace */
       case '\n': /* whitespace */
       case '\t': /* whitespace */
-	input->get();
-	charInput = input->peek();
-	break;
+        input->get();
+        charInput = input->peek();
+        break;
       default:
-	charInput = '?';
+        charInput = '?';
       }
       
 }

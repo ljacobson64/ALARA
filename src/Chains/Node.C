@@ -46,10 +46,10 @@ Node::Node(char *isoName)
       /* strip isomeric flag */
       char *strPtr = cpyName + strlen(cpyName) - 1;
       if(isalpha(*strPtr))
-	{
-	  isoFlag = (*strPtr) - 'l';
-	  *strPtr = '\0';
-	}
+        {
+          isoFlag = (*strPtr) - 'l';
+          *strPtr = '\0';
+        }
 
       strPtr = strchr(cpyName,'-');
       
@@ -70,7 +70,7 @@ Node::Node(char *isoName)
     to NuclearData and initializing 'kza' with argument 1. */
 
 Node::Node(int nextKza, Node* passedPrev, double* passedSingle, 
-	   int passedRank, int passedState) 
+           int passedRank, int passedState) 
   : TreeInfo(passedPrev,passedRank,passedState), 
     kza(nextKza)
 { 
@@ -83,7 +83,7 @@ Node::Node(int nextKza, Node* passedPrev, double* passedSingle,
       single = new double[nGroups+1];
       memCheck(single,"Node::Node(...) constructor: single");
       for (gNum=0;gNum<=nGroups;gNum++)
-	single[gNum] = passedSingle[gNum];
+        single[gNum] = passedSingle[gNum];
       P = single;
       break;
     case MODE_REVERSE:
@@ -119,13 +119,13 @@ void Node::readData()
       /* if a new node is created with TRUNCATE_STABLE state
        * strip its pure transmutation reactions immediately */
       if (state == TRUNCATE_STABLE)
-	state = stripNonDecay();
+        state = stripNonDecay();
       break;
     case MODE_REVERSE:
       if (single != NULL)
-	D = single;
+        D = single;
       else
-	D = prev->P;
+        D = prev->P;
       break;
     }
 }
@@ -140,9 +140,9 @@ double Node::getLambda(int setKza)
       readData();
     
       if (nPaths>0 && D[nGroups]>0)
-	lambdaCache[kza] = D[nGroups];
+        lambdaCache[kza] = D[nGroups];
       else
-	lambdaCache[kza] = 0;
+        lambdaCache[kza] = 0;
     }
 
   return lambdaCache[setKza];
@@ -157,9 +157,9 @@ double Node::getHeat(int setKza)
       readData();
       
       if (nPaths>0 && D[nGroups]>0)
-	heatCache[kza] = D[nGroups] * (E[0]+E[1]+E[2]);
+        heatCache[kza] = D[nGroups] * (E[0]+E[1]+E[2]);
       else
-	heatCache[kza] = 0;
+        heatCache[kza] = 0;
     }
 
   return heatCache[setKza];
@@ -174,9 +174,9 @@ double Node::getAlpha(int setKza)
       readData();
       
       if (nPaths>0 && D[nGroups]>0)
-	alphaCache[kza] = D[nGroups] * E[2];
+        alphaCache[kza] = D[nGroups] * E[2];
       else
-	alphaCache[kza] = 0;
+        alphaCache[kza] = 0;
     }
   
   return alphaCache[setKza];
@@ -191,9 +191,9 @@ double Node::getBeta(int setKza)
       readData();
       
       if (nPaths>0 && D[nGroups]>0)
-	betaCache[kza] = D[nGroups] * E[0];
+        betaCache[kza] = D[nGroups] * E[0];
       else
-	betaCache[kza] = 0;
+        betaCache[kza] = 0;
     }
   return betaCache[setKza];
 }
@@ -206,9 +206,9 @@ double Node::getGamma(int setKza)
       readData();
       
       if (nPaths>0 && D[nGroups]>0)
-	gammaCache[kza] = D[nGroups] * E[1];
+        gammaCache[kza] = D[nGroups] * E[1];
       else
-	gammaCache[kza] = 0;
+        gammaCache[kza] = 0;
     }
 
   return gammaCache[setKza];
@@ -244,23 +244,23 @@ void Node::loadWDR(char *fname)
   while (!wdrFile.eof())
     {
       if (mode == WDR_SYMMODE)
-	{
-	  for (strPtr=isoName;*strPtr;strPtr++)
-	    *strPtr = tolower(*strPtr);
-	  strPtr = strchr(isoName,'-');
-	  *strPtr = '\0';
-	  
-	  sprintf(sym," %s ",isoName);
-	  
-	  Z = (strstr(SYMBOLS,sym)-SYMBOLS)/3 + 1;
-	  isoFlag = '\0';
-	  sscanf(strPtr+1,"%d%c",&A,&isoFlag);
-	  tmpKza = (Z*1000+A)*10;
-	  if (isalpha(isoFlag))
-	    tmpKza += isoFlag - 'l';
-	}
+        {
+          for (strPtr=isoName;*strPtr;strPtr++)
+            *strPtr = tolower(*strPtr);
+          strPtr = strchr(isoName,'-');
+          *strPtr = '\0';
+          
+          sprintf(sym," %s ",isoName);
+          
+          Z = (strstr(SYMBOLS,sym)-SYMBOLS)/3 + 1;
+          isoFlag = '\0';
+          sscanf(strPtr+1,"%d%c",&A,&isoFlag);
+          tmpKza = (Z*1000+A)*10;
+          if (isalpha(isoFlag))
+            tmpKza += isoFlag - 'l';
+        }
       else
-	tmpKza = atoi(isoName);
+        tmpKza = atoi(isoName);
 
       wdrCache[tmpKza] = dataAccess.getLambda(tmpKza)/wdr;
       wdrFile >> isoName >> wdr;
@@ -320,40 +320,40 @@ void Node::copyRates(double **rates, const int step, int *loopRank)
     {
     case MODE_FORWARD:
       {
-	/* if there is a natural loop */
-	if (foundLoop>-1)
-	  loopRank[rank] = rank - foundLoop;
+        /* if there is a natural loop */
+        if (foundLoop>-1)
+          loopRank[rank] = rank - foundLoop;
 
-	/* check for internal loop */
-	if (rank > 0 && loopRank[rank-1] > -1 
-	    && (loopRank[rank] > loopRank[rank-1]+1 || loopRank[rank] == -1))
-	  loopRank[rank] = loopRank[rank-1] + 1;
-	
-	break;
+        /* check for internal loop */
+        if (rank > 0 && loopRank[rank-1] > -1 
+            && (loopRank[rank] > loopRank[rank-1]+1 || loopRank[rank] == -1))
+          loopRank[rank] = loopRank[rank-1] + 1;
+        
+        break;
       }
     case MODE_REVERSE:
       {
 
-	/* if there is a natural loop */
-	if (foundLoop>-1)
-	  {
-	    loopRank[foundLoop] = rank - foundLoop;
-	    
-	    /* check for internal loop */
-	    if (loopRank[foundLoop] > loopRank[foundLoop+1]+1)
-	      loopRank[foundLoop] = loopRank[foundLoop+1]+1;
-	  }
+        /* if there is a natural loop */
+        if (foundLoop>-1)
+          {
+            loopRank[foundLoop] = rank - foundLoop;
+            
+            /* check for internal loop */
+            if (loopRank[foundLoop] > loopRank[foundLoop+1]+1)
+              loopRank[foundLoop] = loopRank[foundLoop+1]+1;
+          }
 
-	/* propagate that loop to other chain members */
-	while (--foundLoop >= 0)
-	  if (loopRank[foundLoop] == -1)
-	    loopRank[foundLoop] = loopRank[foundLoop+1]+1;
+        /* propagate that loop to other chain members */
+        while (--foundLoop >= 0)
+          if (loopRank[foundLoop] == -1)
+            loopRank[foundLoop] = loopRank[foundLoop+1]+1;
 
-	break;
+        break;
       }
     }
 
-	  
+          
 
 }
 
@@ -379,8 +379,8 @@ void Node::delRates(double **rates, const int step, int *loopRank)
       loopRank[rank] = -1;
       idx = rank;
       while (--idx >= 0)
-	if (loopRank[idx]+idx >= rank)
-	  loopRank[idx] = -1;
+        if (loopRank[idx]+idx >= rank)
+          loopRank[idx] = -1;
       break;
     }
 }
@@ -401,65 +401,65 @@ int Node::stateEngine(int stateBits)
   if (stateBits>-1)
     {
       switch(state)
-	{
-	case CONTINUE:
-	  if (stateBits == IGNORE)
-	    state = IGNORE;
-	  else if (stateBits >= TRUNCATE_STABLE && mode == MODE_FORWARD)
-	    state = stripNonDecay();
-	  else if (nPaths == 0 || stateBits >= TRUNCATE)
-	    state = TRUNCATE;
-	  break;
-	case TRUNCATE_STABLE:
-	  if (stateBits == IGNORE)
-	    state = IGNORE;
-	  else 
-	    /* NOTE: this test is easier than case CONTINUE since:
-	     * 1) stripNonDecay() is run during readData()
-	     * 2) since this is a next of something in a form
-	     *    of TRUNCATE state, this must also be in a form of 
-	     *    TRUNCATE state
-	     * 3) there is no change of state if it is radioactive.
-	     */
-	    if (nPaths == 0 || stateBits > TRUNCATE)
-	      state = TRUNCATE;
-	  break;
-	}
+        {
+        case CONTINUE:
+          if (stateBits == IGNORE)
+            state = IGNORE;
+          else if (stateBits >= TRUNCATE_STABLE && mode == MODE_FORWARD)
+            state = stripNonDecay();
+          else if (nPaths == 0 || stateBits >= TRUNCATE)
+            state = TRUNCATE;
+          break;
+        case TRUNCATE_STABLE:
+          if (stateBits == IGNORE)
+            state = IGNORE;
+          else 
+            /* NOTE: this test is easier than case CONTINUE since:
+             * 1) stripNonDecay() is run during readData()
+             * 2) since this is a next of something in a form
+             *    of TRUNCATE state, this must also be in a form of 
+             *    TRUNCATE state
+             * 3) there is no change of state if it is radioactive.
+             */
+            if (nPaths == 0 || stateBits > TRUNCATE)
+              state = TRUNCATE;
+          break;
+        }
     }
   else
     /* chain building action analysis */
     switch(state)
       {
       case IGNORE:
-	/* When we are ignoring the last next, we must change the
-	 * prev's state back to truncate so that its chain will not be
-	 * lost. */
-	if (prev != NULL && prev->state == SOLVED)
-	  prev->state = TRUNCATE;
-	break;
+        /* When we are ignoring the last next, we must change the
+         * prev's state back to truncate so that its chain will not be
+         * lost. */
+        if (prev != NULL && prev->state == SOLVED)
+          prev->state = TRUNCATE;
+        break;
       case TRUNCATE:
-	/* During the initial call to the state engine for a new isotope
-	 * the state can be set to TRUNCATE.  The state engine then starts
-	 * with this state when determining the action for Chain::build(...).
-	 * The appropriate action is to solve the chain.
-	 */
-	state = SOLVE;
-	break;
+        /* During the initial call to the state engine for a new isotope
+         * the state can be set to TRUNCATE.  The state engine then starts
+         * with this state when determining the action for Chain::build(...).
+         * The appropriate action is to solve the chain.
+         */
+        state = SOLVE;
+        break;
       case SOLVE:
-	/* This state is set when a chain is truncated.   
-	 *
-	 * The appropriate action here is to initiate a retraction of the chain.
-	 */
-	state = SOLVED;
-	/* if we just solved the root, set the terminal state */
-	if (rank == 0)
-	  state = FINISHED_ROOT;
-	break;
+        /* This state is set when a chain is truncated.   
+         *
+         * The appropriate action here is to initiate a retraction of the chain.
+         */
+        state = SOLVED;
+        /* if we just solved the root, set the terminal state */
+        if (rank == 0)
+          state = FINISHED_ROOT;
+        break;
       case SOLVED:
-	/* if we just solved the root, set the terminal state */
-	if (rank == 0)
-	  state = FINISHED_ROOT;
-	break;
+        /* if we just solved the root, set the terminal state */
+        if (rank == 0)
+          state = FINISHED_ROOT;
+        break;
       }
   
   return state;
@@ -498,7 +498,7 @@ Node* Node::addNext(int &setRank)
       /* look back up chain for successive isotopes which are also on
        * their last next */
       while (ptr->prev != NULL && ptr->prev->state == SOLVED)
-	ptr = ptr->prev;
+        ptr = ptr->prev;
 
       /* setRank indicates that all nodes after this one (ptr) should be
        * tallied at the next solution */
@@ -541,8 +541,8 @@ int Node::findLoop()
       other_l = nodePtr->D[nGroups];
      
       if ( (nodePtr->kza == kza) || (l == other_l) )
-	return nodePtr->rank;
-	  
+        return nodePtr->rank;
+          
       nodePtr = nodePtr->prev;
     }
 
@@ -594,11 +594,11 @@ void Node::getRxnInfo(double *rateVec, int &baseKza, int &rxnNum, int &numRxns)
   if (rateVec == P)
     {
       if (P != NULL)
-	{
-	  baseKza = base->kza;
-	  rxnNum = base->pathNum;
-	  numRxns = base->origNPaths;
-	}
+        {
+          baseKza = base->kza;
+          rxnNum = base->pathNum;
+          numRxns = base->origNPaths;
+        }
     }
   /* otherwise this is a destruction rate */
   else
@@ -621,10 +621,10 @@ double** Node::getCPXS(int findKZA)
   readData();
   
   int cpKZA[5] = { 20040,
-		   10020,
-		   20030,
-		   10010,
-		   10030 };
+                   10020,
+                   20030,
+                   10010,
+                   10030 };
 
   // Alpha, Deuteron, Helium3, Proton, Triton
 
@@ -635,23 +635,23 @@ double** Node::getCPXS(int findKZA)
     {
       CPXS[i] = &CPXSStorage[i*nGroups];
       for(int j = 0; j < nGroups; j++)
-	{
-	  CPXS[i][j] = 0;
-	}
+        {
+          CPXS[i][j] = 0;
+        }
     }
   
   // Look for appropriate entry
   for(int i = 0; i < nPaths; i++)
     {
       if(!strcmp(emitted[i],"x"))
-	for(int j = 0; j < nCP; j++)
-	  {
-	    if(relations[i] == cpKZA[j])
-	      for(int k = 0; k < nGroups; k++)
-		{
-		  CPXS[j][k] = paths[i][k];
-		}
-	  }
+        for(int j = 0; j < nCP; j++)
+          {
+            if(relations[i] == cpKZA[j])
+              for(int k = 0; k < nGroups; k++)
+                {
+                  CPXS[j][k] = paths[i][k];
+                }
+          }
     }
 
   return CPXS;

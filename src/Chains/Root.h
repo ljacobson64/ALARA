@@ -57,7 +57,7 @@ protected:
 
       /// Default constructor when called with no arguments
       MixCompRef(Mixture* addMix=NULL, Component* addComp=NULL, 
-		 double isoDens=0);
+                 double isoDens=0);
 
       /// Copy constructor
       MixCompRef(const MixCompRef&);

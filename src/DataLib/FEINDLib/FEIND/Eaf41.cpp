@@ -60,17 +60,17 @@ void Eaf41::LoadLibrary() throw(ExFileOpen, ExEmptyXSec)
       daughter_str = str.substr(34,7);
 
       if(path_str[2] == 'F')
-	{
-	  // Fission Reaction
-	  // Find the type of fission:
-	  fission_type = FissionType(path_str[0]);
-	  is_fission = true;
-	}
+        {
+          // Fission Reaction
+          // Find the type of fission:
+          fission_type = FissionType(path_str[0]);
+          is_fission = true;
+        }
       else
-	{
-	  path = ConvertPath(path_str);	  
-	  daughter_kza = DaughterEtoF(daughter_str);
-	}
+        {
+          path = ConvertPath(path_str);          
+          daughter_kza = DaughterEtoF(daughter_str);
+        }
 
       // Skip 2 lines:
       getline(InFile,str,'\n');
@@ -79,35 +79,35 @@ void Eaf41::LoadLibrary() throw(ExFileOpen, ExEmptyXSec)
       path.CrossSection.Reset(NumGroups);
 
       for(i = 0; i < 175; i++)
-	{
-	  if(i < non_zero)
-	    {
-	      InFile >> str;
-	      path.CrossSection[i] = atof(str.c_str());
-	    }
-	  else
-	    {
-	      path.CrossSection[i] = 0.0;
-	    }
-	}
+        {
+          if(i < non_zero)
+            {
+              InFile >> str;
+              path.CrossSection[i] = atof(str.c_str());
+            }
+          else
+            {
+              path.CrossSection[i] = 0.0;
+            }
+        }
 
       if(!is_fission)
-	{
-	  // Add the parent, parent/daughter contributions:
-	  Library.SetDCs(parent_kza, daughter_kza, TOTAL_CS, 
-			 path.CrossSection, true);
+        {
+          // Add the parent, parent/daughter contributions:
+          Library.SetDCs(parent_kza, daughter_kza, TOTAL_CS, 
+                         path.CrossSection, true);
 
-	  // Add the parent/daughter/path data:
-	  Library.AddPath(parent_kza, daughter_kza, path);
+          // Add the parent/daughter/path data:
+          Library.AddPath(parent_kza, daughter_kza, path);
 
-	  // Add secondary daughters to the daughter list:
-	  AddCPPCS(parent_kza,path);
-	}
+          // Add secondary daughters to the daughter list:
+          AddCPPCS(parent_kza,path);
+        }
       else
-	{
-	  // Set the fission cross-section:
-	  Library.SetPCs(parent_kza, fission_type, path.CrossSection);
-	}
+        {
+          // Set the fission cross-section:
+          Library.SetPCs(parent_kza, fission_type, path.CrossSection);
+        }
       
       // Every reaction in this file format contributes to the total
       // cross-section
@@ -143,21 +143,21 @@ Path Eaf41::ConvertPath(const string& str)
       character = str[i];
       // Ignore blank spaces:
       if(str[i] != ' ')
-	{
-	  // Check for a number:
-	  if( !atoi(character.c_str()) )
-	    {
-	      // Not a number:
-	      ret.Emitted[ParticleEtoF(str[i])] += num_part;
-	      num_part = 1;
-	      
-	    }
-	  else
-	    {
-	      // It is a number:
-	      num_part = atoi(character.c_str());
-	    }
-	}
+        {
+          // Check for a number:
+          if( !atoi(character.c_str()) )
+            {
+              // Not a number:
+              ret.Emitted[ParticleEtoF(str[i])] += num_part;
+              num_part = 1;
+              
+            }
+          else
+            {
+              // It is a number:
+              num_part = atoi(character.c_str());
+            }
+        }
     }
 
   return ret;
@@ -244,17 +244,17 @@ void Eaf41::AddCPPCS(Kza parent, Path& path) throw(ExEmptyXSec)
       // EXCEPTION - Cpt find
 
       if(path.Emitted.find(Cpt[i]) != path.Emitted.end())
-	{
-	  assert(path.Emitted[Cpt[i]]);
+        {
+          assert(path.Emitted[Cpt[i]]);
 
-	  cs = path.CrossSection;
+          cs = path.CrossSection;
 
-	  if(path.Emitted[Cpt[i]] > 1)
-	    {
-	      cs *= path.Emitted[Cpt[i]];
-	    }
+          if(path.Emitted[Cpt[i]] > 1)
+            {
+              cs *= path.Emitted[Cpt[i]];
+            }
 
-	  Library.SetDCs(parent, Cpt[i], TOTAL_CS, cs, true);
-	}
+          Library.SetDCs(parent, Cpt[i], TOTAL_CS, cs, true);
+        }
     }
 }

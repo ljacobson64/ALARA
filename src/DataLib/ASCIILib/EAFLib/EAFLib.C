@@ -199,8 +199,8 @@ void EAFLib::readReaction(int& rxnNum, int zak )
    * [symbol][mass #][Isomeric Flag][Isomer #](N,[emitted particles])
    * [daughter symbol][duaghter mass#][daughter Iso. Flag][daughter Iso. #] */
   sscanf(buffer,"%*d %d %*2s %*d%*c%*c(N,%3s )%2s %d%c%c",
-	 &nEntries,emitted[rxnNum],daugSym+1,&daugNum,&daugIsoF,
-	 &daugIsoC);
+         &nEntries,emitted[rxnNum],daugSym+1,&daugNum,&daugIsoF,
+         &daugIsoC);
   
   debug(6,"Found reaction with %d entries, %d(n,%s)%s %d ,%c,%c.",nEntries,zak,emitted[rxnNum],daugSym+1,daugNum,daugIsoF,daugIsoC);
   
@@ -273,10 +273,10 @@ int EAFLib::getTransData()
 
   if (gas[0] == NULL)
       for (gasNum=0;gasNum<numGases;gasNum++)
-	{
-	  gas[gasNum] = new float[nGroups];
-	  memCheck(gas[gasNum],"EAFLib::getTransData(...): gas[n]");
-	}
+        {
+          gas[gasNum] = new float[nGroups];
+          memCheck(gas[gasNum],"EAFLib::getTransData(...): gas[n]");
+        }
 
   /* first time into this routine */
   if (zak == 0)
@@ -305,7 +305,7 @@ int EAFLib::getTransData()
       
       /* initialize gas production xsections */
       for (gNum=0;gNum<nGroups;gNum++)
-	gas[gasNum][gNum] = 0;
+        gas[gasNum][gNum] = 0;
     }
   
   debug(6,"Reading through reaction paths for %d",zak);
@@ -319,36 +319,36 @@ int EAFLib::getTransData()
       /* parse emitted particles */
       /* create a total production cross-section */
       for (eNum=0;eNum<strlen(emitted[rxnNum]);eNum++)
-	{
-	  emitted[rxnNum][eNum] = tolower(emitted[rxnNum][eNum]);
-	  mult=1;
-	  /* if this is not the first character AND
-	   * the previous character is a digit */
-	  if (eNum>0 && isdigit(emitted[rxnNum][eNum-1]))
-	    /* determine how many are produced */
-	    mult=atoi(emitted[rxnNum]+eNum-1);
-	  /* based on which character this is */
-	  gasNum = strchr(gasList,emitted[rxnNum][eNum])-gasList;
-	  if (gasNum>=0)
-	    {
-	      gasFlag[gasNum] = 1;
-	      for (gNum=0;gNum<nGroups;gNum++)
-		gas[gasNum][gNum] += mult*xSection[rxnNum][gNum];
-	    }
-	}
+        {
+          emitted[rxnNum][eNum] = tolower(emitted[rxnNum][eNum]);
+          mult=1;
+          /* if this is not the first character AND
+           * the previous character is a digit */
+          if (eNum>0 && isdigit(emitted[rxnNum][eNum-1]))
+            /* determine how many are produced */
+            mult=atoi(emitted[rxnNum]+eNum-1);
+          /* based on which character this is */
+          gasNum = strchr(gasList,emitted[rxnNum][eNum])-gasList;
+          if (gasNum>=0)
+            {
+              gasFlag[gasNum] = 1;
+              for (gNum=0;gNum<nGroups;gNum++)
+                gas[gasNum][gNum] += mult*xSection[rxnNum][gNum];
+            }
+        }
 
       inTrans >> zak;
 
       /* get next modified kza number */
       if (inTrans.eof())
-	zak = -1;
+        zak = -1;
       
       /* if fission x-section, dismiss */
       if (tolower(emitted[rxnNum][0]) == 'f')
-	{
-	  rxnNum--;
-	  continue;
-	}
+        {
+          rxnNum--;
+          continue;
+        }
     }
   
   /* put all data into correct variables and arrays */
@@ -357,11 +357,11 @@ int EAFLib::getTransData()
   for (gasNum=0;gasNum<numGases;gasNum++)
     if (gasFlag[gasNum])
       {
-	for(gNum=0;gNum<nGroups;gNum++)
-	  xSection[nTRxns][gNum] = gas[gasNum][gNum];
-	transKza[nTRxns] = gasKza[gasNum];
-	strcpy(emitted[nTRxns],gasEmitted);
-	nTRxns++;
+        for(gNum=0;gNum<nGroups;gNum++)
+          xSection[nTRxns][gNum] = gas[gasNum][gNum];
+        transKza[nTRxns] = gasKza[gasNum];
+        strcpy(emitted[nTRxns],gasEmitted);
+        nTRxns++;
       }
   
   debug(5,"Found %d reaction paths for %d.",nTRxns,oldZak);
@@ -491,25 +491,25 @@ int EAFLib::getDecayData()
       
       /* set daughter kza based on reaction type*/
       decayKza[decyNum] = (zak/10 - delKza(rxnType))*10
-	+ int(dIsoFlag);
+        + int(dIsoFlag);
       /* if this is a proton producing reaction */
       if (int(rxnType) == 7)
-	{
-	  pFlag = 1;
-	  pBranch += bRatio[decyNum];
-	}
+        {
+          pFlag = 1;
+          pBranch += bRatio[decyNum];
+        }
       /* if this is an alpha producing reaction */
       else if (int(rxnType) == 4 || int(rxnType*10)%10 == 4)
-	{
-	  aFlag = 1;
-	  aBranch += bRatio[decyNum];
-	}
+        {
+          aFlag = 1;
+          aBranch += bRatio[decyNum];
+        }
       /* spontaneous fission */
       else if (int(rxnType) == 6)
-	{
-	  decyNum--;
-	  nDRxns--;
-	}
+        {
+          decyNum--;
+          nDRxns--;
+        }
       
     }
 
@@ -571,8 +571,8 @@ void EAFLib::skipDiscreteGammas(char* buffer, int numGammas)
       inDecay.getline(buffer,MAXLINELENGTH);
       /* if necessary */
       if (numParms>6)
-	/* skip another line */
-	inDecay.getline(buffer,MAXLINELENGTH);
+        /* skip another line */
+        inDecay.getline(buffer,MAXLINELENGTH);
     }
 }
 
@@ -607,12 +607,12 @@ void EAFLib::skipContGammas(char *buffer)
       numPnts = atoi(buffer+55);
       /* skip one line for every three data points */
       for (pntNum=0;pntNum<numPnts;pntNum+=3)
-	inDecay.getline(buffer,MAXLINELENGTH);
+        inDecay.getline(buffer,MAXLINELENGTH);
     }
 }
 
 void EAFLib::readDiscreteGammas(int specNum, int numGammas, 
-				float discFactor, char *buffer ) 
+                                float discFactor, char *buffer ) 
 { 
   int gammaNum; 
   int numParms; 
@@ -637,7 +637,7 @@ void EAFLib::readDiscreteGammas(int specNum, int numGammas,
       
       /* throw away extra line if necessary */
       if (numParms>6)
-	inDecay.getline(buffer,MAXLINELENGTH);
+        inDecay.getline(buffer,MAXLINELENGTH);
       
       discGammaE[specNum][gammaNum] = gammaE;
       discGammaI[specNum][gammaNum] = gammaI*discFactor;
@@ -680,11 +680,11 @@ void EAFLib::readContGammas(int specNum, float contFactor, char* buffer)
       sscanf(buffer,"%d %d %d %d %d %d",b,t,b+1,t+1,b+2,t+2);
       /* for each region on this line */
       for (;regNum<lineStart+3 && regNum<numReg;regNum++)
-	{
-	  /* set the data */
-	  intRegB[specNum][regNum] = b[regNum-lineStart];
-	  intRegT[specNum][regNum] = t[regNum-lineStart];
-	}
+        {
+          /* set the data */
+          intRegB[specNum][regNum] = b[regNum-lineStart];
+          intRegT[specNum][regNum] = t[regNum-lineStart];
+        }
     }
   
   /* read the interpolation table */
@@ -703,13 +703,13 @@ void EAFLib::readContGammas(int specNum, float contFactor, char* buffer)
       /* extract spectrum table data */
       /* for each point on this line */
       for (;pntNum<lineStart+3 && pntNum<numPnts;pntNum++)
-	{
-	  extract(buffer+22*(pntNum-lineStart),&x);
-	  extract(buffer+11+22*(pntNum-lineStart),&y);
-	  /* set the data */
-	  contX[specNum][pntNum] = x;
-	  contY[specNum][pntNum] = y*contFactor;
-	}
+        {
+          extract(buffer+22*(pntNum-lineStart),&x);
+          extract(buffer+11+22*(pntNum-lineStart),&y);
+          /* set the data */
+          contX[specNum][pntNum] = x;
+          contY[specNum][pntNum] = y*contFactor;
+        }
     }
   
   /* skip covariance data */
@@ -721,7 +721,7 @@ void EAFLib::readContGammas(int specNum, float contFactor, char* buffer)
       numPnts = atoi(buffer+55);
       /* skip one line for every three data points */
       for (pntNum=0;pntNum<numPnts;pntNum+=3)
-	inDecay.getline(buffer,MAXLINELENGTH);
+        inDecay.getline(buffer,MAXLINELENGTH);
     }
 }
 
@@ -769,53 +769,53 @@ int EAFLib::getGammaData()
       /* it is possible that the ENDF entry is all zeros, 
        * in which case, skip this spectrum */
       if ( (discFactor == 0.0 || numGammas == 0) && (specType == 0.0 || contFactor == 0.0) )
-	radType = 1;
+        radType = 1;
       
       /* if this is not a gamma spectrum or an x-ray spectrum entry */
       if ( (int(radType) != 0) && (int(radType) != 9) )
-	{
-	  skipDiscreteGammas(buffer,numGammas);
-	  if (specType>0)
-	    skipContGammas(buffer);
-	}
+        {
+          skipDiscreteGammas(buffer,numGammas);
+          if (specType>0)
+            skipContGammas(buffer);
+        }
       /* this is a gamma spectrum entry */
       else
-	{
-	  /* read this spectrum */
-	  /* read discrete entries */
-	  numDisc[numGSpec] = 0;
-	  discGammaE[numGSpec] = NULL;
-	  discGammaI[numGSpec] = NULL;
-	  
-	  if (numGammas > 0 )
-	    {
-	    /* if there are valid discrete gammas */
-	    if (discFactor > 0 )
-	      readDiscreteGammas(numGSpec,numGammas,discFactor,buffer);
-	    else
-	      skipDiscreteGammas(buffer,numGammas);
-	    }
-	  
-	  nIntReg[numGSpec] = 0;
-	  intRegB[numGSpec] = NULL;
-	  intRegT[numGSpec] = NULL;
-	  nPnts[numGSpec] = 0;
-	  contX[numGSpec] = NULL;
-	  contY[numGSpec] = NULL;
-	  
-	  /* read continuous data */
-	  if (specType>0)
-	    {
-	    /* if the scaling factor is non-zero */
-	    if (contFactor>0)
-	      readContGammas(numGSpec,contFactor,buffer);
-	    else
-	      skipContGammas(buffer);
-	    }
-	  
-	  /* increment gamma spectra counter */
-	  numGSpec++;
-	}
+        {
+          /* read this spectrum */
+          /* read discrete entries */
+          numDisc[numGSpec] = 0;
+          discGammaE[numGSpec] = NULL;
+          discGammaI[numGSpec] = NULL;
+          
+          if (numGammas > 0 )
+            {
+            /* if there are valid discrete gammas */
+            if (discFactor > 0 )
+              readDiscreteGammas(numGSpec,numGammas,discFactor,buffer);
+            else
+              skipDiscreteGammas(buffer,numGammas);
+            }
+          
+          nIntReg[numGSpec] = 0;
+          intRegB[numGSpec] = NULL;
+          intRegT[numGSpec] = NULL;
+          nPnts[numGSpec] = 0;
+          contX[numGSpec] = NULL;
+          contY[numGSpec] = NULL;
+          
+          /* read continuous data */
+          if (specType>0)
+            {
+            /* if the scaling factor is non-zero */
+            if (contFactor>0)
+              readContGammas(numGSpec,contFactor,buffer);
+            else
+              skipContGammas(buffer);
+            }
+          
+          /* increment gamma spectra counter */
+          numGSpec++;
+        }
     }
 
   if (numGSpec == 0)

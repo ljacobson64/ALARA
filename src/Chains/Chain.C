@@ -57,7 +57,7 @@ Chain::Chain(Root *newRoot, topSchedule *top)
   for (rank=0;rank<maxChainLength;rank++)
     {
       for (int set=0;set<6;set++)
-	rates[set*maxChainLength + rank] = NULL;
+        rates[set*maxChainLength + rank] = NULL;
       loopRank[rank] = -1;
     }
 
@@ -123,7 +123,7 @@ Chain::Chain(const Chain& c)
       colRates = new double[4*sliceSize];
       memCheck(colRates,"Chain::Chain(...) copy constructor: colRates");
       for (rank=0;rank<4*sliceSize;rank++)
-	colRates[rank] = c.colRates[rank];
+        colRates[rank] = c.colRates[rank];
     }
 
   root = c.root;
@@ -185,7 +185,7 @@ Chain& Chain::operator=(const Chain& c)
       colRates = new double[4*sliceSize];
       memCheck(colRates,"Chain::Chain(...) copy constructor: colRates");
       for (rank=0;rank<4*sliceSize;rank++)
-	colRates[rank] = c.colRates[rank];
+        colRates[rank] = c.colRates[rank];
     }
 
   root = c.root;
@@ -209,7 +209,7 @@ void Chain::getTruncInfo(istream& input)
   input >> truncLimit;
 
   verbose(2,"Truncation parameters set at %g for truncation and %g for ignore.",
-	  truncLimit, truncLimit*ignoreLimit);
+          truncLimit, truncLimit*ignoreLimit);
 }
 
 void Chain::getIgnoreInfo(istream& input)
@@ -217,10 +217,10 @@ void Chain::getIgnoreInfo(istream& input)
   input >> ignoreLimit;
 
   verbose(2,"Truncation parameters set at %g for truncation and %g for ignore.",
-	  truncLimit, truncLimit*ignoreLimit);
+          truncLimit, truncLimit*ignoreLimit);
   if (impurityDefn>0)
     verbose(2,"Impurity defined as %g with truncation parameters set at %g for truncation and %g for ignore.",
-	    impurityDefn, impurityTruncLimit, impurityTruncLimit*ignoreLimit);
+            impurityDefn, impurityTruncLimit, impurityTruncLimit*ignoreLimit);
 }
 
 void Chain::getImpTruncInfo(istream& input)
@@ -228,7 +228,7 @@ void Chain::getImpTruncInfo(istream& input)
   input >> impurityDefn >> impurityTruncLimit;
 
   verbose(2,"Impurity defined as %g with truncation parameters set at %g for truncation and %g for ignore.",
-	  impurityDefn, impurityTruncLimit, impurityTruncLimit*ignoreLimit);
+          impurityDefn, impurityTruncLimit, impurityTruncLimit*ignoreLimit);
 }
 
 /****************************
@@ -288,7 +288,7 @@ void Chain::setState(topSchedule* top)
   
   /* run state engine */
   int state = node->stateEngine(truncBits);
-	    
+            
   verbose(3,"Checking node %d",node->count(relProd));
 
   verbose(4,"Set truncation state: %d (%g)",state,relProd[0]);
@@ -310,7 +310,7 @@ int Chain::build(topSchedule *top)
   if (node->newNode())
     {
       verbose(3,"Processing new node %d at rank %d",node->getKza(), 
-	      chainLength);
+              chainLength);
       chainLength++;
       node->readData();
       /* if our chain is too large, expand the rate vectors */
@@ -337,14 +337,14 @@ int Chain::build(topSchedule *top)
        * except we have to retract newRank as the chain retracts. 
        */
       switch(mode)
-	{
-	case MODE_FORWARD:
-	  newRank = chainLength-1;
-	  break;
-	case MODE_REVERSE:
-	  newRank = 0;
-	  break;
-	}
+        {
+        case MODE_FORWARD:
+          newRank = chainLength-1;
+          break;
+        case MODE_REVERSE:
+          newRank = 0;
+          break;
+        }
     case IGNORE:
       /* If already solved or ignoring, then we are done with this
        * isotope.
@@ -400,7 +400,7 @@ void Chain::setupColRates()
   else
     error(9000,"Programming Error: Chain::setupColRates(...) \n\
 sliceSize = %d [chainLength = %d, VolFlux::getNumFluxes() = %d].",
-	  sliceSize, chainLength,VolFlux::getNumFluxes());
+          sliceSize, chainLength,VolFlux::getNumFluxes());
 
   for (rank=0;rank<2*sliceSize+2*chainLength;rank++)
     colRates[rank] = 0;
@@ -415,17 +415,17 @@ sliceSize = %d [chainLength = %d, VolFlux::getNumFluxes() = %d].",
     {
       idx = rank;
       if (mode == MODE_REVERSE)
-	idx = (chainLength-1)-rank;
+        idx = (chainLength-1)-rank;
 
       if (rates[rank+2*step] == NULL)
-	L[idx] = 0;
+        L[idx] = 0;
       else
-	L[idx] = *(rates[rank+2*step]);
+        L[idx] = *(rates[rank+2*step]);
 
       if (rates[rank+3*step] == NULL)
-	l[idx] = 0;
+        l[idx] = 0;
       else
-	l[idx] = *(rates[rank+3*step]);
+        l[idx] = *(rates[rank+3*step]);
     }
 
   if (solvingRef)
@@ -449,21 +449,21 @@ void Chain::collapseRates(VolFlux* flux)
     {
       nodePtr = root;
       for (rank=0;rank<chainLength;rank++)
-	{
-	  idx = rank;
-	  if (mode == MODE_REVERSE)
-	    idx = (chainLength-1)-rank;
-	  idx2 = fluxNum*chainLength + idx; 
-	  P[idx2] = flux->fold(rates[rank],nodePtr)      + L[idx];
-	  d[idx2] = flux->fold(rates[rank+step],nodePtr) + l[idx];
-	  nodePtr = nodePtr->getNext();
-	}
+        {
+          idx = rank;
+          if (mode == MODE_REVERSE)
+            idx = (chainLength-1)-rank;
+          idx2 = fluxNum*chainLength + idx; 
+          P[idx2] = flux->fold(rates[rank],nodePtr)      + L[idx];
+          d[idx2] = flux->fold(rates[rank+step],nodePtr) + l[idx];
+          nodePtr = nodePtr->getNext();
+        }
       
       debug(5,"collapsed rates P[last] and d[last]: %12.5e, %12.5e",P[chainLength-1],d[chainLength-1]);
 
       /* in forward mode, don't destroy bottom isotope */
       if (solvingRef)
-	d[fluxNum*chainLength+chainLength-1] = 0;
+        d[fluxNum*chainLength+chainLength-1] = 0;
 
      fluxNum++;
      flux = flux->advance();
@@ -505,27 +505,27 @@ void Chain::setDecay(Matrix& D, double time)
   for (;idx<size;idx++)
     {
       if (col == row)
-	{
-	  data[idx] = exp(-l[row]*time);
-	  col = 0;
-	  row++;
-	}
+        {
+          data[idx] = exp(-l[row]*time);
+          col = 0;
+          row++;
+        }
       else
-	{
-	  data[idx] = 1;
-	  for (idx2=col;idx2<row;idx2++)
-	    data[idx] *= L[idx2+1];
+        {
+          data[idx] = 1;
+          for (idx2=col;idx2<row;idx2++)
+            data[idx] *= L[idx2+1];
 
-	  if (data[idx] > 0)
+          if (data[idx] > 0)
             {
-	    if ( loopRank[idx2] == -1 ) //Check for loop in a decay chain
+            if ( loopRank[idx2] == -1 ) //Check for loop in a decay chain
                data[idx] *= bateman(row,col,l,time,success);
             else
-	       data[idx] *= laplaceInverse(row, col, l, time, success);
+               data[idx] *= laplaceInverse(row, col, l, time, success);
             }
 
-	  col++;
-	}
+          col++;
+        }
     }
 
   delete[] D.data;
@@ -577,26 +577,26 @@ void Chain::fillTMat(Matrix& T,double time, int fluxNum)
   for (;idx<size;idx++)
     {
       if (col == row)
-	{
-	  data[idx] = exp(-d[row+fluxOffset]*time);
-	  col = 0;
-	  row++;
-	  switch(mode)
-	    {
-	    case MODE_FORWARD:
-	      rank = row;
-	      break;
-	    case MODE_REVERSE:
-	      rank = (chainLength-1)-row;
-	      break;
-	    }
-	}
+        {
+          data[idx] = exp(-d[row+fluxOffset]*time);
+          col = 0;
+          row++;
+          switch(mode)
+            {
+            case MODE_FORWARD:
+              rank = row;
+              break;
+            case MODE_REVERSE:
+              rank = (chainLength-1)-row;
+              break;
+            }
+        }
       else
-	{
-	  data[idx] = fillTElement(row,col,P+fluxOffset,d+fluxOffset,time,
-				   loopRank,rank);
-	  col++;
-	}
+        {
+          data[idx] = fillTElement(row,col,P+fluxOffset,d+fluxOffset,time,
+                                   loopRank,rank);
+          col++;
+        }
     }
 
   /* for reference calculations, don't destroy the last isotope */
@@ -641,14 +641,14 @@ void Chain::mult(Matrix &result, Matrix& A, Matrix& B)
   for (;idx<size;idx++)
     {
       if (col > row)
-	{
-	  row++;
-	  col=0;
-	  idxA = idx;
-	}
+        {
+          row++;
+          col=0;
+          idxA = idx;
+        }
       data[idx] = 0;
       for (term=col;term<=row;term++)
-	data[idx] += A.data[idxA+term]*B.data[term*(term+1)/2+col];
+        data[idx] += A.data[idxA+term]*B.data[term*(term+1)/2+col];
       col++;
     }
 
@@ -675,14 +675,14 @@ void Chain::expandRates()
   for (rank=0;rank<maxChainLength;rank++)
     {
       for (int set=0;set<6;set++)
-	newRates[set*maxChainLength*2 + rank] = 
-	  rates[set*maxChainLength + rank];
+        newRates[set*maxChainLength*2 + rank] = 
+          rates[set*maxChainLength + rank];
       newloopRank[rank] = loopRank[rank];
     }
   for (;rank<maxChainLength*2;rank++)
     {
       for (int set=0;set<6;set++)
-	newRates[set*maxChainLength*2 + rank] = NULL;
+        newRates[set*maxChainLength*2 + rank] = NULL;
       newloopRank[rank] = -1;
     }
       
@@ -705,8 +705,8 @@ void Chain::compressRates()
   for (int idx=0;idx<maxChainLength/2;idx++)
     {
       for (int set=0;set<6;set++)
-	newRates[set*maxChainLength/2 + idx] = 
-	  rates[set*maxChainLength + idx];
+        newRates[set*maxChainLength/2 + idx] = 
+          rates[set*maxChainLength + idx];
       newloopRank[idx] = loopRank[idx];
     }
 
@@ -722,7 +722,7 @@ void Chain::resizeRates()
   if (chainLength>maxChainLength)
     expandRates();
   else if (maxChainLength>INITMAXCHAINLENGTH &&
-	   chainLength<maxChainLength/4)
+           chainLength<maxChainLength/4)
     compressRates();
 }
 

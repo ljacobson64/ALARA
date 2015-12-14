@@ -50,7 +50,7 @@ Result::Result(int setKza, Result* nxtPtr)
     {
       N = new double[nResults];
       for (resNum=0;resNum<nResults;resNum++)
-	N[resNum] = 0;
+        N[resNum] = 0;
     }
   next = nxtPtr;
 }
@@ -68,7 +68,7 @@ Result::Result(const Result& r)
     {
       N = new double[nResults];
       for (resNum=0;resNum<nResults;resNum++)
-	N[resNum] = r.N[resNum];
+        N[resNum] = r.N[resNum];
     }
   next = NULL;
 
@@ -84,7 +84,7 @@ Result::Result(int setKza,float* floatN)
     {
       N = new double[nResults];
       for (resNum=0;resNum<nResults;resNum++)
-	N[resNum] = floatN[resNum];
+        N[resNum] = floatN[resNum];
     }
   next = NULL;
 }
@@ -110,7 +110,7 @@ Result& Result::operator=(const Result& r)
     {
       N = new double[nResults];
       for (resNum=0;resNum<nResults;resNum++)
-	N[resNum] = r.N[resNum];
+        N[resNum] = r.N[resNum];
     }
 
   return *this;
@@ -132,12 +132,12 @@ Result* Result::find(int srchKza)
       oldPtr = ptr;
       ptr = ptr->next;
       if (ptr->kza == srchKza)
-	return ptr;
+        return ptr;
       else if (ptr->kza > srchKza)
-	{
-	  oldPtr->next = new Result(srchKza,ptr);
-	  return oldPtr->next;
-	}
+        {
+          oldPtr->next = new Result(srchKza,ptr);
+          return oldPtr->next;
+        }
     }
 
   ptr->next = new Result(srchKza);
@@ -194,10 +194,10 @@ void Result::tally(double* Nlist, double scale)
       N[resNum] += Nlist[resNum]*scale;
       /* used during debugging 
       if ( isnan(N[resNum]) || isinf(N[resNum]))
-	error(2000,"A negative solution has been encountered, suggesting a possible round off error.  Please notify the code author."); */
+        error(2000,"A negative solution has been encountered, suggesting a possible round off error.  Please notify the code author."); */
     }
 
-	
+        
 
 }
 
@@ -229,16 +229,16 @@ void Result::postProcTarget(Result* outputList, Mixture *mixPtr)
       
       /* if we found the component */
       while (compPtr)
-	{
-	  compNum = mixPtr->getCompNum(compPtr);
-	  
-	  /* update this component */
-	  
-	  outputList[compNum].find(root->kza)->tally(root->N,density);
-	  
-	  /* get the next component */
-	  compPtr = mixPtr->getComp(root->kza,density,compPtr);
-	}
+        {
+          compNum = mixPtr->getCompNum(compPtr);
+          
+          /* update this component */
+          
+          outputList[compNum].find(root->kza)->tally(root->N,density);
+          
+          /* get the next component */
+          compPtr = mixPtr->getComp(root->kza,density,compPtr);
+        }
     }
 
   /* we are done with this data */
@@ -301,7 +301,7 @@ void Result::postProc(Result& outputList, double density)
     total for this point at each cooling time, at the pointer passed by
     reference in the third argument. */
 void Result::write(int response, int targetKza, Mixture *mixPtr, 
-		   CoolingTime *coolList,double*& total, double volume_mass, Volume *volPtr)
+                   CoolingTime *coolList,double*& total, double volume_mass, Volume *volPtr)
 {
   int resNum;
   int gGrpNum,nGammaGrps;
@@ -326,7 +326,7 @@ void Result::write(int response, int targetKza, Mixture *mixPtr,
       /* initialize total gamma source array */
       photonSrc = new double[nResults*nGammaGrps];
       for (gGrpNum=0;gGrpNum<nResults*nGammaGrps;gGrpNum++)
-	photonSrc[gGrpNum] = 0.0;
+        photonSrc[gGrpNum] = 0.0;
     }
   
   /* invert volume_mass */
@@ -351,48 +351,48 @@ void Result::write(int response, int targetKza, Mixture *mixPtr,
       /* query the data library through a dummy Node object
        * to get the nuclear data for the multiplier */
       switch(response)
-	{
-	case OUTFMT_SRC:
-	  /* set gamma vector */
-	  gammaMult = gammaSrc->getGammaMult(targetKza);
-	  /* write activity at same time as gamma source */
-	case OUTFMT_ACT:
-	  multiplier = dataAccess.getLambda(targetKza)*actMult;
-	  break;
-	case OUTFMT_HEAT:
-	  multiplier = dataAccess.getHeat(targetKza) * EV2J;
-	  break;
-	case OUTFMT_ALPHA:
-	  multiplier = dataAccess.getAlpha(targetKza) * EV2J;
-	  break;
-	case OUTFMT_BETA:
-	  multiplier = dataAccess.getBeta(targetKza) * EV2J;
-	  break;
-	case OUTFMT_GAMMA:
-	  multiplier = dataAccess.getGamma(targetKza) * EV2J;
-	  break;
-	case OUTFMT_WDR:
-	  multiplier = dataAccess.getWDR(targetKza)*actMult;
-	  break;
-	case OUTFMT_CDOSE:
-	  multiplier = mixPtr->getDoseConv(targetKza, gammaSrc) *
-	    dataAccess.getLambda(targetKza)*actMult;
-	  break;
+        {
+        case OUTFMT_SRC:
+          /* set gamma vector */
+          gammaMult = gammaSrc->getGammaMult(targetKza);
+          /* write activity at same time as gamma source */
+        case OUTFMT_ACT:
+          multiplier = dataAccess.getLambda(targetKza)*actMult;
+          break;
+        case OUTFMT_HEAT:
+          multiplier = dataAccess.getHeat(targetKza) * EV2J;
+          break;
+        case OUTFMT_ALPHA:
+          multiplier = dataAccess.getAlpha(targetKza) * EV2J;
+          break;
+        case OUTFMT_BETA:
+          multiplier = dataAccess.getBeta(targetKza) * EV2J;
+          break;
+        case OUTFMT_GAMMA:
+          multiplier = dataAccess.getGamma(targetKza) * EV2J;
+          break;
+        case OUTFMT_WDR:
+          multiplier = dataAccess.getWDR(targetKza)*actMult;
+          break;
+        case OUTFMT_CDOSE:
+          multiplier = mixPtr->getDoseConv(targetKza, gammaSrc) *
+            dataAccess.getLambda(targetKza)*actMult;
+          break;
         case OUTFMT_ADJ:
           multiplier = volPtr->getAdjDoseConv(targetKza, gammaSrc) *
-	    dataAccess.getLambda(targetKza)*actMult;
-	  break;
-	 case OUTFMT_EXP:
-	  multiplier = dataAccess.getLambda(targetKza)*actMult* 
-		gammaSrc->calcExposureDoseConv(targetKza,mixPtr->getGammaAttenCoef()) ;
-	  break;
-	case OUTFMT_EXP_CYL_VOL:
-	  multiplier = dataAccess.getLambda(targetKza)*actMult* 
-	        gammaSrc->calcExposureDoseConv(targetKza,mixPtr->getGammaAttenCoef()) ;
-	  break;
+            dataAccess.getLambda(targetKza)*actMult;
+          break;
+         case OUTFMT_EXP:
+          multiplier = dataAccess.getLambda(targetKza)*actMult* 
+                gammaSrc->calcExposureDoseConv(targetKza,mixPtr->getGammaAttenCoef()) ;
+          break;
+        case OUTFMT_EXP_CYL_VOL:
+          multiplier = dataAccess.getLambda(targetKza)*actMult* 
+                gammaSrc->calcExposureDoseConv(targetKza,mixPtr->getGammaAttenCoef()) ;
+          break;
         default:
-	  multiplier = 1.0;
-	}
+          multiplier = 1.0;
+        }
       multiplier *= volume_mass;
     }
   
@@ -403,85 +403,85 @@ void Result::write(int response, int targetKza, Mixture *mixPtr,
       ptr = ptr->next;
 
       if (mode == MODE_FORWARD)
-	{
-	  /* query the data library through a dummy Node object
-	   * to get the nuclear data for the multiplier */
-	  switch(response)
-	    {
-	    case OUTFMT_SRC:
-	      /* set gamma vector */
-	      gammaMult = gammaSrc->getGammaMult(ptr->kza);
-	      /* write activity at same time as gamma source */
-	    case OUTFMT_ACT:
-	      multiplier = dataAccess.getLambda(ptr->kza)*actMult;
-	      break;
-	    case OUTFMT_HEAT:
-	      multiplier = dataAccess.getHeat(ptr->kza) * EV2J;
-	      break;
-	    case OUTFMT_ALPHA:
-	      multiplier = dataAccess.getAlpha(ptr->kza) * EV2J;
-	      break;
-	    case OUTFMT_BETA:
-	      multiplier = dataAccess.getBeta(ptr->kza) * EV2J;
-	      break;
-	    case OUTFMT_GAMMA:
-	      multiplier = dataAccess.getGamma(ptr->kza) * EV2J;
-	      break;
-	    case OUTFMT_WDR:
-	      multiplier = dataAccess.getWDR(ptr->kza)*actMult;
-	      break;
-	    case OUTFMT_CDOSE:
-	      multiplier = mixPtr->getDoseConv(ptr->kza, gammaSrc) *
-		dataAccess.getLambda(ptr->kza)*actMult;
-	      break;
-	    case OUTFMT_ADJ:
-	      multiplier = volPtr->getAdjDoseConv(ptr->kza,gammaSrc) *
-		dataAccess.getLambda(ptr->kza)*actMult;
-	      break;
-	    case OUTFMT_EXP:
-	      multiplier = dataAccess.getLambda(ptr->kza)*actMult*
-		gammaSrc->calcExposureDoseConv(ptr->kza,mixPtr->getGammaAttenCoef());
-	      break;
-	    case OUTFMT_EXP_CYL_VOL:
-	      multiplier = dataAccess.getLambda(ptr->kza)*actMult* 
-	        gammaSrc->calcExposureDoseConv(ptr->kza,mixPtr->getGammaAttenCoef()) ;
-  	      break;
+        {
+          /* query the data library through a dummy Node object
+           * to get the nuclear data for the multiplier */
+          switch(response)
+            {
+            case OUTFMT_SRC:
+              /* set gamma vector */
+              gammaMult = gammaSrc->getGammaMult(ptr->kza);
+              /* write activity at same time as gamma source */
+            case OUTFMT_ACT:
+              multiplier = dataAccess.getLambda(ptr->kza)*actMult;
+              break;
+            case OUTFMT_HEAT:
+              multiplier = dataAccess.getHeat(ptr->kza) * EV2J;
+              break;
+            case OUTFMT_ALPHA:
+              multiplier = dataAccess.getAlpha(ptr->kza) * EV2J;
+              break;
+            case OUTFMT_BETA:
+              multiplier = dataAccess.getBeta(ptr->kza) * EV2J;
+              break;
+            case OUTFMT_GAMMA:
+              multiplier = dataAccess.getGamma(ptr->kza) * EV2J;
+              break;
+            case OUTFMT_WDR:
+              multiplier = dataAccess.getWDR(ptr->kza)*actMult;
+              break;
+            case OUTFMT_CDOSE:
+              multiplier = mixPtr->getDoseConv(ptr->kza, gammaSrc) *
+                dataAccess.getLambda(ptr->kza)*actMult;
+              break;
+            case OUTFMT_ADJ:
+              multiplier = volPtr->getAdjDoseConv(ptr->kza,gammaSrc) *
+                dataAccess.getLambda(ptr->kza)*actMult;
+              break;
+            case OUTFMT_EXP:
+              multiplier = dataAccess.getLambda(ptr->kza)*actMult*
+                gammaSrc->calcExposureDoseConv(ptr->kza,mixPtr->getGammaAttenCoef());
+              break;
+            case OUTFMT_EXP_CYL_VOL:
+              multiplier = dataAccess.getLambda(ptr->kza)*actMult* 
+                gammaSrc->calcExposureDoseConv(ptr->kza,mixPtr->getGammaAttenCoef()) ;
+                break;
             default:
-	      multiplier = 1.0;
-	    }
-	 
-	  multiplier *= volume_mass;
-	}
+              multiplier = 1.0;
+            }
+         
+          multiplier *= volume_mass;
+        }
       
       /* if the multipier is 0 (e.g. stable isotope for activity based
-	 responses) skip this isotope */
+         responses) skip this isotope */
 
       if (0 == multiplier && OUTFMT_SRC != response)
-	 continue;
+         continue;
 
       /* write the formatted output for this isotope */
       cout << isoName(ptr->kza,isoSym) << "\t";
  
      for (resNum=0;resNum<nResults;resNum++)
-	{
-	  sprintf(isoSym,"%-11.4e ",ptr->N[resNum]*multiplier);
-	  cout << isoSym;
+        {
+          sprintf(isoSym,"%-11.4e ",ptr->N[resNum]*multiplier);
+          cout << isoSym;
 
-	  /* gamma source */
-	  if (response == OUTFMT_SRC)
-	    {
-	      gammaSrc->writeIsoName(isoName(ptr->kza,isoSym),coolTimesList[resNum]);
-	      gammaSrc->writeIsotope(gammaMult,ptr->N[resNum]*multiplier/actMult);
-	    }
+          /* gamma source */
+          if (response == OUTFMT_SRC)
+            {
+              gammaSrc->writeIsoName(isoName(ptr->kza,isoSym),coolTimesList[resNum]);
+              gammaSrc->writeIsotope(gammaMult,ptr->N[resNum]*multiplier/actMult);
+            }
 
-	  /* increment the total */
-	  total[resNum] += ptr->N[resNum]*multiplier;
-	  if (response == OUTFMT_SRC && gammaMult != NULL)
-	    /* accumulate gamma source to total */
-	    for (gGrpNum=0;gGrpNum<nGammaGrps;gGrpNum++)
-	      photonSrc[resNum*nGammaGrps+gGrpNum] += gammaMult[gGrpNum]*ptr->N[resNum]*multiplier/actMult;
-	  
-	}
+          /* increment the total */
+          total[resNum] += ptr->N[resNum]*multiplier;
+          if (response == OUTFMT_SRC && gammaMult != NULL)
+            /* accumulate gamma source to total */
+            for (gGrpNum=0;gGrpNum<nGammaGrps;gGrpNum++)
+              photonSrc[resNum*nGammaGrps+gGrpNum] += gammaMult[gGrpNum]*ptr->N[resNum]*multiplier/actMult;
+          
+        }
       cout << endl;
     }
   
@@ -516,7 +516,7 @@ void Result::initBinDump(const char* fname)
     {
       binDump = fopen(fname,"wb+");
       if (!binDump)
-	error(240,"Unable to open dump file %s",fname);
+        error(240,"Unable to open dump file %s",fname);
     }
 }
 
@@ -555,7 +555,7 @@ void Result::writeDump()
 
       fwrite(&(ptr->kza),SINT,1,binDump);
       for (resNum=0;resNum<nResults;resNum++)
-	floatN[resNum] = ptr->N[resNum];
+        floatN[resNum] = ptr->N[resNum];
       fwrite(floatN,SFLOAT,nResults,binDump);
 
     }

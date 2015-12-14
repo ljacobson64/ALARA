@@ -52,7 +52,7 @@ topScheduleT::topScheduleT(const topScheduleT &t) :
       memCheck(coolT,"topScheduleT::topScheduleT(...) constructor: coolT");
 
       for (int coolNum=0;coolNum<nCoolingTimes;coolNum++)
-	coolT[coolNum] = t.coolT[coolNum];
+        coolT[coolNum] = t.coolT[coolNum];
     }
 }
 
@@ -85,10 +85,10 @@ topScheduleT& topScheduleT::operator=(const topScheduleT &t)
       memCheck(subSchedT,"calcScheduleT::operator=(...): subSchedT");
       
       for (int itemNum=0;itemNum<nItems;itemNum++)
-	{
-	  subSchedT[itemNum] = new calcScheduleT( *(t.subSchedT[itemNum]) );
-	  memCheck(subSchedT[itemNum],"calcScheduleT::operator=(...): subSchedT[itemNum]");
-	}
+        {
+          subSchedT[itemNum] = new calcScheduleT( *(t.subSchedT[itemNum]) );
+          memCheck(subSchedT[itemNum],"calcScheduleT::operator=(...): subSchedT[itemNum]");
+        }
     }
   /**** END copied directly from calcSchedule.C ***/
 
@@ -101,7 +101,7 @@ topScheduleT& topScheduleT::operator=(const topScheduleT &t)
       memCheck(coolT,"topScheduleT::topScheduleT(...) constructor: coolT");
 
       for (int coolNum=0;coolNum<nCoolingTimes;coolNum++)
-	coolT[coolNum] = t.coolT[coolNum];
+        coolT[coolNum] = t.coolT[coolNum];
     }
 
   return *this;

@@ -29,7 +29,7 @@ void EndfIeaf::LoadLibrary() throw(ExFileOpen, ExEmptyXSec)
   while(getline(InFile,str,'\n'))
     {
       if(!Is35(str))
-	continue;
+        continue;
       
       parent_kza = int(DecayEndf6::FormatFloat(str.substr(0,11)));
       daughter_kza = int(DecayEndf6::FormatFloat(str.substr(11,11)));

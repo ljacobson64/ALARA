@@ -101,57 +101,57 @@ void ASCIILib::trans2merge()
     /* ensure that it is non-zero */
     if (sum(xSection[rxnNum])>0)
       {
-	debug(6,"Checking next reaction: %d",
-	      transKza[rxnNum]);
+        debug(6,"Checking next reaction: %d",
+              transKza[rxnNum]);
 
-	/* truncate the emitted string */
-	emittedEnd = strchr(emitted[rxnNum],' ');
-	if (emittedEnd != NULL)
-	  *emittedEnd = '\0';
-	
-	/* compare it to each of the previous unique reactions */
-	for (unique=0;unique<nRxns;unique++)
-	  /* if this reaction product matches a previous product */
-	  if (transKza[rxnNum] == daugKza[unique] 
-	      && strcmp(emitted[rxnNum],"x"))
-	    {
-	      /* increment the cross-section */
-	      for (gNum=0;gNum<nGroups;gNum++)
-		mXsection[unique][gNum] += xSection[rxnNum][gNum];
-	      
-	      /* concatenate the emitted strings */
-	      char *tmp = new char[strlen(mEmitted[unique])+
-				  strlen(emitted[rxnNum])+2];
-	      memCheck(tmp,"ASCIILib::trans2merge(...): tmp -> mEmitted[n]");
-	      sprintf(tmp,"%s,%s",mEmitted[unique],emitted[rxnNum]);
-	      delete mEmitted[unique];
-	      mEmitted[unique] =tmp;
-	      
-	      /* end for loop AND use as flag below */
-	      unique = nRxns+1;
-	    }
+        /* truncate the emitted string */
+        emittedEnd = strchr(emitted[rxnNum],' ');
+        if (emittedEnd != NULL)
+          *emittedEnd = '\0';
+        
+        /* compare it to each of the previous unique reactions */
+        for (unique=0;unique<nRxns;unique++)
+          /* if this reaction product matches a previous product */
+          if (transKza[rxnNum] == daugKza[unique] 
+              && strcmp(emitted[rxnNum],"x"))
+            {
+              /* increment the cross-section */
+              for (gNum=0;gNum<nGroups;gNum++)
+                mXsection[unique][gNum] += xSection[rxnNum][gNum];
+              
+              /* concatenate the emitted strings */
+              char *tmp = new char[strlen(mEmitted[unique])+
+                                  strlen(emitted[rxnNum])+2];
+              memCheck(tmp,"ASCIILib::trans2merge(...): tmp -> mEmitted[n]");
+              sprintf(tmp,"%s,%s",mEmitted[unique],emitted[rxnNum]);
+              delete mEmitted[unique];
+              mEmitted[unique] =tmp;
+              
+              /* end for loop AND use as flag below */
+              unique = nRxns+1;
+            }
 
-	/* if a new reaction product */
-	if (unique == nRxns)
-	  {
-	    debug(6,"Adding unique reaction %d",unique);
-	    daugKza[unique] = transKza[rxnNum];
-	    debug(7,"Set daughter kza",daugKza[unique]);
-	    mXsection[unique] = new float[nGroups+1];
-	    memCheck(mXsection[unique],
-		     "ASCIILib::trans2merge(...): mXsection[n]");
-	    mXsection[unique][nGroups] = 0;
-	    for (gNum=0;gNum<nGroups;gNum++)
-	      mXsection[unique][gNum] = xSection[rxnNum][gNum];
-	    debug(7,"Set xsection");
-	    mEmitted[unique] = new char[strlen(emitted[rxnNum])+1];
-	    memCheck(mEmitted[unique],
-		     "ASCIILib::trans2merge(...): mEmitted[n]");
-	    strcpy(mEmitted[unique],emitted[rxnNum]);
-	    debug(7,"Set emitted %s",mEmitted[unique]);
-	    nRxns++;
-	  }
-	
+        /* if a new reaction product */
+        if (unique == nRxns)
+          {
+            debug(6,"Adding unique reaction %d",unique);
+            daugKza[unique] = transKza[rxnNum];
+            debug(7,"Set daughter kza",daugKza[unique]);
+            mXsection[unique] = new float[nGroups+1];
+            memCheck(mXsection[unique],
+                     "ASCIILib::trans2merge(...): mXsection[n]");
+            mXsection[unique][nGroups] = 0;
+            for (gNum=0;gNum<nGroups;gNum++)
+              mXsection[unique][gNum] = xSection[rxnNum][gNum];
+            debug(7,"Set xsection");
+            mEmitted[unique] = new char[strlen(emitted[rxnNum])+1];
+            memCheck(mEmitted[unique],
+                     "ASCIILib::trans2merge(...): mEmitted[n]");
+            strcpy(mEmitted[unique],emitted[rxnNum]);
+            debug(7,"Set emitted %s",mEmitted[unique]);
+            nRxns++;
+          }
+        
       }
 }
 
@@ -175,42 +175,42 @@ void ASCIILib::decay2merge()
     /* ensure that it is non-zero */
     if (bRatio[rxnNum]>0)
       {
-	/* compare it to each of the previous unique reactions */
-	for (unique=0;unique<nRxns;unique++)
-	  /* if this reaction product matches a previous product */
-	  if (daugKza[unique] == decayKza[rxnNum])
-	    {
-	      /* increment the cross-section */
-	      mXsection[unique][nGroups] += bRatio[rxnNum]*log(2.0)/thalf;
-	      
-	      /* concatenate the emitted strings */
-	      char *tmp = new char[strlen(mEmitted[unique])+4];
-	      memCheck(tmp,"ASCIILib::decay2merge(...): tmp -> mEmitted[n]");
-	      sprintf(tmp,"%s,*%c",mEmitted[unique],
-		      (nDRxns-rxnNum>nIons?'D':'X'));
-	      delete mEmitted[unique];
-	      mEmitted[unique] =tmp;
-	      
-	      /* end for loop AND use as flag below */
-	      unique = nRxns+1;
-	    }
-	
-	/* if a new reaction product */
-	if (unique == nRxns)
-	  {
-	    mXsection[unique] = new float[nGroups+1];
-	    memCheck(mXsection[unique],
-		     "ASCIILib::decay2merge(...): mXsection[n]");
-	    for (gNum=0;gNum<nGroups;gNum++)
-	      mXsection[unique][gNum] = 0;
-	    daugKza[unique] = decayKza[rxnNum];
-	    mXsection[unique][nGroups] = bRatio[rxnNum]*log(2.0)/thalf;
-	    mEmitted[unique] = new char[3];
-	    memCheck(mEmitted[unique],
-		     "ASCIILib::decay2merge(...): mEmitted[n]");
-	    strcpy(mEmitted[unique],"*D");
-	    nRxns++;
-	  }
+        /* compare it to each of the previous unique reactions */
+        for (unique=0;unique<nRxns;unique++)
+          /* if this reaction product matches a previous product */
+          if (daugKza[unique] == decayKza[rxnNum])
+            {
+              /* increment the cross-section */
+              mXsection[unique][nGroups] += bRatio[rxnNum]*log(2.0)/thalf;
+              
+              /* concatenate the emitted strings */
+              char *tmp = new char[strlen(mEmitted[unique])+4];
+              memCheck(tmp,"ASCIILib::decay2merge(...): tmp -> mEmitted[n]");
+              sprintf(tmp,"%s,*%c",mEmitted[unique],
+                      (nDRxns-rxnNum>nIons?'D':'X'));
+              delete mEmitted[unique];
+              mEmitted[unique] =tmp;
+              
+              /* end for loop AND use as flag below */
+              unique = nRxns+1;
+            }
+        
+        /* if a new reaction product */
+        if (unique == nRxns)
+          {
+            mXsection[unique] = new float[nGroups+1];
+            memCheck(mXsection[unique],
+                     "ASCIILib::decay2merge(...): mXsection[n]");
+            for (gNum=0;gNum<nGroups;gNum++)
+              mXsection[unique][gNum] = 0;
+            daugKza[unique] = decayKza[rxnNum];
+            mXsection[unique][nGroups] = bRatio[rxnNum]*log(2.0)/thalf;
+            mEmitted[unique] = new char[3];
+            memCheck(mEmitted[unique],
+                     "ASCIILib::decay2merge(...): mEmitted[n]");
+            strcpy(mEmitted[unique],"*D");
+            nRxns++;
+          }
       }
 
 }
@@ -236,50 +236,50 @@ void ASCIILib::merge()
     /* ensure that it is non-zero */
     if (sum(xSection[rxnNum])>0)
       {
-	/* truncate the emitted string */
-	emittedEnd = strchr(emitted[rxnNum],' ');
-	if (emittedEnd != NULL)
-	  *emittedEnd = '\0';
-	
-	/* compare it to each of the previous unique reactions */
-	for (unique=0;unique<nRxns;unique++)
-	  /* if this reaction product matches a previous product */
-	  if (transKza[rxnNum] == daugKza[unique] 
-	      && strcmp(emitted[rxnNum],"x"))
-	    {
-	      /* increment the cross-section */
-	      for (gNum=0;gNum<nGroups;gNum++)
-		mXsection[unique][gNum] += xSection[rxnNum][gNum];
-	      
-	      /* concatenate the emitted strings */
-	      char *tmp = new char[strlen(mEmitted[unique])+
-				  strlen(emitted[rxnNum])+2];
-	      memCheck(tmp,"ASCIILib::trans2merge(...): tmp -> mEmitted[n]");
-	      sprintf(tmp,"%s,%s",mEmitted[unique],emitted[rxnNum]);
-	      delete mEmitted[unique];
-	      mEmitted[unique] =tmp;
-	      
-	      /* end for loop AND use as flag below */
-	      unique = nRxns+1;
-	    }
-	
-	/* if a new reaction product */
-	if (unique == nRxns)
-	  {
-	    daugKza[unique] = transKza[rxnNum];
-	    mXsection[unique] = new float[nGroups+1];
-	    memCheck(mXsection[unique],
-		     "ASCIILib::trans2merge(...): mXsection[n]");
-	    mXsection[unique][nGroups] = 0;
-	    for (gNum=0;gNum<nGroups;gNum++)
-	      mXsection[unique][gNum] = xSection[rxnNum][gNum];
-	    mEmitted[unique] = new char[strlen(emitted[rxnNum])+1];
-	    memCheck(mEmitted[unique],
-		     "ASCIILib::trans2merge(...): mEmitted[n]");
-	    strcpy(mEmitted[unique],emitted[rxnNum]);
-	    nRxns++;
-	  }
-	
+        /* truncate the emitted string */
+        emittedEnd = strchr(emitted[rxnNum],' ');
+        if (emittedEnd != NULL)
+          *emittedEnd = '\0';
+        
+        /* compare it to each of the previous unique reactions */
+        for (unique=0;unique<nRxns;unique++)
+          /* if this reaction product matches a previous product */
+          if (transKza[rxnNum] == daugKza[unique] 
+              && strcmp(emitted[rxnNum],"x"))
+            {
+              /* increment the cross-section */
+              for (gNum=0;gNum<nGroups;gNum++)
+                mXsection[unique][gNum] += xSection[rxnNum][gNum];
+              
+              /* concatenate the emitted strings */
+              char *tmp = new char[strlen(mEmitted[unique])+
+                                  strlen(emitted[rxnNum])+2];
+              memCheck(tmp,"ASCIILib::trans2merge(...): tmp -> mEmitted[n]");
+              sprintf(tmp,"%s,%s",mEmitted[unique],emitted[rxnNum]);
+              delete mEmitted[unique];
+              mEmitted[unique] =tmp;
+              
+              /* end for loop AND use as flag below */
+              unique = nRxns+1;
+            }
+        
+        /* if a new reaction product */
+        if (unique == nRxns)
+          {
+            daugKza[unique] = transKza[rxnNum];
+            mXsection[unique] = new float[nGroups+1];
+            memCheck(mXsection[unique],
+                     "ASCIILib::trans2merge(...): mXsection[n]");
+            mXsection[unique][nGroups] = 0;
+            for (gNum=0;gNum<nGroups;gNum++)
+              mXsection[unique][gNum] = xSection[rxnNum][gNum];
+            mEmitted[unique] = new char[strlen(emitted[rxnNum])+1];
+            memCheck(mEmitted[unique],
+                     "ASCIILib::trans2merge(...): mEmitted[n]");
+            strcpy(mEmitted[unique],emitted[rxnNum]);
+            nRxns++;
+          }
+        
       }
   
   /* for each decay reaction */
@@ -287,42 +287,42 @@ void ASCIILib::merge()
     /* ensure that it is non-zero */
     if (bRatio[rxnNum]>0)
       {
-	/* compare it to each of the previous unique reactions */
-	for (unique=0;unique<nRxns;unique++)
-	  /* if this reaction product matches a previous product */
-	  if (daugKza[unique] == decayKza[rxnNum])
-	    {
-	      /* increment the cross-section */
-	      mXsection[unique][nGroups] += bRatio[rxnNum]*log(2.0)/thalf;
-	      
-	      /* concatenate the emitted strings */
-	      char *tmp = new char[strlen(mEmitted[unique])+4];
-	      memCheck(tmp,"ASCIILib::trans2merge(...): tmp -> mEmitted[n]");
-	      sprintf(tmp,"%s,*%c",mEmitted[unique],
-		      (nDRxns-rxnNum>nIons?'D':'X'));
-	      delete mEmitted[unique];
-	      mEmitted[unique] =tmp;
-	      
-	      /* end for loop AND use as flag below */
-	      unique = nRxns+1;
-	    }
-	
-	/* if a new reaction product */
-	if (unique == nRxns)
-	  {
-	    mXsection[unique] = new float[nGroups+1];
-	    memCheck(mXsection[unique],
-		     "ASCIILib::trans2merge(...): mXsection[n]");
-	    for (gNum=0;gNum<nGroups;gNum++)
-	      mXsection[unique][gNum] = 0;
-	    daugKza[unique] = decayKza[rxnNum];
-	    mXsection[unique][nGroups] = bRatio[rxnNum]*log(2.0)/thalf;
-	    mEmitted[unique] = new char[3];
-	    memCheck(mEmitted[unique],
-		     "ASCIILib::trans2merge(...): mEmitted[n]");
-	    strcpy(mEmitted[unique],"*D");
-	    nRxns++;
-	  }
+        /* compare it to each of the previous unique reactions */
+        for (unique=0;unique<nRxns;unique++)
+          /* if this reaction product matches a previous product */
+          if (daugKza[unique] == decayKza[rxnNum])
+            {
+              /* increment the cross-section */
+              mXsection[unique][nGroups] += bRatio[rxnNum]*log(2.0)/thalf;
+              
+              /* concatenate the emitted strings */
+              char *tmp = new char[strlen(mEmitted[unique])+4];
+              memCheck(tmp,"ASCIILib::trans2merge(...): tmp -> mEmitted[n]");
+              sprintf(tmp,"%s,*%c",mEmitted[unique],
+                      (nDRxns-rxnNum>nIons?'D':'X'));
+              delete mEmitted[unique];
+              mEmitted[unique] =tmp;
+              
+              /* end for loop AND use as flag below */
+              unique = nRxns+1;
+            }
+        
+        /* if a new reaction product */
+        if (unique == nRxns)
+          {
+            mXsection[unique] = new float[nGroups+1];
+            memCheck(mXsection[unique],
+                     "ASCIILib::trans2merge(...): mXsection[n]");
+            for (gNum=0;gNum<nGroups;gNum++)
+              mXsection[unique][gNum] = 0;
+            daugKza[unique] = decayKza[rxnNum];
+            mXsection[unique][nGroups] = bRatio[rxnNum]*log(2.0)/thalf;
+            mEmitted[unique] = new char[3];
+            memCheck(mEmitted[unique],
+                     "ASCIILib::trans2merge(...): mEmitted[n]");
+            strcpy(mEmitted[unique],"*D");
+            nRxns++;
+          }
       }
   
 }  
@@ -369,49 +369,49 @@ void ASCIILib::makeBinLib(const char *alaraFname)
     {  
       /* establish order */
       if (tKza < dKza)
-	{
-	  /* make a pure trans entry */
-	  debug(4,"Writing pure transmutation entry for %d.",tKza);
-	  kza = tKza;
-	  trans2merge();
-	  tKza = getTransData();
-	  writeGamma = FALSE;
-	  debug(4,"Got next transmutation entry.");
-	}
+        {
+          /* make a pure trans entry */
+          debug(4,"Writing pure transmutation entry for %d.",tKza);
+          kza = tKza;
+          trans2merge();
+          tKza = getTransData();
+          writeGamma = FALSE;
+          debug(4,"Got next transmutation entry.");
+        }
       else if (dKza < tKza)
-	{
-	  /* make a pure decay entry */
-	  debug(4,"Writing pure decay entry for %d.",dKza);
-	  kza = dKza;
-	  decay2merge();
-	  if (numSpec > 0)
-	    {
-	      gammaLib->writeGammaData(kza,numSpec,numDisc,nIntReg,nPnts,
-				       discGammaE,discGammaI,intRegB,intRegT,
-				       contX,contY);
-	      nGammaParents++;
-	    }
-	  dKza = getDecayData();
-	  debug(4,"Got next decay entry.");
-	}
+        {
+          /* make a pure decay entry */
+          debug(4,"Writing pure decay entry for %d.",dKza);
+          kza = dKza;
+          decay2merge();
+          if (numSpec > 0)
+            {
+              gammaLib->writeGammaData(kza,numSpec,numDisc,nIntReg,nPnts,
+                                       discGammaE,discGammaI,intRegB,intRegT,
+                                       contX,contY);
+              nGammaParents++;
+            }
+          dKza = getDecayData();
+          debug(4,"Got next decay entry.");
+        }
       else
-	{
-	  /* make a merged entry */
-	  debug(4,"Writing merged entry for %d.",tKza);
-	  kza = tKza;
-	  merge();
-	  tKza = getTransData();
-	  debug(4,"Got next transmutation entry.");
-	  if (numSpec > 0)
-	    {
-	      gammaLib->writeGammaData(kza,numSpec,numDisc,nIntReg,nPnts,
-				       discGammaE,discGammaI,intRegB,intRegT,
-				       contX,contY);
-	      nGammaParents++;
-	    }
-	  dKza = getDecayData();
-	  debug(4,"Got next decay entry.");
-	}
+        {
+          /* make a merged entry */
+          debug(4,"Writing merged entry for %d.",tKza);
+          kza = tKza;
+          merge();
+          tKza = getTransData();
+          debug(4,"Got next transmutation entry.");
+          if (numSpec > 0)
+            {
+              gammaLib->writeGammaData(kza,numSpec,numDisc,nIntReg,nPnts,
+                                       discGammaE,discGammaI,intRegB,intRegT,
+                                       contX,contY);
+              nGammaParents++;
+            }
+          dKza = getDecayData();
+          debug(4,"Got next decay entry.");
+        }
 
       /* write the entry to the output files */
       binLib->writeData(kza,nRxns,mThalf,mE,daugKza,mEmitted,mXsection);
@@ -452,33 +452,33 @@ float ASCIILib::sum(float* vector)
 void ASCIILib::getTransInfo()
 {
   error(9000, 
-	"Programming error: ASCIILib::getTransInfo() must be called from a derived object.");
+        "Programming error: ASCIILib::getTransInfo() must be called from a derived object.");
 }
 
 void ASCIILib::getDecayInfo()
 {
   error(9000,
-	"Programming error: ASCIILib::getDecayInfo() must be called from a derived object.");
+        "Programming error: ASCIILib::getDecayInfo() must be called from a derived object.");
 }
 
 
 int ASCIILib::getTransData()
 {
   error(9000,
-	"Programming error: ASCIILib::getTransData() must be called from a derived object.");
+        "Programming error: ASCIILib::getTransData() must be called from a derived object.");
   return -1;
 }
 
 int ASCIILib::getDecayData()
 {
   error(9000,
-	"Programming error: ASCIILib::getDecayData() must be called from a derived object.");
+        "Programming error: ASCIILib::getDecayData() must be called from a derived object.");
   return -1;
 }
 
 void ASCIILib::readData(int /*getKza*/, NuclearData* /*data*/)
 {
   error(9000,
-	"Programming error: ASCIILib::readData() must be called from a derived object.");
+        "Programming error: ASCIILib::readData() must be called from a derived object.");
 
 }

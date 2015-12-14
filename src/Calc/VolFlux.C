@@ -32,28 +32,28 @@ VolFlux::VolFlux()
       memCheck(nflux,"VolFlux::VolFlux(...) constructor: flux");
 
       for (int gNum=0;gNum<nGroups;gNum++)
-	nflux[gNum] = 0;
+        nflux[gNum] = 0;
 
       if(nCP)
-	{
-	  CPflux = new double*[nCP];
-	  CPfluxStorage = new double[nCP*nCPEG];
+        {
+          CPflux = new double*[nCP];
+          CPfluxStorage = new double[nCP*nCPEG];
       
-	  for(int i = 0; i < nCP; i++)
-	    {
-	      CPflux[i] = &CPfluxStorage[i*nCPEG];
-	      
-	      for(int j = 0; j < nCPEG; j++)
-		{
-		  CPflux[i][j] = 0;
-		}
-	    }
-	}
+          for(int i = 0; i < nCP; i++)
+            {
+              CPflux[i] = &CPfluxStorage[i*nCPEG];
+              
+              for(int j = 0; j < nCPEG; j++)
+                {
+                  CPflux[i][j] = 0;
+                }
+            }
+        }
       else
-	{
-	  CPfluxStorage = NULL;
-	  CPflux = NULL;
-	}
+        {
+          CPfluxStorage = NULL;
+          CPflux = NULL;
+        }
     }
 
   next = NULL;
@@ -71,21 +71,21 @@ VolFlux::VolFlux(const VolFlux& v)
       memCheck(nflux,"VolFlux::VolFlux(...) copy constructor: flux");
 
       for (int gNum=0;gNum<nGroups;gNum++)
-	{
-	  nflux[gNum] = v.nflux[gNum];
-	}
+        {
+          nflux[gNum] = v.nflux[gNum];
+        }
       CPflux = new double*[nCP];
       CPfluxStorage = new double[nCP*nCPEG];
       
       for(int i = 0; i < nCP; i++)
-	{
-	  CPflux[i] = &CPfluxStorage[i*nCPEG];
-	  
-	  for(int j = 0; j < nCPEG; j++)
-	    {
-	      CPflux[i][j] = v.CPflux[i][j];
-	    }
-	}
+        {
+          CPflux[i] = &CPfluxStorage[i*nCPEG];
+          
+          for(int j = 0; j < nCPEG; j++)
+            {
+              CPflux[i][j] = v.CPflux[i][j];
+            }
+        }
 
     }
 
@@ -104,31 +104,31 @@ VolFlux::VolFlux(ifstream &fluxFile, double scale)
       memCheck(nflux,"VolFlux::VolFlux(...) input constructor: flux");
 
       for (grpNum=0;grpNum<nGroups;grpNum++)
-	{
-	  fluxFile >> nflux[grpNum];
-	  nflux[grpNum] *= scale;
-     	}
+        {
+          fluxFile >> nflux[grpNum];
+          nflux[grpNum] *= scale;
+             }
 
       if(nCP)
-	{
-	  CPflux = new double*[nCP];
-	  CPfluxStorage = new double[nCP*nCPEG];
-	  
-	  for(int i = 0; i < nCP; i++)
-	    {
-	      CPflux[i] = &CPfluxStorage[i*nCPEG];
-	      
-	      for(int j = 0; j < nCPEG; j++)
-		{
-		  CPflux[i][j] = 0;
-		}
-	    }
-	}
+        {
+          CPflux = new double*[nCP];
+          CPfluxStorage = new double[nCP*nCPEG];
+          
+          for(int i = 0; i < nCP; i++)
+            {
+              CPflux[i] = &CPfluxStorage[i*nCPEG];
+              
+              for(int j = 0; j < nCPEG; j++)
+                {
+                  CPflux[i][j] = 0;
+                }
+            }
+        }
       else
-	{
-	  CPfluxStorage = NULL;
-	  CPflux = NULL;
-	}
+        {
+          CPfluxStorage = NULL;
+          CPflux = NULL;
+        }
       
     }
   
@@ -148,30 +148,30 @@ VolFlux::VolFlux(double* fluxData, double scale)
       nflux = new double[nGroups+120];
       
       for(grpNum=0; grpNum < nGroups; grpNum++)
-	{
-	  nflux[grpNum] = fluxData[grpNum]*scale;
-	}
+        {
+          nflux[grpNum] = fluxData[grpNum]*scale;
+        }
       
       if(nCP)
-	{
-	  CPflux = new double*[nCP];
-	  CPfluxStorage = new double[nCP*nCPEG];
-	  
-	  for(int i = 0; i < nCP; i++)
-	    {
-	      CPflux[i] = &CPfluxStorage[i*nCPEG];
-	      
-	      for(int j = 0; j < nCPEG; j++)
-		{
-		  CPflux[i][j] = 0;
-		}
-	    }
-	}
+        {
+          CPflux = new double*[nCP];
+          CPfluxStorage = new double[nCP*nCPEG];
+          
+          for(int i = 0; i < nCP; i++)
+            {
+              CPflux[i] = &CPfluxStorage[i*nCPEG];
+              
+              for(int j = 0; j < nCPEG; j++)
+                {
+                  CPflux[i][j] = 0;
+                }
+            }
+        }
       else
-	{
-	  CPflux = NULL;
-	  CPfluxStorage = NULL;
-	}
+        {
+          CPflux = NULL;
+          CPfluxStorage = NULL;
+        }
     }
 
   next = NULL;
@@ -196,28 +196,28 @@ VolFlux& VolFlux::operator=(const VolFlux& v)
       memCheck(nflux,"VolFlux::opeartor=(...): flux");
 
       for (int gNum=0;gNum<nGroups;gNum++)
-	nflux[gNum] = v.nflux[gNum];
+        nflux[gNum] = v.nflux[gNum];
 
       if(nCP)
-	{
-	  CPflux = new double*[nCP];
-	  CPfluxStorage = new double[nCP*nCPEG];
-	  
-	  for(int i = 0; i < nCP; i++)
-	    {
-	      CPflux[i] = &CPfluxStorage[i*nCPEG];
-	      
-	      for(int j = 0; j < nCPEG; j++)
-		{
-		  CPflux[i][j] = v.CPflux[i][j];
-		}
-	    }
-	}
+        {
+          CPflux = new double*[nCP];
+          CPfluxStorage = new double[nCP*nCPEG];
+          
+          for(int i = 0; i < nCP; i++)
+            {
+              CPflux[i] = &CPfluxStorage[i*nCPEG];
+              
+              for(int j = 0; j < nCPEG; j++)
+                {
+                  CPflux[i][j] = v.CPflux[i][j];
+                }
+            }
+        }
       else
-	{
-	  CPfluxStorage = NULL;
-	  CPflux = NULL;
-	}     
+        {
+          CPfluxStorage = NULL;
+          CPflux = NULL;
+        }     
     }
       
   return *this;
@@ -258,37 +258,37 @@ void VolFlux::updateReference(VolFlux *compFlux, double volWeight)
     {
       compFlux = compFlux->next;
       if (reference->next == NULL)
-	{
-	  reference->next = new VolFlux(*compFlux);
-	  memCheck(reference->next,
-		   "VolFlux::updateReference(...): reference->next");
-	  reference = reference->next;
+        {
+          reference->next = new VolFlux(*compFlux);
+          memCheck(reference->next,
+                   "VolFlux::updateReference(...): reference->next");
+          reference = reference->next;
 
-	  switch (refflux_type) 
-	    {
-	    case REFFLUX_VOL_AVG:
-	      reference->scale(volWeight);
-	      break;
-	    case REFFLUX_MAX:
-	    default:
-	      break;
-	    }
-	}
+          switch (refflux_type) 
+            {
+            case REFFLUX_VOL_AVG:
+              reference->scale(volWeight);
+              break;
+            case REFFLUX_MAX:
+            default:
+              break;
+            }
+        }
       else
-	{
-	  reference = reference->next;
-	  for (gNum=0;gNum<nGroups;gNum++)
-	    switch (refflux_type) {
-	    case REFFLUX_VOL_AVG:
-	      reference->nflux[gNum] += compFlux->nflux[gNum]*volWeight;
-	      break;
-	    case REFFLUX_MAX:
-	    default:
-	      if (compFlux->nflux[gNum]>reference->nflux[gNum])
-		reference->nflux[gNum] = compFlux->nflux[gNum];
-	      break;
-	    }
-	}
+        {
+          reference = reference->next;
+          for (gNum=0;gNum<nGroups;gNum++)
+            switch (refflux_type) {
+            case REFFLUX_VOL_AVG:
+              reference->nflux[gNum] += compFlux->nflux[gNum]*volWeight;
+              break;
+            case REFFLUX_MAX:
+            default:
+              if (compFlux->nflux[gNum]>reference->nflux[gNum])
+                reference->nflux[gNum] = compFlux->nflux[gNum];
+              break;
+            }
+        }
     }
 
 
@@ -322,12 +322,12 @@ double VolFlux::fold(double* rateVec, Node* nodePtr)
       rate = cache.read(baseKza,pathNum);
 
       if (rate < 0)
-	{
-	  rate = 0;
-	  for (grpNum=0;grpNum<nGroups;grpNum++)
-	    rate += rateVec[grpNum]*nflux[grpNum];
-	  cache.set(baseKza,numPaths+1,pathNum,rate);
-	}
+        {
+          rate = 0;
+          for (grpNum=0;grpNum<nGroups;grpNum++)
+            rate += rateVec[grpNum]*nflux[grpNum];
+          cache.set(baseKza,numPaths+1,pathNum,rate);
+        }
     }
   
   return rate;

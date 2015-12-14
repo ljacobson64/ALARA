@@ -52,17 +52,17 @@ void clearComment(istream& inFile)
     switch (charInput)
       {
       case '#' : /* comment */
-	inFile.ignore(MAXLINELENGTH,'\n');
-	charInput = inFile.peek();
-	break;
+        inFile.ignore(MAXLINELENGTH,'\n');
+        charInput = inFile.peek();
+        break;
       case ' ' : /* whitespace */
       case '\n': /* whitespace */
       case '\t': /* whitespace */
-	inFile.get();
-	charInput = inFile.peek();
-	break;
+        inFile.get();
+        charInput = inFile.peek();
+        break;
       default:
-	charInput = 'A';
+        charInput = 'A';
       }
       
 }
@@ -150,38 +150,38 @@ const char* searchPath(const char* filename, const char* envPathVar, const char*
   if ( (stat_result = stat(searchFilename.c_str(),&stat_info)) != 0)
     {
       if (envPathVar)
-	{
-	  std::string envPath = envPathVar;
-	  
-	  std::string::size_type begin = 0;
-	  std::string::size_type end = 0;
-	  
-	  if (envPath[envPath.length()-1] != ':')
-	    envPath += ":";
-	  
-	  while (stat_result != 0 && begin < envPath.length())
-	    {
-	      end = envPath.find(":",begin);
-	      std::string thisDir = envPath.substr(begin,end-begin);
-	      if (thisDir[thisDir.length()-1] == '/')
-		thisDir.erase(thisDir.length()-1,1);
-	      searchFilename = thisDir + "/" + filename;
+        {
+          std::string envPath = envPathVar;
+          
+          std::string::size_type begin = 0;
+          std::string::size_type end = 0;
+          
+          if (envPath[envPath.length()-1] != ':')
+            envPath += ":";
+          
+          while (stat_result != 0 && begin < envPath.length())
+            {
+              end = envPath.find(":",begin);
+              std::string thisDir = envPath.substr(begin,end-begin);
+              if (thisDir[thisDir.length()-1] == '/')
+                thisDir.erase(thisDir.length()-1,1);
+              searchFilename = thisDir + "/" + filename;
 
-	      verbose(100,"Looking for %s",searchFilename.c_str());
+              verbose(100,"Looking for %s",searchFilename.c_str());
 
-	      stat_result = stat(searchFilename.c_str(),&stat_info);
-	      begin = end + 1;
-	    }
-	}
+              stat_result = stat(searchFilename.c_str(),&stat_info);
+              begin = end + 1;
+            }
+        }
 
       if (stat_result != 0)
-	{
-	  searchFilename = builtinPathVar;
-	  searchFilename += "/";
-	  searchFilename += filename;
-	  verbose(100,"Looking for %s",searchFilename.c_str());
-	  stat_result = stat(searchFilename.c_str(),&stat_info);
-	}
+        {
+          searchFilename = builtinPathVar;
+          searchFilename += "/";
+          searchFilename += filename;
+          verbose(100,"Looking for %s",searchFilename.c_str());
+          stat_result = stat(searchFilename.c_str(),&stat_info);
+        }
 
     }
   

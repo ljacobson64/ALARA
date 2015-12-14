@@ -19,7 +19,7 @@
     'density' are set with arguments in that order - 'next' is always
     NULL. */
 Root::MixCompRef::MixCompRef(Mixture* addMix, Component* addComp, 
-			     double isoDens) :
+                             double isoDens) :
   mixPtr(addMix), compPtr(addComp), density(isoDens)
 {
   next = NULL;
@@ -114,7 +114,7 @@ void Root::MixCompRef::tally(MixCompRef* tallyList)
       
       /* if not found, add it */
       if (found == NULL)
-	head->add(tallyList);
+        head->add(tallyList);
 
       /* go to next ref */
       tallyList = tallyList->next;
@@ -144,7 +144,7 @@ void Root::MixCompRef::refFlux(Volume *refVolume)
 
       /* find next mixture */
       while (ptr != NULL && ptr->mixPtr == oldPtr->mixPtr)
-	ptr = ptr->next;
+        ptr = ptr->next;
       
     }
   
@@ -169,7 +169,7 @@ void Root::MixCompRef::solve(Chain *chain, topSchedule* schedule)
 
       /* find next mixture */
       while (ptr != NULL && ptr->mixPtr == oldPtr->mixPtr)
-	ptr = ptr->next;
+        ptr = ptr->next;
       
     }
   
@@ -190,7 +190,7 @@ void Root::MixCompRef::writeDump()
 
       /* find next mixture */
       while (ptr != NULL && ptr->mixPtr == oldPtr->mixPtr)
-	ptr = ptr->next;
+        ptr = ptr->next;
       
     }
   
@@ -209,8 +209,8 @@ Root::MixCompRef* Root::MixCompRef::find(MixCompRef* srchRef)
     {
       /* break if this reference matches the mix AND the component */
       if (ptr->mixPtr == srchRef->mixPtr &&
-	  ptr->compPtr == srchRef->compPtr)
-	break;
+          ptr->compPtr == srchRef->compPtr)
+        break;
       ptr = ptr->next;
     }
 
@@ -227,8 +227,8 @@ Root::MixCompRef* Root::MixCompRef::find(Mixture* mix, Component* comp)
     {
       /* break if this reference matches the mix AND the component */
       if (ptr->mixPtr == mix)
-	if (ptr->compPtr == comp || comp == NULL)
-	  break;
+        if (ptr->compPtr == comp || comp == NULL)
+          break;
       ptr = ptr->next;
     }
 
@@ -259,7 +259,7 @@ double Root::MixCompRef::mixConc(Mixture* currMixPtr)
   while (ptr != NULL)
     {
       if (ptr->mixPtr == currMixPtr)
-	totalDens += ptr->density;
+        totalDens += ptr->density;
       ptr = ptr->next;
     }
 
@@ -284,7 +284,7 @@ void Root::MixCompRef::readDump(int kza)
 
       /* find next mixture */
       while (ptr != NULL && ptr->mixPtr == oldPtr->mixPtr)
-	ptr = ptr->next;
+        ptr = ptr->next;
       
     }
   
@@ -310,13 +310,13 @@ Component* Root::MixCompRef::getComp(double& dens, Mixture *mix, Component *last
       {
       /* if there are no more matches for this mixture */
       if (ptr->next == NULL || ptr->next->mixPtr != mix)
-	{
-	  dens = 0;
-	  return NULL;
-	}
+        {
+          dens = 0;
+          return NULL;
+        }
       else
-	/* otherwise advance ptr */
-	ptr = ptr->next;
+        /* otherwise advance ptr */
+        ptr = ptr->next;
       }
 
   dens = ptr->density;

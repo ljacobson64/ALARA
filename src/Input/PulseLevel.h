@@ -36,7 +36,7 @@ public:
       a blank list head.  Otherwise, it sets the number of pulses, the
       time and the units, and initializes the 'next' pointer to NULL. */
   PulseLevel(int inNumPulse=PULSE_HEAD, double inDelay=0, 
-	     char inUnits=' ') 
+             char inUnits=' ') 
     : nPulses(inNumPulse),  units(inUnits),  
       delay(inDelay), next(NULL) {};
 

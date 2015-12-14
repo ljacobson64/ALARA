@@ -190,7 +190,7 @@ void History::makeHistories()
     {
       ptr = ptr->next;
       if (!strcmp(ptr->histName,srchHist))
-	return ptr;
+        return ptr;
     }
 
   return NULL;

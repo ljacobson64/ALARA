@@ -125,22 +125,22 @@ void ADJLib::getForwardData(int kza)
       fread(E,SFLOAT,3,normBinLib);
 
       if (thalf>0)
-	totalXSection[nGroups] = log(2)/thalf;
+        totalXSection[nGroups] = log(2)/thalf;
 
       /* Read info for each daughter */
       for (rxnNum=0;rxnNum<nRxns;rxnNum++)
-	{
-	  fread(&checkKza,SINT,1,normBinLib);
-	  fread(&emittedLen,SINT,1,normBinLib);
-	  fread(emitted,1,emittedLen,normBinLib);
-	  emitted[emittedLen] = '\0';
-	  fread(&numNZGroups,1,SINT,normBinLib);
-	  fread(xSection,SFLOAT,numNZGroups,normBinLib);
-	  if (strcmp(emitted,"x"))
-	    for (gNum=0;gNum<numNZGroups;gNum++)
-	      totalXSection[gNum] += xSection[gNum];
-	  fread(&extraGroup,SFLOAT,1,normBinLib);
-	}
+        {
+          fread(&checkKza,SINT,1,normBinLib);
+          fread(&emittedLen,SINT,1,normBinLib);
+          fread(emitted,1,emittedLen,normBinLib);
+          emitted[emittedLen] = '\0';
+          fread(&numNZGroups,1,SINT,normBinLib);
+          fread(xSection,SFLOAT,numNZGroups,normBinLib);
+          if (strcmp(emitted,"x"))
+            for (gNum=0;gNum<numNZGroups;gNum++)
+              totalXSection[gNum] += xSection[gNum];
+          fread(&extraGroup,SFLOAT,1,normBinLib);
+        }
     }
 
 }      
@@ -185,7 +185,7 @@ void ADJLib::writeData(DaugItem *daug)
       fread(&extraGroup,SFLOAT,1,normBinLib);
 
       tmpIdx << "\t" << parKza << "\t" << emitted 
-	     << "\t" << offset << endl;
+             << "\t" << offset << endl;
       
       offset+=fwrite(&parKza,SINT,1,binLib)*SINT;
       offset+=fwrite(&emittedLen,SINT,1,binLib)*SINT;
@@ -229,26 +229,26 @@ void ADJLib::build()
     {
       /* parse entire index */
       for (parNum=0;parNum<nParents;parNum++)
-	{
-	  /* get required parent info */
-	  fread(&parKza,SINT,1,normBinLib);
-	  fread(&nRxns,SINT,1,normBinLib);
-	  fread(&junkLong,SLONG,1,normBinLib);
-	  for (rxnNum=0;rxnNum<nRxns;rxnNum++)
-	    {
-	      /* get daughter info for each reaction */
-	      fread(&daugKza,SINT,1,normBinLib);
-	      fread(&emittedLen,SINT,1,normBinLib);
-	      fread(emitted,1,emittedLen,normBinLib);
-	      fread(&rxnOffset,SLONG,1,normBinLib);
+        {
+          /* get required parent info */
+          fread(&parKza,SINT,1,normBinLib);
+          fread(&nRxns,SINT,1,normBinLib);
+          fread(&junkLong,SLONG,1,normBinLib);
+          for (rxnNum=0;rxnNum<nRxns;rxnNum++)
+            {
+              /* get daughter info for each reaction */
+              fread(&daugKza,SINT,1,normBinLib);
+              fread(&emittedLen,SINT,1,normBinLib);
+              fread(emitted,1,emittedLen,normBinLib);
+              fread(&rxnOffset,SLONG,1,normBinLib);
 
-	      /* save parent/daughter info */
-	      if (daugList == NULL)
-		daugList = new DaugItem(daugKza,parKza,rxnOffset);
-	      else
-		daugList->add(daugKza,parKza,rxnOffset);
-	    }
-	}
+              /* save parent/daughter info */
+              if (daugList == NULL)
+                daugList = new DaugItem(daugKza,parKza,rxnOffset);
+              else
+                daugList->add(daugKza,parKza,rxnOffset);
+            }
+        }
     }
   
   /* copy binary file header: group boundaries and weights */

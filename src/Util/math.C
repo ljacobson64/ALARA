@@ -26,11 +26,11 @@ double fact(int i)
     {
       factorials = new double[maxFactorial];
       for (idx=0;idx<maxFactorial;idx++)
-	{
-	  idx2 = idx;
-	  factorials[idx] = 1;
-	  while (idx2>1) factorials[idx] *= idx2--;
-	}
+        {
+          idx2 = idx;
+          factorials[idx] = 1;
+          while (idx2>1) factorials[idx] *= idx2--;
+        }
     }
 
   if (i < maxFactorial)
@@ -63,10 +63,10 @@ double bateman(int row, int col, double* d, double t, int& finitePositive)
       den = 1;
 
       for (denTerm=col;denTerm<term;denTerm++)
-	den *= (d[denTerm]-d[term]);
+        den *= (d[denTerm]-d[term]);
 
       for (denTerm++;denTerm<=row;denTerm++)
-	den *= (d[denTerm]-d[term]);
+        den *= (d[denTerm]-d[term]);
 
       /* set numerator element based on Laplace root: d[term] */
       sumInc = expm1(-d[term]*t)-expm1(-d[row]*t);
@@ -101,28 +101,28 @@ double dGn(int idx, double *pole, int *mult, int numPoles, int termNum)
 
       /* all poles before the current pole */
       for (pNum=0; pNum<idx; pNum++)
-	result /= pow( pole[pNum] - pole[idx] , mult[pNum] );
+        result /= pow( pole[pNum] - pole[idx] , mult[pNum] );
 
       /* all poles after the current pole */
       for (pNum++; pNum<numPoles; pNum++)
-	result /= pow( pole[pNum] - pole[idx] , mult[pNum] );
+        result /= pow( pole[pNum] - pole[idx] , mult[pNum] );
     }
   else
     for (pwr=termNum;pwr>0;pwr--)
       {
-	invPwrSum = 0;
+        invPwrSum = 0;
 
-	/* all poles before the current pole */
-	for (pNum=0; pNum<idx; pNum++)
-	  invPwrSum += mult[pNum] * pow( pole[pNum]-pole[idx] , -pwr );
+        /* all poles before the current pole */
+        for (pNum=0; pNum<idx; pNum++)
+          invPwrSum += mult[pNum] * pow( pole[pNum]-pole[idx] , -pwr );
 
-	/* all poles after the current pole */
-	for (pNum++; pNum<numPoles; pNum++)
-	  invPwrSum += mult[pNum] * pow( pole[pNum]-pole[idx] , -pwr );
+        /* all poles after the current pole */
+        for (pNum++; pNum<numPoles; pNum++)
+          invPwrSum += mult[pNum] * pow( pole[pNum]-pole[idx] , -pwr );
 
-	/* recursively add terms */
-	result += -2*(pwr%2 -.5) * (fact(termNum-1)/fact(termNum-pwr)) 
-	  * invPwrSum * dGn(idx,pole,mult,numPoles,termNum-pwr);
+        /* recursively add terms */
+        result += -2*(pwr%2 -.5) * (fact(termNum-1)/fact(termNum-pwr)) 
+          * invPwrSum * dGn(idx,pole,mult,numPoles,termNum-pwr);
       }
   
   return result;
@@ -130,7 +130,7 @@ double dGn(int idx, double *pole, int *mult, int numPoles, int termNum)
 }
 
 double laplaceInverse(int row, int col, double *d, double t, 
-		      int& finitePositive)
+                      int& finitePositive)
 {
   int idx, checkIdx, multCnt;
   int numPoles = 0;
@@ -144,17 +144,17 @@ double laplaceInverse(int row, int col, double *d, double t,
   for (idx = col;idx<=row;idx++)
     {
       for (checkIdx=0;checkIdx<numPoles;checkIdx++)
-	if ( fabs((d[idx]-pole[checkIdx]))<SMALL_REL_DIFF*d[idx] )
-	  {
-	    mult[checkIdx]++;
-	    break;
-	  }
+        if ( fabs((d[idx]-pole[checkIdx]))<SMALL_REL_DIFF*d[idx] )
+          {
+            mult[checkIdx]++;
+            break;
+          }
       if (checkIdx == numPoles)
-	{
-	  pole[checkIdx] = d[idx];
-	  mult[checkIdx] = 1;
-	  numPoles++;
-	}
+        {
+          pole[checkIdx] = d[idx];
+          mult[checkIdx] = 1;
+          numPoles++;
+        }
     }
 
   /* perform recursive analytic Laplace inversion */
@@ -163,10 +163,10 @@ double laplaceInverse(int row, int col, double *d, double t,
       poleResult = 0;
 
       for (multCnt=mult[idx];multCnt>0;multCnt--)
-	poleResult += dGn(idx, pole, mult, numPoles, mult[idx] - multCnt)
-	  * pow(t,multCnt-1)
-	  / fact(multCnt-1) 
-	  / fact(mult[idx]-multCnt) ;
+        poleResult += dGn(idx, pole, mult, numPoles, mult[idx] - multCnt)
+          * pow(t,multCnt-1)
+          / fact(multCnt-1) 
+          / fact(mult[idx]-multCnt) ;
 
       result += poleResult * exp(-pole[idx]*t);
     }
@@ -235,14 +235,14 @@ double laplaceExpansion(int row, int col, double *d, double t, int &converged)
 
       /* power of t/n! times coefficient, with alternating sign!! */
       correction = powPoleMat.rowSum(sz) * ( 1-2*(termNum%2) )
-	* pow(t,termNum+sz)/fact(termNum+sz);
+        * pow(t,termNum+sz)/fact(termNum+sz);
       
       if (fabs(correction/result) > MAXEXPTOL)
-	/* use this term if significant */
-	result += correction;
+        /* use this term if significant */
+        result += correction;
       else
-	/* otherwise break */
-	break;
+        /* otherwise break */
+        break;
     }
 
   /* for monstrous decay rates (e.g. Be-8) the correction or
@@ -254,7 +254,7 @@ double laplaceExpansion(int row, int col, double *d, double t, int &converged)
 }
 
 double fillTElement(int row, int col, double *P, double *d, double t, 
-		    int* loopRank, int rank)
+                    int* loopRank, int rank)
 {
 
   int idx,loopIdx,parLoopIdx;
@@ -313,12 +313,12 @@ double fillTElement(int row, int col, double *P, double *d, double t,
       
       /* if we think the expansion method is good, use it */
       if (defSuccess)
-	result = laplaceExpansion(row,col,d,t,defSuccess);
+        result = laplaceExpansion(row,col,d,t,defSuccess);
       
       /* if either we think the expansion method is bad,
          or we prove that it is bad, use the inversion method */
       if (!defSuccess)
-	result = laplaceInverse(row,col,d,t,altSuccess);
+        result = laplaceInverse(row,col,d,t,altSuccess);
     }
   else
     result = bateman(row,col,d,t,altSuccess);

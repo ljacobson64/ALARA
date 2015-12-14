@@ -192,49 +192,49 @@ Mixture* Mixture::getMixture(istream &input)
       mixPtr->nComps++;
 
       switch(tolower(token[0]))
-	{
-	case 'm':
-	  debug(2,"Creating new Constituent object of material type");
-	  type = COMP_MAT;
-	  break;
-	case 'e':
-	  debug(2,"Creating new Constituent object of element type");
-	  type = COMP_ELE;
-	  break;
-/*	case 'i':
-	  debug(2,"Creating new Constituent object of isotope type");
-	  type = COMP_ISO;
-	  break; */
-	case 'l':
-	  debug(2,"Creating new Constituent object of similar type");
-	  type = COMP_SIM;
-	  break;
-	case 't':
-	  Chain::modeReverse();
-	  /* don't count this in component list */
-	  mixPtr->nComps--;
-	  clearComment(input);
-	  input >> token;
-	  switch(tolower(token[0]))
-	    {
-	    case 'e':
-	      type = TARGET_ELE;
-	      break;
-	    case 'i':
-	      type = TARGET_ISO;
-	      break;
-	    default:
-	      error(180,"Target materials for reverse calculations can only be elements or isotopes and not '%s'",token);
-	    }
-	  break;
-	default:
-	  error(181,"Invalid material constituent: %s", token);
-	}
+        {
+        case 'm':
+          debug(2,"Creating new Constituent object of material type");
+          type = COMP_MAT;
+          break;
+        case 'e':
+          debug(2,"Creating new Constituent object of element type");
+          type = COMP_ELE;
+          break;
+/*        case 'i':
+          debug(2,"Creating new Constituent object of isotope type");
+          type = COMP_ISO;
+          break; */
+        case 'l':
+          debug(2,"Creating new Constituent object of similar type");
+          type = COMP_SIM;
+          break;
+        case 't':
+          Chain::modeReverse();
+          /* don't count this in component list */
+          mixPtr->nComps--;
+          clearComment(input);
+          input >> token;
+          switch(tolower(token[0]))
+            {
+            case 'e':
+              type = TARGET_ELE;
+              break;
+            case 'i':
+              type = TARGET_ISO;
+              break;
+            default:
+              error(180,"Target materials for reverse calculations can only be elements or isotopes and not '%s'",token);
+            }
+          break;
+        default:
+          error(181,"Invalid material constituent: %s", token);
+        }
       if (type <= COMP_SIM)
-	/* add each component to the list */
-	compList = compList->getComponent(type,input,mixPtr);
+        /* add each component to the list */
+        compList = compList->getComponent(type,input,mixPtr);
       else
-	targetCompList = targetCompList->getComponent(type,input,mixPtr);
+        targetCompList = targetCompList->getComponent(type,input,mixPtr);
 
       clearComment(input);
       input >> token;
@@ -278,14 +278,14 @@ void Mixture::xCheck()
       current = ptr->compListHead->exists(COMP_SIM);
       /* for each type 'l' */
       while(current != NULL)
-	{
-	  /* search for the referenced name */
-	  if (head->find(current->getName()) == NULL)
-	      error(380, "Constituent type 'l' of mixture %s references a non-existent mixture: %s",
-		      ptr->mixName,current->getName());
+        {
+          /* search for the referenced name */
+          if (head->find(current->getName()) == NULL)
+              error(380, "Constituent type 'l' of mixture %s references a non-existent mixture: %s",
+                      ptr->mixName,current->getName());
 
-	  current = current->exists(COMP_SIM);
-	}
+          current = current->exists(COMP_SIM);
+        }
     }
 
   verbose(3,"All internally referenced mixtures were found.");
@@ -317,19 +317,19 @@ void Mixture::removeUnused(Loading *loadList)
 
       /* if this mixture is not used in the material loading, remove it */
       if (loadList->findMix(ptr->mixName) == NULL)
-	{
-	  /* remove current mixture def from list */
-	  prev->next = ptr->next;
-	  warning(580,"Removing mixture %s not used in any zones.",
-		  ptr->mixName);
+        {
+          /* remove current mixture def from list */
+          prev->next = ptr->next;
+          warning(580,"Removing mixture %s not used in any zones.",
+                  ptr->mixName);
 
-	  /* this ensures that the entire list is not deleted */
-	  ptr->next = NULL;
-	  delete ptr;
+          /* this ensures that the entire list is not deleted */
+          ptr->next = NULL;
+          delete ptr;
 
-	  /* go back to last item for testing while loop */
-	  ptr = prev;
-	}
+          /* go back to last item for testing while loop */
+          ptr = prev;
+        }
     }
 
   verbose(3,"Mixture list has been cleaned up and 'similar' constituents expanded.");
@@ -349,17 +349,17 @@ void Mixture::copySim(Mixture *cpyPtr)
       
       current = ptr->compListHead->exists(COMP_SIM);
       while (current != NULL)
-	{
-	  /* if this component is similar to mixture of interest */
-	  if (!strcmp(cpyPtr->mixName,current->getName()))
-	    {
-	      /* replace the similar component */
-	      current = current->replaceSim(cpyPtr->compListHead);
-	      verbose(4,"Replaced constituent of mixture %s with definition of mixture %s",
-		      ptr->mixName,cpyPtr->mixName);
-	    }
-	  current = current->exists(COMP_SIM);
-	}
+        {
+          /* if this component is similar to mixture of interest */
+          if (!strcmp(cpyPtr->mixName,current->getName()))
+            {
+              /* replace the similar component */
+              current = current->replaceSim(cpyPtr->compListHead);
+              verbose(4,"Replaced constituent of mixture %s with definition of mixture %s",
+                      ptr->mixName,cpyPtr->mixName);
+            }
+          current = current->exists(COMP_SIM);
+        }
     }
 
   verbose(4,"All constituents similar to %s have been replaced.", cpyPtr->mixName);
@@ -391,22 +391,22 @@ void Mixture::makeRootList(Root *&masterRootList)
       verbose(3,"Expanding mixture %s",ptr->mixName);
       ptr->rootList = ptr->compListHead->expand(ptr);
       switch(NuclearData::getMode())
-	{
-	case MODE_FORWARD:
-	  /* merge this root list into the master */
-	  masterRootList = masterRootList->merge(ptr->rootList);
-	  verbose(4,"Merged rootlist for mixture %s to master root list.",
-		  ptr->mixName);
-	  break;
-	case MODE_REVERSE:
-	  /* expand the target components into a target list */
-	  ptr->targetList = ptr->targetCompListHead->expand(ptr);
-	  /* merge this root list into the master */
-	  masterRootList = masterRootList->merge(ptr->targetList);
-	  verbose(4,"Merged targetList for mixture %s to master root list.",
-		  ptr->mixName);
-	  break;
-	}
+        {
+        case MODE_FORWARD:
+          /* merge this root list into the master */
+          masterRootList = masterRootList->merge(ptr->rootList);
+          verbose(4,"Merged rootlist for mixture %s to master root list.",
+                  ptr->mixName);
+          break;
+        case MODE_REVERSE:
+          /* expand the target components into a target list */
+          ptr->targetList = ptr->targetCompListHead->expand(ptr);
+          /* merge this root list into the master */
+          masterRootList = masterRootList->merge(ptr->targetList);
+          verbose(4,"Merged targetList for mixture %s to master root list.",
+                  ptr->mixName);
+          break;
+        }
     }
 
   verbose(3,"Expanded all mixtures to master root list.");
@@ -469,7 +469,7 @@ void Mixture::tally(Result *volOutputList, double vol)
     what type of normalization is being used, so that the correct
     output information can be given. */
 void Mixture::write(int response, int writeComp, CoolingTime* coolList,
-		    int targetKza, int normType)
+                    int targetKza, int normType)
 {
   Mixture *head = this;
   Mixture *ptr = head;
@@ -486,120 +486,120 @@ void Mixture::write(int response, int writeComp, CoolingTime* coolList,
       cout << "Mixture #" << ++mixCntr << ": " << ptr->mixName << endl;
       debug(5,"Mixture::userVol=%f",ptr->userVol);
       if (normType > 0)
-	cout << "\tRelative Volume: " << ptr->volume << endl;
+        cout << "\tRelative Volume: " << ptr->volume << endl;
       else
-	cout << "\tMass: " << ptr->volume*ptr->totalDensity << endl;
+        cout << "\tMass: " << ptr->volume*ptr->totalDensity << endl;
 
       /* write the component breakdown if requested */
       if (writeComp && response != OUTFMT_SRC)
-	{
-	  /* get the list of components for this mixture */
-	  Component *compPtr = ptr->compListHead;
-	  int compNum=0;
-	  compPtr = compPtr->advance();
+        {
+          /* get the list of components for this mixture */
+          Component *compPtr = ptr->compListHead;
+          int compNum=0;
+          compPtr = compPtr->advance();
 
-	  /* for each component */
-	  while (compPtr != NULL)
-	    {
-	      volFrac = compPtr->getVolFrac();
-	      volume_mass = ptr->volume * volFrac;
+          /* for each component */
+          while (compPtr != NULL)
+            {
+              volFrac = compPtr->getVolFrac();
+              volume_mass = ptr->volume * volFrac;
 
-	      /* write component header */
-	      cout << "Constituent: " << compPtr->getName() << endl;
+              /* write component header */
+              cout << "Constituent: " << compPtr->getName() << endl;
 
-	      if (normType < 0)
-		{
-	          cout 
-		    << "\tVolume Fraction: " << volFrac
-		    << "\tRelative Volume: " << volume_mass;
-		  density = compPtr->getDensity();
-		  volume_mass *= density;
-		  cout
-		    << "\tDensity: " << density 
-		    << "\tMass: " << volume_mass;
-		}
-	      else if (normType == OUTNORM_VOL_INT)
-		{
-		  /* The mixture responses are volume weighted sums already.
-		     For volume integrated results, don't renormalize */
-	          cout 
-		    << "\tVolume Fraction: " << volFrac
-		    << "\tAbsolute Volume: " << ptr->userVol;
-		  volume_mass /= ptr->userVol;
-		  cout << "\tVolume Integrated ";
-		}
-	      else
-		{
-	          cout 
-		    << "\tVolume Fraction: " << volFrac
-		    << "\tRelative Volume: " << volume_mass;
-		}
+              if (normType < 0)
+                {
+                  cout 
+                    << "\tVolume Fraction: " << volFrac
+                    << "\tRelative Volume: " << volume_mass;
+                  density = compPtr->getDensity();
+                  volume_mass *= density;
+                  cout
+                    << "\tDensity: " << density 
+                    << "\tMass: " << volume_mass;
+                }
+              else if (normType == OUTNORM_VOL_INT)
+                {
+                  /* The mixture responses are volume weighted sums already.
+                     For volume integrated results, don't renormalize */
+                  cout 
+                    << "\tVolume Fraction: " << volFrac
+                    << "\tAbsolute Volume: " << ptr->userVol;
+                  volume_mass /= ptr->userVol;
+                  cout << "\tVolume Integrated ";
+                }
+              else
+                {
+                  cout 
+                    << "\tVolume Fraction: " << volFrac
+                    << "\tRelative Volume: " << volume_mass;
+                }
 
-	      cout << endl;
+              cout << endl;
 
-	      ptr->outputList[compNum].write(response,targetKza,this,
-					     coolList,ptr->total,volume_mass);
+              ptr->outputList[compNum].write(response,targetKza,this,
+                                             coolList,ptr->total,volume_mass);
 
-	      compPtr = compPtr->advance();
-	      compNum++;
-	    }
-	}
+              compPtr = compPtr->advance();
+              compNum++;
+            }
+        }
       
       volFrac = ptr->volFraction;
 
       /* if components were written and there is only one */
       if (writeComp && ptr->nComps == 0 && volFrac == 1.0)
-	/* write comment refering total to component total */
-	cout << "** Interval totals are the same as those of the single constituent."
-	     << endl << endl;
+        /* write comment refering total to component total */
+        cout << "** Interval totals are the same as those of the single constituent."
+             << endl << endl;
       else
-	{
-	  /* otherwise write the total response for the zone */
-	  volume_mass = volFrac*ptr->volume;
-	  
-	  /* write component header */
-	  cout << "Total (All constituents) " << endl;
+        {
+          /* otherwise write the total response for the zone */
+          volume_mass = volFrac*ptr->volume;
+          
+          /* write component header */
+          cout << "Total (All constituents) " << endl;
 
-	  cout << "\tCOMPACTED" << endl;
+          cout << "\tCOMPACTED" << endl;
 
-	  
-	  if (normType < 0)
-	    {
-	      /* different from constituent: mixture densities 
-		 already take volume fraction into account */
-	      cout 
-	        << "\tVolume Fraction: " << volFrac
-	        << "\tRelative Volume: " << volume_mass;
-	      volume_mass = ptr->totalDensity * ptr->volume;
-	      cout
-		<< "\tDensity: " << ptr->totalDensity
-		<< "\tMass: " << volume_mass;
-	    }
-	  else if (normType == OUTNORM_VOL_INT)
-	    {
-	      /* The mixture responses are volume weighted sums already.
-		 For volume integrated results, don't renormalize */
-	      cout 
-	        << "\tVolume Fraction: " << volFrac
-	        << "\tAbsolute Volume: " << ptr->userVol;
-	      volume_mass /=ptr->userVol;
-	      cout << "\tVolume Integrated ";
-	    }
-	  else
-	    {
-	      cout 
-		<< "\tVolume Fraction: " << volFrac
-		<< "\tRelative Volume: " << volume_mass;
-	    }
-	  
-	  cout << endl;
-	      
-	  ptr->outputList[ptr->nComps].write(response,targetKza,this,
-					     coolList,ptr->total,volume_mass);
+          
+          if (normType < 0)
+            {
+              /* different from constituent: mixture densities 
+                 already take volume fraction into account */
+              cout 
+                << "\tVolume Fraction: " << volFrac
+                << "\tRelative Volume: " << volume_mass;
+              volume_mass = ptr->totalDensity * ptr->volume;
+              cout
+                << "\tDensity: " << ptr->totalDensity
+                << "\tMass: " << volume_mass;
+            }
+          else if (normType == OUTNORM_VOL_INT)
+            {
+              /* The mixture responses are volume weighted sums already.
+                 For volume integrated results, don't renormalize */
+              cout 
+                << "\tVolume Fraction: " << volFrac
+                << "\tAbsolute Volume: " << ptr->userVol;
+              volume_mass /=ptr->userVol;
+              cout << "\tVolume Integrated ";
+            }
+          else
+            {
+              cout 
+                << "\tVolume Fraction: " << volFrac
+                << "\tRelative Volume: " << volume_mass;
+            }
+          
+          cout << endl;
+              
+          ptr->outputList[ptr->nComps].write(response,targetKza,this,
+                                             coolList,ptr->total,volume_mass);
 
-	}
+        }
     }
-	  
+          
 
   /** WRITE TOTAL TABLE **/
   /* reset mixture pointer and counter */
@@ -624,10 +624,10 @@ void Mixture::write(int response, int writeComp, CoolingTime* coolList,
       cout << ++mixCntr << "\t";
 
       for (resNum=0;resNum<nResults;resNum++)
-	{
-	  sprintf(isoSym,"%-11.4e ",ptr->total[resNum]);
-	  cout << isoSym;
-	}
+        {
+          sprintf(isoSym,"%-11.4e ",ptr->total[resNum]);
+          cout << isoSym;
+        }
       cout << "\t" << ptr->mixName << endl;
     }
   coolList->writeSeparator();
@@ -668,7 +668,7 @@ void Mixture::setGammaAttenCoef(int nGroups, ifstream& gAttenData)
     {
       clearComment(gAttenData);
       for (gNum=0;gNum<nGroups;gNum++)
-	gAttenData >> gammaAttenData[numEle*nGroups + gNum];
+        gAttenData >> gammaAttenData[numEle*nGroups + gNum];
 
       numEle++;
 
@@ -693,42 +693,42 @@ void Mixture::setGammaAttenCoef(int nGroups, ifstream& gAttenData)
       /* for each root in mixture */
       root = ptr->rootList->getNext();
       while (root != NULL)
-	{
-	  kza = root->getKza();
-	  Z = kza/10000;
-	  A = (kza - 10000*Z)/10;
+        {
+          kza = root->getKza();
+          Z = kza/10000;
+          A = (kza - 10000*Z)/10;
 
-	  /* get total density of this root */
-	  density = root->mixConc(ptr)*A;
-	  totalDens += density;
+          /* get total density of this root */
+          density = root->mixConc(ptr)*A;
+          totalDens += density;
 
-	  /* find data for this Z */
-	  idx=-1;
-	  while (gammaAttenZ[++idx] < Z) ;
-	  if (gammaAttenZ[idx] == Z)
-	    for (gNum=0;gNum<nGroups;gNum++)
-	      ptr->gammaAttenCoef[gNum] += density*gammaAttenData[idx*nGroups+gNum];
-	  else
-	    /* if no data, interpolate */
-	    if (idx > 0)
-	      {
-		/* if we are above last data point, extrapolate */
-		if (idx == numEle)
-		  idx--;
-		interp = float(Z - gammaAttenZ[idx-1])/
-		  float(gammaAttenZ[idx]-gammaAttenZ[idx-1]);
-		for (gNum=0;gNum<nGroups;gNum++)
-		  ptr->gammaAttenCoef[gNum] += density*
-		    ( gammaAttenData[  idx  *nGroups+gNum] * interp      
-		     +gammaAttenData[(idx-1)*nGroups+gNum] * (1 - interp) );
-	      }
+          /* find data for this Z */
+          idx=-1;
+          while (gammaAttenZ[++idx] < Z) ;
+          if (gammaAttenZ[idx] == Z)
+            for (gNum=0;gNum<nGroups;gNum++)
+              ptr->gammaAttenCoef[gNum] += density*gammaAttenData[idx*nGroups+gNum];
+          else
+            /* if no data, interpolate */
+            if (idx > 0)
+              {
+                /* if we are above last data point, extrapolate */
+                if (idx == numEle)
+                  idx--;
+                interp = float(Z - gammaAttenZ[idx-1])/
+                  float(gammaAttenZ[idx]-gammaAttenZ[idx-1]);
+                for (gNum=0;gNum<nGroups;gNum++)
+                  ptr->gammaAttenCoef[gNum] += density*
+                    ( gammaAttenData[  idx  *nGroups+gNum] * interp      
+                     +gammaAttenData[(idx-1)*nGroups+gNum] * (1 - interp) );
+              }
 
-	  root = root->getNext();
+          root = root->getNext();
 
-	}
+        }
 
       for (gNum=0;gNum<nGroups;gNum++)
-	ptr->gammaAttenCoef[gNum] = ptr->gammaAttenCoef[gNum]/totalDens;
+        ptr->gammaAttenCoef[gNum] = ptr->gammaAttenCoef[gNum]/totalDens;
 
     }
       
@@ -777,7 +777,7 @@ Mixture* Mixture::find(char* srchName)
     {
       ptr = ptr->next;
       if (!strcmp(ptr->mixName,srchName))
-	return ptr;
+        return ptr;
     }
 
   return NULL;
@@ -793,7 +793,7 @@ void Mixture::resetOutList()
       ptr = ptr->next;
       ptr->volume = 0;
       for (compNum=0;compNum<=ptr->nComps;compNum++)
-	ptr->outputList[compNum].clear();
+        ptr->outputList[compNum].clear();
     }
 }
 

@@ -53,7 +53,7 @@ void DecayEndf6::LoadLibrary() throw(ExFileOpen, ExDecayMode)
       ExtractSpectrum(num_spec, parent_kza);
       
       while(Is8457(str))
-	getline(InFile, str, '\n');
+        getline(InFile, str, '\n');
     }
 }
 
@@ -86,7 +86,7 @@ double DecayEndf6::FormatFloat(string str)
 Kza DecayEndf6::ExtractParent(const std::string& str)
 {
   return Kza( FormatFloat(str.substr(0,11)) * 10 + 
-	      FormatFloat(str.substr(33,11)) );
+              FormatFloat(str.substr(33,11)) );
 
 }
 
@@ -111,13 +111,13 @@ void DecayEndf6::ExtractEnergies(Kza parent, string& str)
   // Electromagnetic Radiation (any photons that leave nucleus)
   // Heavy Particles (alphas, i think)
   Library.AddDecayEnergy(parent, LIGHT_PARTICLES, 
-			 FormatFloat(str.substr(0,11)));
+                         FormatFloat(str.substr(0,11)));
 
   Library.AddDecayEnergy(parent, EM_RADIATION, 
-			 FormatFloat(str.substr(22,11)));
+                         FormatFloat(str.substr(22,11)));
 
   Library.AddDecayEnergy(parent, HEAVY_PARTICLES, 
-			 FormatFloat(str.substr(44,11)));
+                         FormatFloat(str.substr(44,11)));
 }
 
 void DecayEndf6::ExtractDecayModes(Kza parent) throw(ExDecayMode)
@@ -141,11 +141,11 @@ void DecayEndf6::ExtractDecayModes(Kza parent) throw(ExDecayMode)
       branching_ratio = FormatFloat(str.substr(44,11));
 
       try{
-	Library.AddDecayMode(parent, decay_mode,
-			     int(FormatFloat(str.substr(11,11))),
-			     branching_ratio);
+        Library.AddDecayMode(parent, decay_mode,
+                             int(FormatFloat(str.substr(11,11))),
+                             branching_ratio);
       } catch (ExDecayMode& ex){ 
-	throw; 
+        throw; 
       }
       
     }
@@ -186,71 +186,71 @@ void DecayEndf6::ExtractSpectrum(unsigned int num, Kza parent)
 
       // We now have enough information to begin reading discrete spectrum:
       for(unsigned int j = 0; j < num_disc; j++)
-	{
-	  // Read information about the energy:
-	  getline(InFile, str, '\n');
-	  energy = FormatFloat(str.substr(0,11));
-	  line_parm = atoi(str.substr(44,11).c_str());
-	     
-	  // Read information about the intensity:
-	  getline(InFile, str, '\n');
-	  intensity = FormatFloat(str.substr(22,11));
+        {
+          // Read information about the energy:
+          getline(InFile, str, '\n');
+          energy = FormatFloat(str.substr(0,11));
+          line_parm = atoi(str.substr(44,11).c_str());
+             
+          // Read information about the intensity:
+          getline(InFile, str, '\n');
+          intensity = FormatFloat(str.substr(22,11));
 
-	  // Check for unecessary information:
-	  if(line_parm > 6) getline(InFile, str, '\n');
-	  
-	  // Now add the spectrum entry, but check to make sure its not zero:
-	  if( (intensity = intensity*disc_rel) )
-	    {
-	      spectrum.Discrete.push_back(pair<double,double>(energy, 
-							      intensity));
-	    }	  
-	}
+          // Check for unecessary information:
+          if(line_parm > 6) getline(InFile, str, '\n');
+          
+          // Now add the spectrum entry, but check to make sure its not zero:
+          if( (intensity = intensity*disc_rel) )
+            {
+              spectrum.Discrete.push_back(pair<double,double>(energy, 
+                                                              intensity));
+            }          
+        }
 
       // Now, lets handle continuous:
       // If it exists:
       if(disc_cont == 1 || disc_cont == 2)
-	{
-	  ContSpec cont;
-	  vector<int> last_point;
-	  vector<int> int_method;
-	  vector<pair<double, double> > region_info;
-	  vector<pair<double, double> > energy_info;
+        {
+          ContSpec cont;
+          vector<int> last_point;
+          vector<int> int_method;
+          vector<pair<double, double> > region_info;
+          vector<pair<double, double> > energy_info;
 
-	  // Read continuum header:
-	  getline(InFile, str, '\n');
-	  num_points = atoi(str.substr(55,11).c_str());
-	  num_regions = atoi(str.substr(44,11).c_str());
-	  cov_flag = atoi(str.substr(33,11).c_str());
+          // Read continuum header:
+          getline(InFile, str, '\n');
+          num_points = atoi(str.substr(55,11).c_str());
+          num_regions = atoi(str.substr(44,11).c_str());
+          cov_flag = atoi(str.substr(33,11).c_str());
 
-	  //region_info.push_back(pair<double,double>(0,0));
-	  region_info = ExtractPairs(num_regions);
-	  region_info.insert(region_info.begin(),pair<double,double>(0,0));
-	  energy_info = ExtractPairs(num_points);
+          //region_info.push_back(pair<double,double>(0,0));
+          region_info = ExtractPairs(num_regions);
+          region_info.insert(region_info.begin(),pair<double,double>(0,0));
+          energy_info = ExtractPairs(num_points);
 
-	  for(int j = 0; j < num_regions; j++)
-	    {
-	      cont.IntMethod = int(region_info[j+1].second);
+          for(int j = 0; j < num_regions; j++)
+            {
+              cont.IntMethod = int(region_info[j+1].second);
 
-	      for(k = int(region_info[j].first); 
-		  k < int(region_info[j+1].first); k++)
-		{
-		  cont.Point.push_back(energy_info[k]);
-		}
-	      
-	      spectrum.Continuous.push_back(cont);
-	      cont.Clear();
-	    }
+              for(k = int(region_info[j].first); 
+                  k < int(region_info[j+1].first); k++)
+                {
+                  cont.Point.push_back(energy_info[k]);
+                }
+              
+              spectrum.Continuous.push_back(cont);
+              cont.Clear();
+            }
 
-	  if(cov_flag)
-	    {
-	      // Now, just skip covariance data:
-	      getline(InFile, str, '\n');
-	      num_points = atoi(str.substr(55,11).c_str());
+          if(cov_flag)
+            {
+              // Now, just skip covariance data:
+              getline(InFile, str, '\n');
+              num_points = atoi(str.substr(55,11).c_str());
 
-	      for(int j = 0; j < num_points; j += 3) getline(InFile, str, '\n');
-	    }
-	}
+              for(int j = 0; j < num_points; j += 3) getline(InFile, str, '\n');
+            }
+        }
 
       Library.AddSpectrum(parent, SpectrumEtoF(spec_type), spectrum);
       
@@ -312,14 +312,14 @@ vector< pair<double, double> > DecayEndf6::ExtractPairs(int num)
       getline(InFile, str, '\n');
       
       for(j = 0; j < get; j++)
-	{
-	  // Extract the numbers from the string:
-	  first = FormatFloat(str.substr(j*22,11));
-	  second = FormatFloat(str.substr(j*22+11,11));
+        {
+          // Extract the numbers from the string:
+          first = FormatFloat(str.substr(j*22,11));
+          second = FormatFloat(str.substr(j*22+11,11));
 
-	  // Add the numbers to our return list:
-	  ret.push_back(pair<double,double>(first, second));
-	}
+          // Add the numbers to our return list:
+          ret.push_back(pair<double,double>(first, second));
+        }
     }
   
   return ret;

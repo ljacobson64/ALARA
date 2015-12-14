@@ -188,7 +188,7 @@ void Dimension::checkTypes(int geom_type)
 
 
   verbose(2,"Checking that dimension types match geometry type: %s.",
-	  geomTypeText[geom_type]);
+          geomTypeText[geom_type]);
 
   while (ptr->next != NULL)
     {
@@ -196,27 +196,27 @@ void Dimension::checkTypes(int geom_type)
       
       /* check for duplicates */
       if (xCheck[ptr->type])
-	error(330,"Duplicate dimensions of type %s.",dimTypeText[ptr->type]);
+        error(330,"Duplicate dimensions of type %s.",dimTypeText[ptr->type]);
       xCheck[ptr->type] = 1;
 
       /* check context */
       fail = (ptr->type < dim_min || ptr->type > dim_max);
       if (fail)
-	{
-	  error(331,"%s geometries don't have dimensions of type %s.",
-		  geomTypeText[geom_type],dimTypeText[ptr->type]);
-	}
+        {
+          error(331,"%s geometries don't have dimensions of type %s.",
+                  geomTypeText[geom_type],dimTypeText[ptr->type]);
+        }
     }
 
   /* fill out dimensions with unit blocks in other directions */
   for (dim=dim_min;dim<=dim_max;dim++)
     if (!xCheck[dim])
       {
-	ptr->next = new Dimension(dim);
-	memCheck(ptr->next,"Dimension::checkTypes(...): ptr->next");
-	ptr = ptr->next;
-	verbose(3,"Setting dimension %s with unit size.",dimTypeText[dim]);
-	ptr->zoneListHead->addZone(1,dimUnit[dim]);
+        ptr->next = new Dimension(dim);
+        memCheck(ptr->next,"Dimension::checkTypes(...): ptr->next");
+        ptr = ptr->next;
+        verbose(3,"Setting dimension %s with unit size.",dimTypeText[dim]);
+        ptr->zoneListHead->addZone(1,dimUnit[dim]);
       }
 }
 
@@ -252,33 +252,33 @@ void Dimension::convert(Volume* volList, Loading *loadList, Geometry *geom)
       ptr = ptr->next;
       debug(3,"Setting up dimension %d.",ptr->type);
       switch (ptr->type)
-	{
+        {
         /* X or R are the 'first' dimension for the purposes
-	 * of calculating invterval volumes */
-	case DIM_X:
-	case DIM_R:
-	  coord[0] = numDims;
-	  break;
+         * of calculating invterval volumes */
+        case DIM_X:
+        case DIM_R:
+          coord[0] = numDims;
+          break;
         /* Y or THETA are the 'second' dimension for the purposes
-	 * of calculating invterval volumes */
-	case DIM_Y:
-	case DIM_THETA:
-	  coord[1] = numDims;
-	  break;
+         * of calculating invterval volumes */
+        case DIM_Y:
+        case DIM_THETA:
+          coord[1] = numDims;
+          break;
         /* Z or PHI are the 'third' dimension for the purposes
-	 * of calculating invterval volumes */
-	case DIM_Z:
-	case DIM_PHI:
-	  coord[2] = numDims;
-	  break;
-	}
+         * of calculating invterval volumes */
+        case DIM_Z:
+        case DIM_PHI:
+          coord[2] = numDims;
+          break;
+        }
       /* save the first (zeroeth) zone boundary and other info */
       d0[numDims] = ptr->start;
       zonePtr[numDims++] = ptr->zoneListHead;
     }
 
   debug(3,"Calling Zone::convert with starting point (%g,%g,%g).",
-	d0[0],d0[1],d0[2]);
+        d0[0],d0[1],d0[2]);
   /* do the final conversion */
   Zone::convert(d0,coord,zonePtr,geom,loadList,volList);
   
@@ -298,7 +298,7 @@ Dimension* Dimension::find(int srchType)
     {
       ptr = ptr->next;
       if (ptr->type == srchType)
-	return ptr;
+        return ptr;
     }
 
   return NULL;
@@ -321,7 +321,7 @@ int Dimension::totZones()
     {
       ptr = ptr->next;
       if (ptr->nZones < 1)
-	ptr->count();
+        ptr->count();
       numZones *= ptr->nZones;
     }
 

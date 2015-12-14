@@ -54,9 +54,9 @@ FEINDLib::FEINDLib(char* arg0, char* arg1, char* arg2, int setType)
     break;
     default: 
     cerr << "*** ERROR LOADING NUCLEAR LIBRARY...\n"
-	 << "Unknown nuclear data format \"" << arg0
-	 << "\" encountered."
-	 << "\n\nABORTING\n\n";
+         << "Unknown nuclear data format \"" << arg0
+         << "\" encountered."
+         << "\n\nABORTING\n\n";
     exit(0);
 
   }
@@ -97,23 +97,23 @@ void FEINDLib::readData(int parent, NuclearData* data)
     try{
 
       if(totalCsc)
-	{
-	  for (gNum = 0; gNum < nGroups; gNum++)
-	    {
-	      totalXSect[gNum] =  totalCsc[gNum]; 
-	    }
-	}
+        {
+          for (gNum = 0; gNum < nGroups; gNum++)
+            {
+              totalXSect[gNum] =  totalCsc[gNum]; 
+            }
+        }
       else
-	{
-	  for (gNum = 0; gNum < nGroups; gNum++)
-	    {
-	      totalXSect[gNum] =  0.0; 
-	    }
-	}
+        {
+          for (gNum = 0; gNum < nGroups; gNum++)
+            {
+              totalXSect[gNum] =  0.0; 
+            }
+        }
 
     } catch(FEIND::Exception& ex)
       {
-	ex.Abort();
+        ex.Abort();
       }
 
   totalXSect[nGroups] = decayConst;
@@ -139,25 +139,25 @@ void FEINDLib::readData(int parent, NuclearData* data)
     try{
 
       if(csc)
-	{
-	  for (gNum = 0; gNum < nGroups; gNum++)
-	    {
-	      xSection[rxnNum][gNum] =  csc[gNum]; 
-	    }
-	}
+        {
+          for (gNum = 0; gNum < nGroups; gNum++)
+            {
+              xSection[rxnNum][gNum] =  csc[gNum]; 
+            }
+        }
       else
-	{
-	  for (gNum = 0; gNum < nGroups; gNum++)
-	    {
-	      xSection[rxnNum][gNum] =  0.0; 
-	    }
-	}
+        {
+          for (gNum = 0; gNum < nGroups; gNum++)
+            {
+              xSection[rxnNum][gNum] =  0.0; 
+            }
+        }
   
       xSection[rxnNum][nGroups] = 0.0;
 
     } catch(FEIND::Exception& ex)
       {
-	ex.Abort();
+        ex.Abort();
       }
 
     fy = FEIND::Library.GetFissionYield(parent,daughterVec[rxnNum], fissionType);

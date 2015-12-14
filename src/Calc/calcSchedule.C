@@ -42,7 +42,7 @@ calcSchedule::calcSchedule(int numItems)
       memCheck(subSched,"calcSchedule::calcSchedule(...) constructor: subSched");
 
       for (int itemNum=0;itemNum<nItems;itemNum++)
-	subSched[itemNum] = NULL;
+        subSched[itemNum] = NULL;
     }
 
 }
@@ -67,10 +67,10 @@ calcSchedule::calcSchedule(const calcSchedule& c)
     {  
       subSched = new calcSchedule*[nItems];
       memCheck(subSched,
-	       "calcSchedule::calcSchedule(...) copy constructor: subSched");
+               "calcSchedule::calcSchedule(...) copy constructor: subSched");
     
       for (int itemNum=0;itemNum<nItems;itemNum++)
-	subSched[itemNum] = c.subSched[itemNum];
+        subSched[itemNum] = c.subSched[itemNum];
     }
 }  
 
@@ -78,7 +78,7 @@ calcSchedule::calcSchedule(const calcSchedule& c)
     are that the 'nItems' is set to 0, and 'fluxCode' and 'opTime'
     are set.  (TYPE B-0 in description above.) */
 calcSchedule::calcSchedule(double td, double pulseTime, History* hist,
-			   int fluxNum)
+                           int fluxNum)
 {
   setCode = 0;
   nItems = 0;
@@ -161,7 +161,7 @@ calcSchedule& calcSchedule::operator=(const calcSchedule& c)
       memCheck(subSched,"calcSchedule::operator=(...): subSched");
       
       for (int itemNum=0;itemNum<nItems;itemNum++)
-	subSched[itemNum] = c.subSched[itemNum];
+        subSched[itemNum] = c.subSched[itemNum];
     }
 
   return *this;
@@ -187,10 +187,10 @@ void calcSchedule::collapse()
   while (nItems == 1)
     {
       verbose(4,"Collapsing this schedule with sub-schedule with %d items.",
-	      subSched[0]->nItems);
+              subSched[0]->nItems);
       nItems = subSched[0]->nItems;
       history = new PulseHistory(subSched[0]->history,subSched[0]->delay,
-				 history);
+                                 history);
       memCheck(history,"calcSchedule::collapse(...): history");
       opTime = subSched[0]->opTime;
       fluxCode = subSched[0]->fluxCode;
@@ -223,8 +223,8 @@ void calcSchedule::setDecay(Chain* chain)
       history->setDecay(chain);
 
       if (nItems>0)
-	for (itemNum=0;itemNum<nItems;itemNum++)
-	  subSched[itemNum]->setDecay(chain);
+        for (itemNum=0;itemNum<nItems;itemNum++)
+          subSched[itemNum]->setDecay(chain);
 
       setCode = chainCode;
     }

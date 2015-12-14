@@ -35,19 +35,19 @@ void FEIND::LoadLibrary(const LibDefine& lib)
     switch(lib.Format)
       {
       case DECAY_ENDF_6:
-	p_parser = new DecayEndf6(lib);
-	break;
+        p_parser = new DecayEndf6(lib);
+        break;
       case EAF_4_1:
-	p_parser = new Eaf41(lib);
-	break;
+        p_parser = new Eaf41(lib);
+        break;
       case CINDER:
-	p_parser = new Cinder(lib);
-	break;
+        p_parser = new Cinder(lib);
+        break;
       case ENDF_IEAF:
-	p_parser = new EndfIeaf(lib);
-	break;
+        p_parser = new EndfIeaf(lib);
+        break;
       default:
-	throw ExFormat("Global FEIND::LoadLibrary function", lib.Format);
+        throw ExFormat("Global FEIND::LoadLibrary function", lib.Format);
       }
   
     assert(p_parser);
@@ -63,7 +63,7 @@ void FEIND::LoadLibrary(const LibDefine& lib)
 }
 
 Kza FEIND::DecayModetoKza(DecayModeType decayMode, int dIso, Kza parent, 
-			  Kza& sec)
+                          Kza& sec)
 {
   Kza ret;
   sec = 0;

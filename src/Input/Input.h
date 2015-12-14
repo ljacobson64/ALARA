@@ -38,7 +38,7 @@ protected:
           'last' to the second.  The second or both arguments can be
           missing, in which case both pointers are set to NULL. */
       istreamStack(istream *instream=NULL, istreamStack *stackItem=NULL)
-	{ strm=instream;  last = stackItem; };
+        { strm=instream;  last = stackItem; };
 
       // NEED COMMENT There is a comment for an inline destructor,
       //              but I counldn't find one for class istreamStack

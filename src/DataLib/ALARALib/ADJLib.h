@@ -59,43 +59,43 @@ protected:
       /// This class is only used as a linked list structure internal
       /// to the ADJLib::DaugItem class for reverse calculations.
       /** Each item in this list describes a reaction that produces this
-	  daughter isotope.  The description includes the ID of the parent
-	  isotope and the binary library offset of the reaction in the
-	  forward library */
+          daughter isotope.  The description includes the ID of the parent
+          isotope and the binary library offset of the reaction in the
+          forward library */
       class ParItem
-	{
-	protected:
-	  /// Isotope ID of parent
-	  int kza;
+        {
+        protected:
+          /// Isotope ID of parent
+          int kza;
 
-	  /// Binary library offset in forward library for this reaction
-	  long offset;
-	  
-	  /// Pointer to next item in linked list
-	  ParItem* next;
+          /// Binary library offset in forward library for this reaction
+          long offset;
+          
+          /// Pointer to next item in linked list
+          ParItem* next;
 
-	  /// Internal constructor used to insert list items
-	  ParItem(const ParItem* cpyPtr);
+          /// Internal constructor used to insert list items
+          ParItem(const ParItem* cpyPtr);
 
-	public:
-	  /// Primary constructor
-	  ParItem(const int parKza, const long rxnOffset);
+        public:
+          /// Primary constructor
+          ParItem(const int parKza, const long rxnOffset);
 
-	  /// Used to add/insert another item into the linked list
-	  void add(const int parKza, const long rxnOffset);
+          /// Used to add/insert another item into the linked list
+          void add(const int parKza, const long rxnOffset);
 
-	  /// Return the number of items in this linked list
-	  int count();
+          /// Return the number of items in this linked list
+          int count();
 
-	  /// Inline function to return a pointer to the next item in the list
-	  ParItem* advance();
+          /// Inline function to return a pointer to the next item in the list
+          ParItem* advance();
 
-	  /// Inline function to return ID of a given list item
-	  int getKza();
+          /// Inline function to return ID of a given list item
+          int getKza();
 
-	  /// Inline function to return the offset of a given list item
-	  long getOffset();
-	};
+          /// Inline function to return the offset of a given list item
+          long getOffset();
+        };
 
       /// Pointer to head of list of parents/reactions
       ParItem* parList;

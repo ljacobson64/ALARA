@@ -54,11 +54,11 @@ PulseHistory::PulseHistory(const PulseHistory &p) :
       memCheck(D,"PulseHistory::PulseHistory(...) copy constructor: D");
       
       for (lvlNum=0;lvlNum<p.nLevels;lvlNum++)
-	{
-	  nPulse[lvlNum] = p.nPulse[lvlNum];
-	  td[lvlNum] = p.td[lvlNum];
-	  D[lvlNum] = p.D[lvlNum];
-	}
+        {
+          nPulse[lvlNum] = p.nPulse[lvlNum];
+          td[lvlNum] = p.td[lvlNum];
+          D[lvlNum] = p.D[lvlNum];
+        }
 
     }
 
@@ -73,7 +73,7 @@ PulseHistory::PulseHistory(const PulseHistory &p) :
     and/or D to be zero (N+M+D is always > 0), and these cases are
     taken care of. */
 PulseHistory::PulseHistory(PulseHistory* hist1, double delay, 
-			   PulseHistory* hist2)
+                           PulseHistory* hist2)
 {
 
   /* this block takes care of various possible cases:
@@ -156,11 +156,11 @@ PulseHistory& PulseHistory::operator=(const PulseHistory &p)
       memCheck(D,"PulseHistory::operator=(...): D");
       
       for (lvlNum=0;lvlNum<p.nLevels;lvlNum++)
-	{
-	  nPulse[lvlNum] = p.nPulse[lvlNum];
-	  td[lvlNum] = p.td[lvlNum];
-	  D[lvlNum] = p.D[lvlNum];
-	}
+        {
+          nPulse[lvlNum] = p.nPulse[lvlNum];
+          td[lvlNum] = p.td[lvlNum];
+          D[lvlNum] = p.D[lvlNum];
+        }
 
     }
 
@@ -179,7 +179,7 @@ void PulseHistory::setDecay(Chain* chain)
   if (setCode != chainCode)
     {
       for (levelNum=0;levelNum<nLevels;levelNum++)
-	chain->setDecay(D[levelNum],td[levelNum]);
+        chain->setDecay(D[levelNum],td[levelNum]);
       
       setCode = chainCode;
     }

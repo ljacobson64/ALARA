@@ -16,7 +16,7 @@ char* isoName(int kza,char* isoSym)
   char isomer = 'l'+kza%10;
   kza /= 10;
   sprintf(isoSym,"%s-%d%c",symbol(kza/1000,isoSym),kza%1000,
-	  (isomer>'l')?isomer:' ');
+          (isomer>'l')?isomer:' ');
 
   return isoSym;
 }

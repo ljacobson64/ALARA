@@ -111,7 +111,7 @@ Component* Component::getComponent(int setType,istream &input, Mixture *mixPtr)
   memCheck(next,"Component::getComponent(...) : next");
 
   verbose(3,"type code: %d name: %s, density %g, volume fraction: %g",
-	  setType,name,dens,volFrac);
+          setType,name,dens,volFrac);
 
   mixPtr->incrVolFrac(volFrac);
 
@@ -194,32 +194,32 @@ Root* Component::expand(Mixture *mix)
       ptr = ptr->next;
       
       switch (ptr->type)
-	{
-	case COMP_MAT:
-	  compRootList = ptr->expandMat(mix);
-	  rootList = rootList->merge(compRootList);
-	  verbose(6,"Merged material %s into rootList for mixture",
-		  ptr->compName);
-	  delete compRootList;
-	  break;
-	case COMP_ELE:
-	case TARGET_ELE:
-	  compRootList = ptr->expandEle(mix,ptr);
-	  rootList = rootList->merge(compRootList);
-	  verbose(6,"Merged element %s into rootList for mixture",
-		  ptr->compName);
-	  delete compRootList;
-	  break;
-//	case COMP_ISO:
-	case TARGET_ISO:
-	  Root* newRoot = new Root(ptr->compName,ptr->density,mix,ptr);
-	  memCheck(newRoot,"Component::expand(...) : newRoot");
-	  rootList = rootList->merge(newRoot);
-	  verbose(6,"Merged isotope %s into rootList for mixture",
-		  ptr->compName);
-	  delete newRoot;
-	  break;
-	}
+        {
+        case COMP_MAT:
+          compRootList = ptr->expandMat(mix);
+          rootList = rootList->merge(compRootList);
+          verbose(6,"Merged material %s into rootList for mixture",
+                  ptr->compName);
+          delete compRootList;
+          break;
+        case COMP_ELE:
+        case TARGET_ELE:
+          compRootList = ptr->expandEle(mix,ptr);
+          rootList = rootList->merge(compRootList);
+          verbose(6,"Merged element %s into rootList for mixture",
+                  ptr->compName);
+          delete compRootList;
+          break;
+//        case COMP_ISO:
+        case TARGET_ISO:
+          Root* newRoot = new Root(ptr->compName,ptr->density,mix,ptr);
+          memCheck(newRoot,"Component::expand(...) : newRoot");
+          rootList = rootList->merge(newRoot);
+          verbose(6,"Merged isotope %s into rootList for mixture",
+                  ptr->compName);
+          delete newRoot;
+          break;
+        }
     }
   return rootList;
 
@@ -256,10 +256,10 @@ Root* Component::expandEle(Mixture* mix, Component* comp)
     {
       verbose(5,"Skipping element %s in element library",testName);
       while (numIsos-->0)
-	{
-	  clearComment(eleLib);
-	  eleLib >> isoName >> isoDens;
-	}
+        {
+          clearComment(eleLib);
+          eleLib >> isoName >> isoDens;
+        }
       clearComment(eleLib);
       eleLib >> testName >> A >> Z >> eleDens >> numIsos;
     }
@@ -267,34 +267,34 @@ Root* Component::expandEle(Mixture* mix, Component* comp)
   if (!eleLib.eof())
     {
       if (density >= 0)
-	density *= eleDens;
+        density *= eleDens;
       else
-	density = -density;
+        density = -density;
 
       double Ndensity = volFraction * density * AVAGADRO/A;
       mix->incrTotalDensity(density*volFraction);
 
       /* if element is found, add a new root for each isotope */
       verbose(5,"Found element %s with %d isotopes in element library",
-	      testName, numIsos);
+              testName, numIsos);
 
       while (numIsos-->0)
-	{
-	  clearComment(eleLib);
-	  eleLib >> isoName >> isoDens;
-	  isoDens *= Ndensity/100.0;
-	  strncpy(testName,compName,eleNameLen);
-	  testName[eleNameLen] = '\0';
-	  strcat(testName,"-");
-	  strcat(testName,isoName);
-	  Root* newRoot = new Root(testName,isoDens,mix,comp);
-	  memCheck(newRoot,"Component::expandEle(...) : newRoot");
-	  rootList = rootList->merge(newRoot);
-	  verbose(6,"Merged isotope %s into rootList for element %s",
-		  testName,compName);
-	  debug(5,"Accounted for isotope %s in Root List",testName);
-	  delete newRoot;
-	}
+        {
+          clearComment(eleLib);
+          eleLib >> isoName >> isoDens;
+          isoDens *= Ndensity/100.0;
+          strncpy(testName,compName,eleNameLen);
+          testName[eleNameLen] = '\0';
+          strcat(testName,"-");
+          strcat(testName,isoName);
+          Root* newRoot = new Root(testName,isoDens,mix,comp);
+          memCheck(newRoot,"Component::expandEle(...) : newRoot");
+          rootList = rootList->merge(newRoot);
+          verbose(6,"Merged isotope %s into rootList for element %s",
+                  testName,compName);
+          debug(5,"Accounted for isotope %s in Root List",testName);
+          delete newRoot;
+        }
     }
   else
     error(310,"Could not find element %s in element library.",compName);
@@ -329,10 +329,10 @@ Root* Component::expandMat(Mixture* mix)
     {
       verbose(5,"Skipping material %s in material library.",testName);
       while (numEles-->0)
-	{
-	  clearComment(matLib);
-	  matLib >> eleName >> eleDens >> eleZ;
-	}
+        {
+          clearComment(matLib);
+          matLib >> eleName >> eleDens >> eleZ;
+        }
       clearComment(matLib);
       matLib >> testName >> matDens >> numEles;
     }
@@ -346,23 +346,23 @@ Root* Component::expandMat(Mixture* mix)
       /* if material found, read list of elements,
        * supplementing the root list for each one */
       while (numEles-->0)
-	{
-	  clearComment(matLib);
-	  matLib >> eleName >> eleDens  >> eleZ;
-	  eleDens *= -density*volFraction/100.0;
-	  element = new Component(COMP_ELE,eleName,eleDens);
-	  memCheck(element,"Component::expandMat(...) : element");
-	  Root *elementRootList = element->expandEle(mix,this);
-	  rootList = rootList->merge(elementRootList);
-	  delete elementRootList;
-	  verbose(6,"Merged element %s into rootList for material %s",
-		  eleName,compName);
-	  delete element;
-	}
+        {
+          clearComment(matLib);
+          matLib >> eleName >> eleDens  >> eleZ;
+          eleDens *= -density*volFraction/100.0;
+          element = new Component(COMP_ELE,eleName,eleDens);
+          memCheck(element,"Component::expandMat(...) : element");
+          Root *elementRootList = element->expandEle(mix,this);
+          rootList = rootList->merge(elementRootList);
+          delete elementRootList;
+          verbose(6,"Merged element %s into rootList for material %s",
+                  eleName,compName);
+          delete element;
+        }
     }
   else
     error(311,"Could not find material %s in material library.",
-	  compName);
+          compName);
   
   return rootList;
 }
@@ -397,7 +397,7 @@ Component* Component::exists(int srchType)
     {
       ptr = ptr->next;
       if (ptr->type == srchType)
-	return ptr;
+        return ptr;
     }
 
   /* return the NULL to denote the end of this component list */

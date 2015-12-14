@@ -60,7 +60,7 @@ void Statistics::closeTree()
 
 /** The current value of nodeCtr (after the incrementing) is returned. */
 int Statistics::accountNode(int kza, char* emitted, int rank, int state, 
-			     double* relProd, int parentnum)
+                             double* relProd, int parentnum)
 {
   float newRelProd; 
   char isoSym[10];
@@ -69,33 +69,33 @@ int Statistics::accountNode(int kza, char* emitted, int rank, int state,
   if (tree)
     {
       while (rank-->1)
-	treeFile << "\t|";
+        treeFile << "\t|";
       if (rank > -1)
-	treeFile << "\t";
+        treeFile << "\t";
 
       if (emitted)
-	treeFile << "|-(" << emitted << ")-> ";
+        treeFile << "|-(" << emitted << ")-> ";
       treeFile << isoName(kza,isoSym);
       if (relProd != NULL)
-	treeFile << " (" << relProd[0] << ")";
+        treeFile << " (" << relProd[0] << ")";
       else 
-	treeFile << " ( - ) ";
+        treeFile << " ( - ) ";
 
       switch(state)
-	{
-	case CONTINUE:
-	  treeFile << " -" << endl;
-	  break;
-	case TRUNCATE:
-	  treeFile << " /" << endl;
-	  break;
-	case TRUNCATE_STABLE:
-	  treeFile << " *" << endl;
-	  break;
-	case IGNORE:
-	  treeFile << " <" << endl;
-	  break;
-	}
+        {
+        case CONTINUE:
+          treeFile << " -" << endl;
+          break;
+        case TRUNCATE:
+          treeFile << " /" << endl;
+          break;
+        case TRUNCATE_STABLE:
+          treeFile << " *" << endl;
+          break;
+        case IGNORE:
+          treeFile << " <" << endl;
+          break;
+        }
     }
 
 
@@ -105,27 +105,27 @@ int Statistics::accountNode(int kza, char* emitted, int rank, int state,
       int itemsWritten=fwrite(&parentnum, sizeof(int), 1, binFile);
       //check to see if anything was actually written
       if( itemsWritten!=1)
-	error(1501,"There was an error in writng to the binary tree file\n");
+        error(1501,"There was an error in writng to the binary tree file\n");
       
       itemsWritten=fwrite(&nodeCtr, sizeof(int), 1, binFile);
       //check to see if anything was actually written
       if( itemsWritten!=1)
-	error(1501,"There was an error in writng to the binary tree file\n");
+        error(1501,"There was an error in writng to the binary tree file\n");
 
       itemsWritten=fwrite(&kza, sizeof(int), 1, binFile);
       //check to see if anything was actually written
       if( itemsWritten!=1)
-	error(1501,"There was an error in writng to the binary tree file\n");
+        error(1501,"There was an error in writng to the binary tree file\n");
        
       if (relProd != NULL)
-	newRelProd = relProd[0];
+        newRelProd = relProd[0];
       else
-	newRelProd = -1;
-	
+        newRelProd = -1;
+        
       itemsWritten=fwrite(&newRelProd, sizeof(float), 1, binFile);
       //check to see if anything was actually written
       if( itemsWritten!=1)
-	error(1501,"There was an error in writng to the binary tree file\n");
+        error(1501,"There was an error in writng to the binary tree file\n");
     }
 
   return nodeCtr;

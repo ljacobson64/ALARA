@@ -60,11 +60,11 @@ void CoolingTime::getCoolingTimes(istream& input)
 
       /* check for valid units */
       if (strchr(UNITS,inUnits) == NULL)
-	error(120,"Invalid units in cooling time: %10g %c",
-	      ptr->coolingTime, ptr->units);
+        error(120,"Invalid units in cooling time: %10g %c",
+              ptr->coolingTime, ptr->units);
 
       verbose(3,"Added cooling time at: %g %c.",
-	      ptr->coolingTime, ptr->units);
+              ptr->coolingTime, ptr->units);
 
       clearComment(input);
       input >> token;
@@ -111,14 +111,14 @@ int CoolingTime::makeCoolingTimes(double *& coolingTimes)
       /* assign each of the cooling times */
       ptr = head;
       while (ptr->next != NULL)
-	{
-	  ptr = ptr->next;
-	  coolingTimes[coolNum++] = convertTime(ptr->coolingTime,ptr->units);
-	  verbose(3,"Added cooling time %g %c = %g = %g.",
-		  ptr->coolingTime,ptr->units, 
-		  convertTime(ptr->coolingTime,ptr->units),
-		  coolingTimes[coolNum-1]);
-	}
+        {
+          ptr = ptr->next;
+          coolingTimes[coolNum++] = convertTime(ptr->coolingTime,ptr->units);
+          verbose(3,"Added cooling time %g %c = %g = %g.",
+                  ptr->coolingTime,ptr->units, 
+                  convertTime(ptr->coolingTime,ptr->units),
+                  coolingTimes[coolNum-1]);
+        }
     }
 
   return nCoolingTimes;

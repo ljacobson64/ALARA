@@ -131,9 +131,9 @@ Schedule* Schedule::getSchedule(istream& input)
   while (strcmp(token,"end"))
     {
       if (isalpha(token[0]))
-	itemList = itemList->getSubSched(token,input);
+        itemList = itemList->getSubSched(token,input);
       else 
-	itemList = itemList->getPulse(atof(token),input);
+        itemList = itemList->getPulse(atof(token),input);
 
       clearComment(input);
       input >> token;
@@ -185,24 +185,24 @@ void Schedule::write(int level, char *histName, double delay, char dUnits)
     {
       verbose(0,"\n\n***Please review this schedule hierarchy.!!!!!!!!!!\n");
       while (ptr->next != NULL)
-	{
-	  ptr = ptr->next;
-	  if (!ptr->usedAsSub)
-	    break;
-	}
+        {
+          ptr = ptr->next;
+          if (!ptr->usedAsSub)
+            break;
+        }
       
       if (ptr->usedAsSub)
-	error(400,"Unable to find top level schedule.\nA top level schedule must not used as a sub-schedule.");
+        error(400,"Unable to find top level schedule.\nA top level schedule must not used as a sub-schedule.");
 
       cout << "Schedule '" << ptr->schedName << "':" << endl;
     }
   else
     {
       for (lvlNum=0;lvlNum<level;lvlNum++)
-	cout << "\t";
+        cout << "\t";
       cout << "Schedule '" << ptr->schedName << "' with " << delay 
-	   << " " << dUnits << " delay and pulsed with history '" 
-	   << histName << "':" << endl;
+           << " " << dUnits << " delay and pulsed with history '" 
+           << histName << "':" << endl;
     }
 
   ptr->itemListHead->write(level+1);
@@ -240,14 +240,14 @@ topSchedule* Schedule::makeSchedules(CoolingTime *coolList)
 
       /* if not used, set this as the top schedule */
       if (!ptr->usedAsSub)
-	{
-	  delete top;
-	  top = new topSchedule(ptr->calcSched,coolList);
-	  delete ptr->calcSched;
-	  ptr->calcSched = top;
-	  verbose(4,"Setting schedule %s as the top schedule.",
-		  ptr->schedName);
-	}
+        {
+          delete top;
+          top = new topSchedule(ptr->calcSched,coolList);
+          delete ptr->calcSched;
+          ptr->calcSched = top;
+          verbose(4,"Setting schedule %s as the top schedule.",
+                  ptr->schedName);
+        }
       
     }
 
@@ -283,10 +283,10 @@ Schedule* Schedule::find(char *srchSched)
     {
       ptr = ptr->next;
       if (!strcmp(ptr->schedName,srchSched))
-	{
-	  debug(4,"Found schedule %s: 0x%x (%s)", srchSched,ptr,ptr->schedName);
-	  return ptr;
-	}
+        {
+          debug(4,"Found schedule %s: 0x%x (%s)", srchSched,ptr,ptr->schedName);
+          return ptr;
+        }
     }
 
   return NULL;

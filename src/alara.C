@@ -50,111 +50,111 @@ int main(int argc, char *argv[])
   while (argNum<argc)
     {
       if (argv[argNum][0] != '-')
-	{
-	if (inFname == NULL)
-	  {
-	    inFname = new char[strlen(argv[argNum])+1];
-	    strcpy(inFname,argv[argNum]);
-	    argNum++;
-	    /* get next argument */
-	    continue;
-	  }
-	else
-	  error(1,"Only one input filename can be specified: %s.",inFname);
-	}
+        {
+        if (inFname == NULL)
+          {
+            inFname = new char[strlen(argv[argNum])+1];
+            strcpy(inFname,argv[argNum]);
+            argNum++;
+            /* get next argument */
+            continue;
+          }
+        else
+          error(1,"Only one input filename can be specified: %s.",inFname);
+        }
 
       while (argv[argNum][0] == '-')
-	argv[argNum]++;
+        argv[argNum]++;
       switch (argv[argNum][0])
-	{
-#ifdef DVLPR	  
-	case 'd':
-	  if (argv[argNum][1] == '\0')
-	    {
-	      debug_level = atoi(argv[argNum+1]);
-	      argNum+=2;
-	    }
-	  else
-	    {
-	      debug_level = atoi(argv[argNum]+1);
-	      argNum++;
-	    }
-	  debug(0,"Set debug level to %d.",debug_level);
-	  break;
+        {
+#ifdef DVLPR          
+        case 'd':
+          if (argv[argNum][1] == '\0')
+            {
+              debug_level = atoi(argv[argNum+1]);
+              argNum+=2;
+            }
+          else
+            {
+              debug_level = atoi(argv[argNum]+1);
+              argNum++;
+            }
+          debug(0,"Set debug level to %d.",debug_level);
+          break;
 #endif
-/*	case 'v':
-	  if (argv[argNum][1] == '\0')
-	    {
-	      verb_level = atoi(argv[argNum+1]);
-	      argNum+=2;
-	    }
-	  else
-	    {
-	      verb_level = atoi(argv[argNum]+1);
-	      argNum++;
-	    }
-	  verbose(0,"Set verbose level to %d.",verb_level);
-	  break;	*/
+/*        case 'v':
+          if (argv[argNum][1] == '\0')
+            {
+              verb_level = atoi(argv[argNum+1]);
+              argNum+=2;
+            }
+          else
+            {
+              verb_level = atoi(argv[argNum]+1);
+              argNum++;
+            }
+          verbose(0,"Set verbose level to %d.",verb_level);
+          break;        */
 
-	case 'v':
-	  if (argv[argNum][1] == '\0')
-	    {
-	      if (argNum<argc-1)
+        case 'v':
+          if (argv[argNum][1] == '\0')
+            {
+              if (argNum<argc-1)
               {
-		verb_level = atoi(argv[argNum+1]);
-	        argNum+=2;
-	      }
-	     else
-		error(2,"-v requires parameter."); 
-	    }
-	  else
-	    {
-	      verb_level = atoi(argv[argNum]+1);
-	      argNum++;
-	    }
-	  verbose(0,"Set verbose level to %d.",verb_level);
-	  break;
-	
- 	case 'c':
-	  verbose(0,"Calculating chains ONLY.");
-	  doOutput=FALSE;
-	  argNum+=1;
-	  break;
-	case 'r':
+                verb_level = atoi(argv[argNum+1]);
+                argNum+=2;
+              }
+             else
+                error(2,"-v requires parameter."); 
+            }
+          else
+            {
+              verb_level = atoi(argv[argNum]+1);
+              argNum++;
+            }
+          verbose(0,"Set verbose level to %d.",verb_level);
+          break;
+        
+         case 'c':
+          verbose(0,"Calculating chains ONLY.");
+          doOutput=FALSE;
+          argNum+=1;
+          break;
+        case 'r':
           verbose(0,"Reusing binary dump data.");
-	  solved=TRUE;
-	  argNum+=1;
-	  break;
-	case 't':
-	  if (argv[argNum][1] == '\0')
-	    {
-	      if (argNum<argc-1)
+          solved=TRUE;
+          argNum+=1;
+          break;
+        case 't':
+          if (argv[argNum][1] == '\0')
+            {
+              if (argNum<argc-1)
               {
                  Statistics::initTree(argv[argNum+1]);
-	         verbose(0,"Openned tree file %s.",argv[argNum+1]);
-	         argNum+=2;
-	      }
-	      else
-		 error(2,"-t requires parameter."); 
-	    }
-	  else
-	    {
-	      Statistics::initTree(argv[argNum]+1);
-	      verbose(0,"Openned tree file %s.",argv[argNum]+1);
-	      argNum++;
-	    }
-	  break;
-	case 'h':
-	  verbose(-1,helpmsg,argv[0]);
-	case 'V':
-	  exit(0);
-	  break;
-	default:
-	  {
-	    verbose(-1,helpmsg,argv[0]);
-	    error(0,"Invalid option: %s.",argv[argNum]);
-	  }
-	}
+                 verbose(0,"Openned tree file %s.",argv[argNum+1]);
+                 argNum+=2;
+              }
+              else
+                 error(2,"-t requires parameter."); 
+            }
+          else
+            {
+              Statistics::initTree(argv[argNum]+1);
+              verbose(0,"Openned tree file %s.",argv[argNum]+1);
+              argNum++;
+            }
+          break;
+        case 'h':
+          verbose(-1,helpmsg,argv[0]);
+        case 'V':
+          exit(0);
+          break;
+        default:
+          {
+            verbose(-1,helpmsg,argv[0]);
+            error(0,"Invalid option: %s.",argv[argNum]);
+          }
+        }
     }
 
 

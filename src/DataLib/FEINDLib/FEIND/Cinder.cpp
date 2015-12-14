@@ -28,13 +28,13 @@ Cinder::Cinder(const LibDefine& lib) :
   for(i = 1; i < lib.Args.size(); i++)
     {
       if(lib.Args[i] == "notrans")
-	LoadTransmutation = false;
+        LoadTransmutation = false;
       else if(lib.Args[i] == "nodecay")
-	LoadDecay = false;
+        LoadDecay = false;
       else if(lib.Args[i] == "noyields")
-	LoadYields = false;
+        LoadYields = false;
       else
-	throw ExInvalidOption("Cinder parser constructor", lib.Args[i]);
+        throw ExInvalidOption("Cinder parser constructor", lib.Args[i]);
     }
 }
 
@@ -89,93 +89,93 @@ void Cinder::ActivationData() throw(Exception)
   while(str.find(begin_fission) == string::npos)
     {
       if(str.find(start_iso) != string::npos)
-	{
-	  // Found new isotope:
-	  parent_kza = ExtractActParent();
-	  
-	  // TODO - Decay data would normally be read here. This feature is
-	  // not currently supported however, so the decay data is skipped
+        {
+          // Found new isotope:
+          parent_kza = ExtractActParent();
+          
+          // TODO - Decay data would normally be read here. This feature is
+          // not currently supported however, so the decay data is skipped
 
-	  if( LoadDecay )
-	    /// Relevant decay data ends just before fission begins:
-	    DecayData(parent_kza);
+          if( LoadDecay )
+            /// Relevant decay data ends just before fission begins:
+            DecayData(parent_kza);
 
-	  // Skip decay data
-	  getline(InFile,str,'\n');
-	  while(str.find(fission_rxn) == string::npos)
-	    getline(InFile,str,'\n');
+          // Skip decay data
+          getline(InFile,str,'\n');
+          while(str.find(fission_rxn) == string::npos)
+            getline(InFile,str,'\n');
 
-	  // Check for the option to not load transmutation data. If this 
-	  // option is set, do not load!
-	  if(!LoadTransmutation) continue;
+          // Check for the option to not load transmutation data. If this 
+          // option is set, do not load!
+          if(!LoadTransmutation) continue;
 
-	  // Check for fission cross section. If it exists, add it to the
-	  // library
-	  if(CheckFission(str))
-	    {
-	      // There is a non-zero fission cross-section:
-	      for(i = NumNeutronGroups-1; i >= 0; i--)
-		{
-		  InFile >> str;
-		  cs[i] = atof(str.c_str());
-		} 
+          // Check for fission cross section. If it exists, add it to the
+          // library
+          if(CheckFission(str))
+            {
+              // There is a non-zero fission cross-section:
+              for(i = NumNeutronGroups-1; i >= 0; i--)
+                {
+                  InFile >> str;
+                  cs[i] = atof(str.c_str());
+                } 
 
-	      // Set the parent fission cross-section:
-	      Library.SetPCs(parent_kza, NEUTRON_FISSION_CS, cs);
+              // Set the parent fission cross-section:
+              Library.SetPCs(parent_kza, NEUTRON_FISSION_CS, cs);
 
-	      // Add this cross-section to the total cross-section:
-	      Library.SetPCs(parent_kza, TOTAL_CS, cs, true);
-	    }
+              // Add this cross-section to the total cross-section:
+              Library.SetPCs(parent_kza, TOTAL_CS, cs, true);
+            }
 
-	  // Done with fission, deal with other transmutation reactions:
-	  InFile >> str;
-	  num_rxn = atoi(str.c_str());
-	  getline(InFile,str,'\n');
+          // Done with fission, deal with other transmutation reactions:
+          InFile >> str;
+          num_rxn = atoi(str.c_str());
+          getline(InFile,str,'\n');
 
-	  for(i = 0; i < num_rxn; i++)
-	    {
-	      getline(InFile,str,'\n');
-	      daughter_kza = atoi(str.substr(10,7).c_str());
-	      daughter_kza = CinderToKza(daughter_kza);
+          for(i = 0; i < num_rxn; i++)
+            {
+              getline(InFile,str,'\n');
+              daughter_kza = atoi(str.substr(10,7).c_str());
+              daughter_kza = CinderToKza(daughter_kza);
 
-	      // Grab the CINDER path string:
-	      path_str = str.substr(50,4);
+              // Grab the CINDER path string:
+              path_str = str.substr(50,4);
 
-	      // Create total parent/daughter cross sections:
-	      if(path_str.find('c') == string::npos || path_str.find('x') || 
-		 path_str == "    ") 
-		  total_flag = true;
-	      else 
-		  path = MakePath(path_str);
+              // Create total parent/daughter cross sections:
+              if(path_str.find('c') == string::npos || path_str.find('x') || 
+                 path_str == "    ") 
+                  total_flag = true;
+              else 
+                  path = MakePath(path_str);
 
-	      for(j = NumNeutronGroups-1; j >= 0; j--)
-		{
-		  InFile >> str;
-		  cs[j] = atof(str.c_str());
-		}
+              for(j = NumNeutronGroups-1; j >= 0; j--)
+                {
+                  InFile >> str;
+                  cs[j] = atof(str.c_str());
+                }
 
-	      if(!total_flag) path.CrossSection = cs;	      
+              if(!total_flag) path.CrossSection = cs;              
 
-	      // Check to see if this is a primary reaction cross-section. If
-	      // it is, add it to the total cross-section.
-	      if(IsPri(parent_kza, daughter_kza))
-		Library.SetPCs(parent_kza, TOTAL_CS, cs, true);
+              // Check to see if this is a primary reaction cross-section. If
+              // it is, add it to the total cross-section.
+              if(IsPri(parent_kza, daughter_kza))
+                Library.SetPCs(parent_kza, TOTAL_CS, cs, true);
 
-	      // Since there seems to be only 1 cross-section per daughter,
-	      // all daughter cross-sections are total parent/daughter cross
-	      // sections
-	      Library.SetDCs(parent_kza, daughter_kza, TOTAL_CS, cs);
+              // Since there seems to be only 1 cross-section per daughter,
+              // all daughter cross-sections are total parent/daughter cross
+              // sections
+              Library.SetDCs(parent_kza, daughter_kza, TOTAL_CS, cs);
 
-	      // Now, set the parent/daughter/path cross-section, if it is
-	      // needed:
-	      if(!total_flag)
-		Library.AddPath(parent_kza, daughter_kza, path);
+              // Now, set the parent/daughter/path cross-section, if it is
+              // needed:
+              if(!total_flag)
+                Library.AddPath(parent_kza, daughter_kza, path);
 
-	      getline(InFile,str,'\n');
-	      
-	      total_flag = false;
-	    }
-	}
+              getline(InFile,str,'\n');
+              
+              total_flag = false;
+            }
+        }
 
       getline(InFile, str, '\n');
     }    
@@ -235,15 +235,15 @@ void Cinder::FissionYields()
       yields = ExtractYield(num_parents, daughter);
       
       for(j = 0; j < num_parents; j++)
-	{
-	  Library.AddFissionYield(parent_list[j], daughter, fission_type[j],
-				  yields[j]);
-	}
+        {
+          Library.AddFissionYield(parent_list[j], daughter, fission_type[j],
+                                  yields[j]);
+        }
     }
 }
 
 void Cinder::ExtractFissionParents(int num, vector<Kza>& parents, 
-				   vector<char>& fissionType)
+                                   vector<char>& fissionType)
 {
   int i;
   int z;
@@ -274,13 +274,13 @@ void Cinder::ExtractFissionParents(int num, vector<Kza>& parents,
       str_a += str[str.size()-2];
        
      if(str_a.find("m") != string::npos)
-	{
-	  // We have a meta stable state:
-	  d_iso = 1;
-	  str_a[2] = str_a[1];
-	  str_a[1] = str_a[0];
-	  str_a[0] = '2';
-	}
+        {
+          // We have a meta stable state:
+          d_iso = 1;
+          str_a[2] = str_a[1];
+          str_a[1] = str_a[0];
+          str_a[0] = '2';
+        }
       
       a = atoi(str_a.c_str());
 
@@ -367,39 +367,39 @@ Path Cinder::MakePath(const string& str)
       if(str[i] == ' ') continue;
 
       if(str[i] >= '0' && str[i] <= '9') 
-	{
-	  character = str[i];
-	  num = atoi(character.c_str());
-	  continue;
-	}
+        {
+          character = str[i];
+          num = atoi(character.c_str());
+          continue;
+        }
 
       switch(toupper(str[i]))
-	{
-	case 'G':
-	  part_id = GAMMA;
-	  break;
-	case 'N':
-	  part_id = NEUTRON;
-	  break;
-	case 'P':
-	  part_id = PROTON;
-	  break;
-	case 'A':
-	  part_id = ALPHA;
-	  break;
-	case 'T':
-	  part_id = TRITON;
-	  break;
-	case 'H':
-	  part_id = HELIUM3;
-	  break;
-	case 'D':
-	  part_id = DEUTERON;
-	  break;
-	default:
-	  break;
-	  // THROW AN EXCEPTION
-	}
+        {
+        case 'G':
+          part_id = GAMMA;
+          break;
+        case 'N':
+          part_id = NEUTRON;
+          break;
+        case 'P':
+          part_id = PROTON;
+          break;
+        case 'A':
+          part_id = ALPHA;
+          break;
+        case 'T':
+          part_id = TRITON;
+          break;
+        case 'H':
+          part_id = HELIUM3;
+          break;
+        case 'D':
+          part_id = DEUTERON;
+          break;
+        default:
+          break;
+          // THROW AN EXCEPTION
+        }
       
       ret.Emitted[part_id] = num;
       num = 1;
@@ -487,13 +487,13 @@ void Cinder::DecayData(Kza parent) throw(ExDecayMode)
   getline(InFile,str,'\n');
 
   Library.AddDecayEnergy( parent, LIGHT_PARTICLES,
-			  atof(str.substr(6,FLOAT_DIGITS).c_str())*1e6 );
-			 
+                          atof(str.substr(6,FLOAT_DIGITS).c_str())*1e6 );
+                         
   Library.AddDecayEnergy( parent, EM_RADIATION,
-			  atof(str.substr(23,FLOAT_DIGITS).c_str())*1e6 );
+                          atof(str.substr(23,FLOAT_DIGITS).c_str())*1e6 );
 
   Library.AddDecayEnergy( parent, HEAVY_PARTICLES,
-			  atof(str.substr(40,FLOAT_DIGITS).c_str())*1e6 );
+                          atof(str.substr(40,FLOAT_DIGITS).c_str())*1e6 );
 
 
   try{
@@ -522,14 +522,14 @@ void Cinder::DecayData(Kza parent) throw(ExDecayMode)
       daughter = CinderToKza( atoi(str.substr(29,7).c_str()) );
 
       try{
-	Library.AddDecayMode(parent, KzaToDecayMode(parent, daughter),
-			     daughter % 10, branch);
+        Library.AddDecayMode(parent, KzaToDecayMode(parent, daughter),
+                             daughter % 10, branch);
       } catch(ExDecayMode& ex){
-	stringstream ss;
-	ss << "\nError occurred while parsing CINDER data.\n"
-	   << "I was reading decay data for parent " << parent << endl;
-	ex.AddToDetailed(ss.str());
-	throw;
+        stringstream ss;
+        ss << "\nError occurred while parsing CINDER data.\n"
+           << "I was reading decay data for parent " << parent << endl;
+        ex.AddToDetailed(ss.str());
+        throw;
       }
     }
 
@@ -542,10 +542,10 @@ void Cinder::DecayData(Kza parent) throw(ExDecayMode)
       Spectrum spec;
 
       for(i = 0; i < NumGammaGroups; i++)
-	{
-	  InFile >> str;
-	  spec.GroupWise.push_back( atof(str.c_str()) );
-	}
+        {
+          InFile >> str;
+          spec.GroupWise.push_back( atof(str.c_str()) );
+        }
 
       Library.AddSpectrum(parent, GAMMA, spec); 
     }
@@ -579,7 +579,7 @@ DecayModeType Cinder::KzaToDecayMode(Kza parent, Kza daughter)
 
       cerr << "ERROR IN CINDER!!!!!\n";
       cerr << "PARENT KZA = " << parent << "\tDAUGHTER KZA = " << daughter 
-	   << endl;
+           << endl;
       exit(10094);
     }  
 }

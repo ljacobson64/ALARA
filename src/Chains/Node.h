@@ -113,16 +113,16 @@ public:
    {  
      if (prev)
        {
-	 nodenum= Statistics::accountNode(kza,prev->emitted[prev->pathNum-1],
-				       rank,state,relProd, prev->nodenum);
-	 return nodenum;
+         nodenum= Statistics::accountNode(kza,prev->emitted[prev->pathNum-1],
+                                       rank,state,relProd, prev->nodenum);
+         return nodenum;
        }   
       else
-	{
-	  nodenum=Statistics::accountNode(kza,NULL,
-				       rank,state,relProd,0);
-	  return nodenum;
-	}
+        {
+          nodenum=Statistics::accountNode(kza,NULL,
+                                       rank,state,relProd,0);
+          return nodenum;
+        }
     };
 
   /// This function accesses the data library to get the decay constant

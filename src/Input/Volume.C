@@ -23,6 +23,9 @@ TempLibType Volume::specLib;
 TempLibType Volume::rangeLib;
 int* Volume::energyRel = NULL;
 
+// Default number of threads for OMP
+int num_threads = 2;
+
 /***************************
  ********* Service *********
  **************************/
@@ -489,6 +492,10 @@ void Volume::solve(Chain* chain, topSchedule* schedule)
 {
   Volume* ptr= this;
   
+#ifdef _OPENMP
+  omp_set_num_threads(num_threads);
+#endif
+
 #pragma omp parallel
 #pragma omp single nowait
   while (ptr->mixNext != NULL)

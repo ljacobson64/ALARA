@@ -104,7 +104,9 @@ void Root::solve(topSchedule *schedule)
 	  /* solve the transfer matrices for each mixture with this root */
 	  ptr->mixList->solve(chain,schedule);
 	}
+      chain->cleanUp();
       delete chain;
+      ptr->cleanUp();
 
       firstNode = lastNode;
       lastNode = Statistics::numNodes();

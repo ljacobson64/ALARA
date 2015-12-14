@@ -196,6 +196,9 @@ public:
   /// class and the reference volume.
   ~Chain();
 
+  /// Allow deletion of reference to be optional by moving out of destructor.
+  void cleanUp();
+
   /// Overloaded assignment operator  
   Chain& operator=(const Chain&);
 

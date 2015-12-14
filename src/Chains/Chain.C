@@ -126,6 +126,11 @@ Chain::Chain(const Chain& c)
 	colRates[rank] = c.colRates[rank];
     }
 
+  P = colRates;
+  d = P+sliceSize;
+  L = d+sliceSize;
+  l = L+chainLength;
+
   root = c.root;
   node = c.node;
 
@@ -135,13 +140,16 @@ Chain::Chain(const Chain& c)
   reference = c.reference;
 }
 
+void Chain::cleanUp()
+{
+  delete reference;
+}
+
 Chain::~Chain()
 { 
   delete[] loopRank;
   delete[] rates; 
   delete[] colRates; 
-  delete reference;
-  root->cleanUp(); 
 }
 
 /** The correct implementation of this operator must ensure that

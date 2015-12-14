@@ -16,6 +16,10 @@
 #include <algorithm>
 #include <string>
 
+#ifdef _OPENMP
+#include <omp.h>
+#endif
+
 /* *** STL typedef ***
 
  DataCache : map<int,double,less<int> >

@@ -1,6 +1,6 @@
 #$Id: Makefile.am,v 1.5 2006-01-17 22:55:49 phruksar Exp $
 
-AM_CPPFLAGS = -I$(top_srcdir)/src
+include $(top_srcdir)/Makefile.h
 
 noinst_LIBRARIES = libDataLib.a
 

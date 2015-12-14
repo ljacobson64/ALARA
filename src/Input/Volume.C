@@ -492,12 +492,16 @@ void Volume::solve(Chain* chain, topSchedule* schedule)
   while (ptr->mixNext != NULL)
     {
       ptr = ptr->mixNext;
+
+      /* make copy of chain to allow for parallelization across volumes */
+      Chain *tmpChain = new Chain(*chain);
       /* collapse the rates with the flux */
-      chain->collapseRates(ptr->fluxHead);
+      tmpChain->collapseRates(ptr->fluxHead);
       /* solve the schedule */
-      schedule->setT(chain,ptr->schedT);
+      schedule->setT(tmpChain,ptr->schedT);
       /* tally results */
-      ptr->results.tallySoln(chain,ptr->schedT);
+      ptr->results.tallySoln(tmpChain,ptr->schedT);
+      delete tmpChain;
 
     }  
 }

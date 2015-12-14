@@ -489,20 +489,30 @@ void Volume::solve(Chain* chain, topSchedule* schedule)
 {
   Volume* ptr= this;
   
+#pragma omp parallel
+#pragma omp single nowait
   while (ptr->mixNext != NULL)
     {
       ptr = ptr->mixNext;
 
-      /* make copy of chain to allow for parallelization across volumes */
-      Chain *tmpChain = new Chain(*chain);
-      /* collapse the rates with the flux */
-      tmpChain->collapseRates(ptr->fluxHead);
-      /* solve the schedule */
-      schedule->setT(tmpChain,ptr->schedT);
-      /* tally results */
-      ptr->results.tallySoln(tmpChain,ptr->schedT);
-      delete tmpChain;
-
+#pragma omp task
+      {
+        /* make copy of chain to allow for parallelization across volumes */
+#ifdef _OpenMP
+        Chain *tmpChain = new Chain(*chain);
+#else
+        Chain *tmpChain = chain;
+#endif
+        /* collapse the rates with the flux */
+        tmpChain->collapseRates(ptr->fluxHead);
+        /* solve the schedule */
+        schedule->setT(tmpChain,ptr->schedT);
+        /* tally results */
+        ptr->results.tallySoln(tmpChain,ptr->schedT);
+#ifdef _OpenMP
+        delete tmpChain;
+#endif
+      }
     }  
 }
 

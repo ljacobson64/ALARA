@@ -70,7 +70,10 @@ calcSchedule::calcSchedule(const calcSchedule& c)
 	       "calcSchedule::calcSchedule(...) copy constructor: subSched");
     
       for (int itemNum=0;itemNum<nItems;itemNum++)
-	subSched[itemNum] = c.subSched[itemNum];
+        if (c.subSched[itemNum]) 
+          { 
+            subSched[itemNum] = new calcSchedule(*(c.subSched[itemNum]));
+          }
     }
 }  
 
@@ -123,10 +126,11 @@ calcSchedule::~calcSchedule()
   int itemNum;
 
   if (nItems>0)
-    for (itemNum=0;itemNum<nItems;itemNum++)
-      delete subSched[itemNum];
-
-  delete[] subSched;
+    {
+      for (itemNum=0;itemNum<nItems;itemNum++)
+        delete subSched[itemNum];
+      delete[] subSched;
+    }
 }
 
 /** The correct implementation of this operator must ensure that

@@ -505,7 +505,7 @@ void Volume::solve(Chain* chain, topSchedule* schedule)
 #pragma omp task
       {
         /* make copy of chain to allow for parallelization across volumes */
-#ifdef _OpenMP
+#ifdef _OPENMP
         Chain *tmpChain = new Chain(*chain);
 #else
         Chain *tmpChain = chain;
@@ -516,7 +516,7 @@ void Volume::solve(Chain* chain, topSchedule* schedule)
         schedule->setT(tmpChain,ptr->schedT);
         /* tally results */
         ptr->results.tallySoln(tmpChain,ptr->schedT);
-#ifdef _OpenMP
+#ifdef _OPENMP
         delete tmpChain;
 #endif
       }

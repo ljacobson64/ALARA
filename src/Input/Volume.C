@@ -504,24 +504,12 @@ void Volume::solve(Chain* chain, topSchedule* schedule)
 
 #pragma omp task firstprivate(ptr)
       {
-        /* make copy of chain to allow for parallelization across volumes */
-#ifdef _OPENMP
-        Chain *tmpChain = new Chain(*chain);
-        topSchedule *tmpSched = new topSchedule(*schedule);
-#else
-        Chain *tmpChain = chain;
-        topSchedule *tmpSched = schedule;
-#endif
         /* collapse the rates with the flux */
-        tmpChain->collapseRates(ptr->fluxHead);
+        chain->collapseRates(ptr->fluxHead);
         /* solve the schedule */
-        tmpSched->setT(tmpChain,ptr->schedT);
+        schedule->setT(chain,ptr->schedT);
         /* tally results */
-        ptr->results.tallySoln(tmpChain,ptr->schedT);
-#ifdef _OPENMP
-        delete tmpChain;
-        delete tmpSched;
-#endif
+        ptr->results.tallySoln(chain,ptr->schedT);
       }
     }
 }

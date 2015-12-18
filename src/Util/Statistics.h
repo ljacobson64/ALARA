@@ -40,7 +40,11 @@
     cputime measures to seconds.
 
  runtime : float[2]
-    This variable stores a pair or times, used to find delta times for
+    This variable stores a pair of cpu times, used to find delta times for
+    different parts of the solution.
+
+  wruntime: double[3]
+    This variable stores three wall times, used to find delta times for
     different parts of the solution.
 
  *** Static Member Functions ***
@@ -70,16 +74,22 @@
  void closeTree()
     This function simply closes the 'treeFile' ofstream.
 
-
  FILE* openBinFile(fname*)
     This function opens the binaray file specified by fname using the file
     pinter binFile
 
-
- void cpuTime(float&,float&)
+ void cputime(float&,float&)
     This function finds the current runtime from a system call, and
-    then returns the time since the last call to cpuTime in the first
+    then returns the time since the last call to cputime in the first
     arguement, and the total cputime in the second argument.
+
+ void walltimeInit()
+    This function initializes the wall timer.
+
+ void walltime(double&,double&)
+    This function finds the current wall time from a system call, and
+    then returns the time since the last call to wall time in the first
+    arguement, and the total wall time in the second argument.
 
  int numNodes()
     This inline function provides access to the current value of
@@ -140,9 +150,13 @@ protected:
   /// cputime measures to seconds.
   static float ticks;
 
-  /// This variable stores a pair or times, used to find delta times for
+  /// This variable stores a pair of cpu times, used to find delta times for
   /// different parts of the solution.
   static float runtime[2];
+
+  /// This variable stores three wall times, used to find delta times for
+  /// different parts of the solution.
+  static double wruntime[3];
 
 public:
   /// This function increments nodeCtr, and then writes the information
@@ -185,6 +199,12 @@ public:
 
   /// This function finds the current runtime from a system call
   static void cputime(float&,float&);
+
+  /// This function initializes the wall timer
+  static void walltimeInit();
+
+  /// This function finds the current wall time from a system call
+  static void walltime(double&,double&);
 
   /// This inline function provides access to the current value of
   /// nodeCtr.

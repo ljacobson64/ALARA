@@ -199,9 +199,12 @@ int main(int argc, char *argv[])
     {
       verbose(0,"Starting problem solution.");
       
+      double incrTime, totalTime;
+      Statistics::walltimeInit();
       rootList->solve(schedule);
+      Statistics::walltime(incrTime,totalTime);
       
-      verbose(1,"Solved problem.");
+      verbose(1,"Solved problem in %f seconds.", incrTime);
     }
 
   if (doOutput)

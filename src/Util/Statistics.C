@@ -3,7 +3,8 @@
 
 #include <unistd.h>
 #include <sys/times.h>
-#include<stdio.h>
+#include <time.h>
+#include <stdio.h>
 
 #include "Chains/truncate.h"
 
@@ -17,6 +18,7 @@ int Statistics::maxRootRank = 0;
 int Statistics::maxProblemRank = 0;
 float Statistics::ticks = (float)sysconf(_SC_CLK_TCK);
 float Statistics::runtime[2] = { 0, 0 };
+double Statistics::wruntime[3] = { 0, 0, 0 };
 
 
 void Statistics::initTree(char* fname)
@@ -132,7 +134,7 @@ int Statistics::accountNode(int kza, char* emitted, int rank, int state,
  
 }
 
-/** The current value of nodeCtr (after the incrementing) is returned. */
+/** The incremental and total computer times are returned. */
 void Statistics::cputime(float &increment, float &total)
 {
   static struct tms time0;
@@ -140,25 +142,34 @@ void Statistics::cputime(float &increment, float &total)
   times(&time0);
 
   runtime[1] = runtime[0];
-  runtime[0] = (float)time0.tms_utime/ticks;
+  runtime[0] = (float)time0.tms_utime / ticks;
 
   total = runtime[0];
-  increment = total-runtime[1];
-
+  increment = total - runtime[1];
 }
 
+/** Initializer for the wall timer. */
+void Statistics::walltimeInit()
+{
+  static struct timespec wtime0;
+  
+  clock_gettime(CLOCK_REALTIME, &wtime0);
+  
+  wruntime[0] = (double)wtime0.tv_sec + (double)wtime0.tv_nsec * 1e-9;
+  wruntime[1] = wruntime[0];
+  wruntime[2] = wruntime[0];
+}
 
+/** The incremental and total wall times are returned. */
+void Statistics::walltime(double &increment, double &total)
+{
+  static struct timespec wtime0;
 
+  clock_gettime(CLOCK_REALTIME, &wtime0);
 
+  wruntime[1] = wruntime[0];
+  wruntime[0] = (double)wtime0.tv_sec + (double)wtime0.tv_nsec * 1e-9;
 
-
-
-
-
-
-
-
-
-
-
-
+  total = wruntime[0] - wruntime[2];
+  increment = wruntime[0] - wruntime[1];
+}

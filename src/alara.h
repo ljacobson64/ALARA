@@ -4,20 +4,20 @@
 
 #include "config.h"
 
-#include <stdio.h>
-#include <stdarg.h>
-#include <stdlib.h>
-#include <ctype.h>
-#include <math.h>
-#include <cstring>
-
-#include <iostream>
-#include <fstream>
 #include <algorithm>
+#include <cctype>
+#include <cmath>
+#include <cstdarg>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <fstream>
+#include <iostream>
+#include <map>
 #include <string>
 
 #ifdef _OPENMP
-#include <omp.h>
+#include "omp.h"
 #endif
 
 /* *** STL typedef ***
@@ -26,8 +26,6 @@
    This STL map provides a cache for scalar data mapped with the kza
    number to which that data corresponds.  
  */ 
-
-#include <map>
 
 /* TO DO: Come see me next week  Why won't it compile?!?!?*/
 

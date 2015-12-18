@@ -24,7 +24,7 @@ TempLibType Volume::rangeLib;
 int* Volume::energyRel = NULL;
 
 // Default number of threads for OMP
-int num_threads = 2;
+int num_threads = 1;
 
 /***************************
  ********* Service *********
@@ -507,10 +507,6 @@ void Volume::solve(Chain* chain, topSchedule* schedule)
       ptrList[p] = ptr;
     }
   ptr = ptrHead;
-
-#ifdef _OPENMP
-  omp_set_num_threads(num_threads);
-#endif
 
 #pragma omp parallel for schedule(guided) private(ptr)
   for (int p = 0; p < numPtrs; p++)

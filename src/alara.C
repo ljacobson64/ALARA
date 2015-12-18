@@ -120,10 +120,10 @@ int main(int argc, char *argv[])
 	  if (argv[argNum][1] == '\0')
 	    {
 	      if (argNum<argc-1)
-              {
-		num_threads = atoi(argv[argNum+1]);
-	        argNum+=2;
-	      }
+		{
+		  num_threads = atoi(argv[argNum+1]);
+		  argNum+=2;
+		}
 	      else
 		error(2,"-j requires parameter.");
 	    }
@@ -132,11 +132,10 @@ int main(int argc, char *argv[])
 	      num_threads = atoi(argv[argNum]+1);
 	      argNum++;
 	    }
-	  if (num_threads < 2)
-	    {
-	      error(2, "Number of threads must be >= 2.");
-	    }
-	  verbose(0,"Using %d OMP threads.",num_threads);
+	  if (num_threads < 1)
+	    error(2, "Number of threads must be positive integer.");
+	  omp_set_num_threads(num_threads);
+	  verbose(0, "Using %d OMP threads.", num_threads);
 #else
 	  error(2, "-j option only avaible when compiled with OpenMP.");
 #endif

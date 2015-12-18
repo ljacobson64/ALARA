@@ -497,12 +497,12 @@ void Volume::solve(Chain* chain, topSchedule* schedule)
 #endif
 
 #pragma omp parallel
-#pragma omp single nowait
+#pragma omp master
   while (ptr->mixNext != NULL)
     {
       ptr = ptr->mixNext;
 
-#pragma omp task
+#pragma omp task firstprivate(ptr)
       {
         /* make copy of chain to allow for parallelization across volumes */
 #ifdef _OPENMP

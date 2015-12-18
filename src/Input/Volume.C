@@ -492,25 +492,36 @@ void Volume::solve(Chain* chain, topSchedule* schedule)
 {
   Volume* ptr= this;
   
+  Volume* ptrHead = ptr;
+  int numPtrs = 0;
+  while (ptr->mixNext != NULL)
+    {
+      ptr = ptr->mixNext;
+      numPtrs++;
+    }
+  Volume* ptrList[numPtrs];
+  ptr = ptrHead;
+  for (int p = 0; p < numPtrs; p++)
+    {
+      ptr = ptr->mixNext;
+      ptrList[p] = ptr;
+    }
+  ptr = ptrHead;
+
 #ifdef _OPENMP
   omp_set_num_threads(num_threads);
 #endif
 
-#pragma omp parallel
-#pragma omp master
-  while (ptr->mixNext != NULL)
+#pragma omp parallel for schedule(guided) private(ptr)
+  for (int p = 0; p < numPtrs; p++)
     {
-      ptr = ptr->mixNext;
-
-#pragma omp task firstprivate(ptr)
-      {
-        /* collapse the rates with the flux */
-        chain->collapseRates(ptr->fluxHead);
-        /* solve the schedule */
-        schedule->setT(chain,ptr->schedT);
-        /* tally results */
-        ptr->results.tallySoln(chain,ptr->schedT);
-      }
+      ptr = ptrList[p];
+      /* collapse the rates with the flux */
+      chain->collapseRates(ptr->fluxHead);
+      /* solve the schedule */
+      schedule->setT(chain,ptr->schedT);
+      /* tally results */
+      ptr->results.tallySoln(chain,ptr->schedT);
     }
 }
 

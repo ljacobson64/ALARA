@@ -508,7 +508,7 @@ void Volume::solve(Chain* chain, topSchedule* schedule)
     }
   ptr = ptrHead;
 
-#pragma omp parallel for schedule(guided) private(ptr)
+#pragma omp parallel for schedule(static) private(ptr)
   for (int p = 0; p < numPtrs; p++)
     {
       ptr = ptrList[p];

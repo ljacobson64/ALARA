@@ -1,6 +1,6 @@
 #$Id: Makefile.am,v 1.4 2003-10-22 06:07:02 wilsonp Exp $
 
-AM_CPPFLAGS = -I$(top_srcdir)/src
+include $(top_srcdir)/Makefile.h
 
 noinst_LIBRARIES = libChains.a
 

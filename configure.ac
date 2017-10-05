@@ -18,7 +18,7 @@ AC_PROG_RANLIB
 AC_PROG_MAKE_SET
 AC_PROG_INSTALL
 AC_PATH_PROG(PERLPATH,perl)
-
+AC_OPENMP
 
 # AC_F77_LIBRARY_LDFLAGS   ### Check autoconf manual
 
@@ -33,6 +33,7 @@ CXXFLAGS='-Wall'
 # FIXME: Replace `main' with a function in `-lm':
 # FIXED: PPHW
 AC_CHECK_LIB([m], [sin])
+AC_CHECK_LIB([gomp], [omp_get_thread_num])
 
 # Checks for header files.
 AC_HEADER_STDC
